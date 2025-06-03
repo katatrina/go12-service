@@ -2,22 +2,37 @@ package main
 
 import (
 	"errors"
+	"fmt"
+	"log"
 	"net/http"
-	"strconv"
+	"os"
 	"strings"
 	"time"
 	
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 type Category struct {
-	Id          int        `json:"id"`
+	Id          uuid.UUID  `json:"id"`
 	Name        string     `json:"name"`
 	Description string     `json:"description"`
-	Status      int        `json:"status"`
+	Status      string     `json:"status"`
 	CreatedAt   *time.Time `json:"createdAt"`
 	UpdatedAt   *time.Time `json:"updatedAt"`
 }
+
+func (Category) TableName() string {
+	return "categories"
+}
+
+const (
+	StatusActive   = "active"
+	StatusInactive = "inactive"
+	StatusDeleted  = "deleted"
+)
 
 func (c *Category) Validate() error {
 	c.Name = strings.TrimSpace(c.Name)
@@ -26,8 +41,8 @@ func (c *Category) Validate() error {
 		return errors.New("name is required")
 	}
 	
-	if c.Status <= 0 {
-		return errors.New("status must be greater than zero")
+	if c.Status != StatusActive && c.Status != StatusInactive && c.Status != StatusDeleted {
+		return errors.New("status must be active, inactive or deleted")
 	}
 	
 	return nil
@@ -41,8 +56,9 @@ type CategoryUpdateDTO struct {
 }
 
 type PagingDTO struct {
-	Page  int `json:"page" form:"page"`
-	Limit int `json:"limit" form:"limit"`
+	Page  int   `json:"page" form:"page"`
+	Limit int   `json:"limit" form:"limit"`
+	Total int64 `json:"total"`
 }
 
 func (p *PagingDTO) Process() {
@@ -56,9 +72,21 @@ func (p *PagingDTO) Process() {
 }
 
 func main() {
-	categories := make([]Category, 0)
-	// var categories []Category // categories = nil
-	latestId := 0
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000"
+	}
+	
+	dsn := os.Getenv("DB_DSN")
+	dbMaster, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	
+	if err != nil {
+		log.Fatal("failed to connect database", err)
+	}
+	
+	db := dbMaster.Debug()
+	
+	fmt.Println("Connected to database", db)
 	
 	r := gin.Default()
 	
@@ -73,135 +101,18 @@ func main() {
 	// CRUDL - Create Read Update Delete List
 	// Version Prefix: /v1
 	
-	group := r.Group("/v1")
-	// API Create
+	v1 := r.Group("/v1")
 	
-	group.POST("/categories", func(c *gin.Context) {
-		var requestBodyData Category
-		
-		if err := c.ShouldBindJSON(&requestBodyData); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
+	{
+		categories := v1.Group("/categories")
+		{
+			categories.POST("", CreateAPI(db))
+			categories.GET("", ListAPI(db))
+			categories.GET("/:id", GetAPI(db))
+			categories.PATCH("/:id", UpdateAPI(db))
+			categories.DELETE("/:id", DeleteAPI(db))
 		}
-		
-		if err := requestBodyData.Validate(); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-		
-		latestId++
-		requestBodyData.Id = latestId
-		
-		now := time.Now().UTC()
-		
-		requestBodyData.CreatedAt = &now
-		requestBodyData.UpdatedAt = &now
-		
-		categories = append(categories, requestBodyData)
-		
-		c.JSON(http.StatusCreated, gin.H{"data": requestBodyData.Id})
-	})
+	}
 	
-	// Listing
-	group.GET("/categories", func(c *gin.Context) {
-		var paging PagingDTO
-		
-		if err := c.ShouldBindQuery(&paging); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-		
-		paging.Process()
-		
-		c.JSON(http.StatusOK, gin.H{"data": categories, "paging": paging})
-	})
-	
-	// Get
-	group.GET("/categories/:id", func(c *gin.Context) {
-		id, err := strconv.Atoi(c.Param("id"))
-		
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-		
-		for _, category := range categories {
-			if category.Id == id {
-				c.JSON(http.StatusOK, gin.H{"data": category})
-				return
-			}
-		}
-		
-		c.JSON(http.StatusNotFound, gin.H{"error": "Category not found"})
-	})
-	
-	// Delete
-	group.DELETE("/categories/:id", func(c *gin.Context) {
-		id, err := strconv.Atoi(c.Param("id"))
-		
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-		
-		for i, category := range categories {
-			if category.Id == id {
-				
-				// Explain:
-				// [1,2,3], i = 1
-				// categories[:i] = [1]
-				// categories[i+1:] = [3]
-				// [1,3]
-				categories = append(categories[:i], categories[i+1:]...)
-				
-				c.JSON(http.StatusOK, gin.H{"message": true})
-				return
-			}
-		}
-		
-		c.JSON(http.StatusNotFound, gin.H{"error": "Category not found"})
-	})
-	
-	// Update
-	group.PATCH("/categories/:id", func(c *gin.Context) {
-		id, err := strconv.Atoi(c.Param("id"))
-		
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-		
-		var requestBodyData CategoryUpdateDTO
-		
-		if err := c.ShouldBindJSON(&requestBodyData); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-		
-		for i, category := range categories {
-			if category.Id == id {
-				if requestBodyData.Name != nil {
-					categories[i].Name = *requestBodyData.Name
-				}
-				
-				if requestBodyData.Description != nil {
-					categories[i].Description = *requestBodyData.Description
-				}
-				
-				if requestBodyData.Status != nil {
-					categories[i].Status = *requestBodyData.Status
-				}
-				
-				now := time.Now().UTC()
-				categories[i].UpdatedAt = &now
-				
-				c.JSON(http.StatusOK, gin.H{"data": true})
-				return
-			}
-		}
-		
-		c.JSON(http.StatusNotFound, gin.H{"error": "Category not found"})
-	})
-	
-	r.Run(":3000") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	r.Run(fmt.Sprintf(":%s", port)) // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
