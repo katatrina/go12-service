@@ -11,17 +11,18 @@ import (
 	
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	categorymodule "github.com/katatrina/go12-service/modules/category"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 type Category struct {
-	Id          uuid.UUID  `json:"id"`
-	Name        string     `json:"name"`
-	Description string     `json:"description"`
-	Status      string     `json:"status"`
-	CreatedAt   *time.Time `json:"createdAt"`
-	UpdatedAt   *time.Time `json:"updatedAt"`
+	Id          uuid.UUID  `json:"id" gorm:"column:id"`
+	Name        string     `json:"name" gorm:"column:name"`
+	Description string     `json:"description" gorm:"column:description"`
+	Status      string     `json:"status" gorm:"column:status"`
+	CreatedAt   *time.Time `json:"createdAt" gorm:"column:created_at"`
+	UpdatedAt   *time.Time `json:"updatedAt" gorm:"column:updated_at"`
 }
 
 func (Category) TableName() string {
@@ -48,7 +49,6 @@ func (c *Category) Validate() error {
 	return nil
 }
 
-// DTO = Data Transfer Object
 type CategoryUpdateDTO struct {
 	Name        *string `json:"name"`
 	Description *string `json:"description"`
@@ -79,9 +79,17 @@ func main() {
 	
 	dsn := os.Getenv("DB_DSN")
 	dbMaster, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-	
 	if err != nil {
-		log.Fatal("failed to connect database", err)
+		log.Fatal("failed to init db session", err)
+	}
+	
+	sqlDB, err := dbMaster.DB()
+	if err != nil {
+		log.Fatal("failed to get sql.DB from gorm session", err)
+	}
+	
+	if err = sqlDB.Ping(); err != nil {
+		log.Fatal("failed to connect to database", err)
 	}
 	
 	db := dbMaster.Debug()
@@ -91,11 +99,9 @@ func main() {
 	r := gin.Default()
 	
 	r.GET("/ping", func(c *gin.Context) {
-		
 		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",
 		})
-		
 	})
 	
 	// CRUDL - Create Read Update Delete List
@@ -106,12 +112,13 @@ func main() {
 	{
 		categories := v1.Group("/categories")
 		{
-			categories.POST("", CreateAPI(db))
 			categories.GET("", ListAPI(db))
 			categories.GET("/:id", GetAPI(db))
 			categories.PATCH("/:id", UpdateAPI(db))
 			categories.DELETE("/:id", DeleteAPI(db))
 		}
+		
+		categorymodule.SetupCategoryModule(db, categories)
 	}
 	
 	r.Run(fmt.Sprintf(":%s", port)) // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
