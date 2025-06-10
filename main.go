@@ -74,7 +74,7 @@ func (p *PagingDTO) Process() {
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "3000"
+		port = "8080"
 	}
 	
 	dsn := os.Getenv("DB_DSN")
