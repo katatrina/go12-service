@@ -4,6 +4,7 @@ CREATE TABLE `carts`
     `user_id`    varchar(36) NOT NULL,
     `food_id`    varchar(36) NOT NULL,
     `quantity`   int         NOT NULL,
+    `status`     enum('active','inactive','deleted') NOT NULL DEFAULT 'active',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`user_id`, `food_id`),
@@ -17,9 +18,9 @@ CREATE TABLE `categories`
     `name`        varchar(100) NOT NULL,
     `description` text,
     `icon`        json DEFAULT NULL,
+    `status`      enum('active','inactive','deleted') NOT NULL DEFAULT 'active',
     `created_at`  timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`  timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `deleted_at`  timestamp NULL DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -28,9 +29,9 @@ CREATE TABLE `cities`
 (
     `id`         varchar(36)  NOT NULL,
     `title`      varchar(100) NOT NULL,
+    `status`     enum('active','inactive','deleted') NOT NULL DEFAULT 'active',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `deleted_at` timestamp NULL DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -39,6 +40,7 @@ CREATE TABLE `food_likes`
 (
     `user_id`    varchar(36) NOT NULL,
     `food_id`    varchar(36) NOT NULL,
+    `status`     enum('active','inactive','deleted') NOT NULL DEFAULT 'active',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`user_id`, `food_id`),
@@ -53,9 +55,9 @@ CREATE TABLE `food_ratings`
     `food_id`    varchar(36) NOT NULL,
     `point`      float DEFAULT '0',
     `comment`    text,
+    `status`     enum('active','inactive','deleted') NOT NULL DEFAULT 'active',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `deleted_at` timestamp NULL DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY          `food_id` (`food_id`) USING BTREE
 ) ENGINE=InnoDB;
@@ -70,9 +72,9 @@ CREATE TABLE `foods`
     `description`   text,
     `price`         float        NOT NULL,
     `images`        json         NOT NULL,
+    `status`        enum('active','inactive','deleted') NOT NULL DEFAULT 'active',
     `created_at`    timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`    timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `deleted_at`    timestamp NULL DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY             `restaurant_id` (`restaurant_id`) USING BTREE,
     KEY             `category_id` (`category_id`) USING BTREE
@@ -85,9 +87,9 @@ CREATE TABLE `images`
     `file_name`  varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
     `width`      int                                                           NOT NULL,
     `height`     int                                                           NOT NULL,
+    `status`     enum('active','inactive','deleted') NOT NULL DEFAULT 'active',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `deleted_at` timestamp NULL DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -100,9 +102,9 @@ CREATE TABLE `order_details`
     `price`       float       NOT NULL,
     `quantity`    int         NOT NULL,
     `discount`    float DEFAULT '0',
+    `status`      enum('active','inactive','deleted') NOT NULL DEFAULT 'active',
     `created_at`  timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`  timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `deleted_at`  timestamp NULL DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY           `order_id` (`order_id`) USING BTREE
 ) ENGINE=InnoDB;
@@ -113,9 +115,9 @@ CREATE TABLE `order_trackings`
     `id`         varchar(36) NOT NULL,
     `order_id`   varchar(36) NOT NULL,
     `state`      enum('waiting_for_shipper','preparing','on_the_way','delivered','cancel') NOT NULL,
+    `status`     enum('active','inactive','deleted') NOT NULL DEFAULT 'active',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `deleted_at` timestamp NULL DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY          `order_id` (`order_id`) USING BTREE
 ) ENGINE=InnoDB;
@@ -127,9 +129,9 @@ CREATE TABLE `orders`
     `user_id`     varchar(36) NOT NULL,
     `total_price` float       NOT NULL,
     `shipper_id`  varchar(36) DEFAULT NULL,
+    `status`      enum('active','inactive','deleted') NOT NULL DEFAULT 'active',
     `created_at`  timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`  timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `deleted_at`  timestamp NULL DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY           `user_id` (`user_id`) USING BTREE,
     KEY           `shipper_id` (`shipper_id`) USING BTREE
@@ -140,6 +142,7 @@ CREATE TABLE `restaurant_foods`
 (
     `restaurant_id` varchar(36) NOT NULL,
     `food_id`       varchar(36) NOT NULL,
+    `status`        enum('active','inactive','deleted') NOT NULL DEFAULT 'active',
     `created_at`    timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`    timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`restaurant_id`, `food_id`),
@@ -151,6 +154,7 @@ CREATE TABLE `restaurant_likes`
 (
     `restaurant_id` varchar(36) NOT NULL,
     `user_id`       varchar(36) NOT NULL,
+    `status`        enum('active','inactive','deleted') NOT NULL DEFAULT 'active',
     `created_at`    timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`restaurant_id`, `user_id`),
     KEY             `user_id` (`user_id`)
@@ -164,9 +168,9 @@ CREATE TABLE `restaurant_ratings`
     `restaurant_id` varchar(36) NOT NULL,
     `point`         float       NOT NULL DEFAULT '0',
     `comment`       text,
+    `status`        enum('active','inactive','deleted') NOT NULL DEFAULT 'active',
     `created_at`    timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`    timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `deleted_at`    timestamp NULL DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY             `user_id` (`user_id`) USING BTREE,
     KEY             `restaurant_id` (`restaurant_id`) USING BTREE
@@ -185,9 +189,9 @@ CREATE TABLE `restaurants`
     `cover`      json         NOT NULL,
     `logo`       json         NOT NULL,
     `shipping_fee_per_km` double DEFAULT '0',
+    `status`     enum('active','inactive','deleted') NOT NULL DEFAULT 'active',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `deleted_at` timestamp NULL DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY          `owner_id` (`owner_id`) USING BTREE,
     KEY          `city_id` (`city_id`) USING BTREE
@@ -204,9 +208,9 @@ CREATE TABLE `user_addresses`
     `addr`       varchar(255) NOT NULL,
     `lat` double DEFAULT NULL,
     `lng` double DEFAULT NULL,
+    `status`     enum('active','inactive','deleted') NOT NULL DEFAULT 'active',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `deleted_at` timestamp NULL DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY          `user_id` (`user_id`) USING BTREE,
     KEY          `city_id` (`city_id`) USING BTREE
@@ -220,9 +224,9 @@ CREATE TABLE `user_device_tokens`
     `is_production` tinyint(1) DEFAULT '0',
     `os`            enum('ios','android','web') DEFAULT 'ios' COMMENT '1: iOS, 2: Android',
     `token`         varchar(255) DEFAULT NULL,
+    `status`        enum('active','inactive','deleted') NOT NULL DEFAULT 'active',
     `updated_at`    timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `created_at`    timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-    `deleted_at`    timestamp NULL DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY             `user_id` (`user_id`) USING BTREE,
     KEY             `os` (`os`) USING BTREE
@@ -242,9 +246,9 @@ CREATE TABLE `users`
     `phone`      varchar(20) DEFAULT NULL,
     `role`       enum('user','admin','shipper') NOT NULL DEFAULT 'user',
     `avatar`     json        DEFAULT NULL,
+    `status`     enum('active','inactive','deleted') NOT NULL DEFAULT 'active',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `deleted_at` timestamp NULL DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB;
