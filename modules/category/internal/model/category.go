@@ -1,7 +1,6 @@
 package categorymodel
 
 import (
-	"errors"
 	"strings"
 	"time"
 	
@@ -9,24 +8,34 @@ import (
 )
 
 type Category struct {
-	Id          uuid.UUID  `json:"id" gorm:"column:id"`
+	ID          uuid.UUID  `json:"id" gorm:"column:id"`
 	Name        string     `json:"name" gorm:"column:name"`
 	Description string     `json:"description" gorm:"column:description"`
+	Status      string     `json:"status" gorm:"column:status"`
 	Icon        []byte     `json:"icon" gorm:"column:icon"`
 	CreatedAt   *time.Time `json:"createdAt" gorm:"column:created_at"`
 	UpdatedAt   *time.Time `json:"updatedAt" gorm:"column:updated_at"`
-	DeletedAt   *time.Time `json:"deletedAt" gorm:"column:deleted_at"`
 }
 
-func (Category) TableName() string {
+func (c *Category) TableName() string {
 	return "categories"
 }
+
+const (
+	StatusActive   = "active"
+	StatusInactive = "inactive"
+	StatusDeleted  = "deleted"
+)
 
 func (c *Category) Validate() error {
 	c.Name = strings.TrimSpace(c.Name)
 	
 	if c.Name == "" {
-		return errors.New("name is required")
+		return ErrNameRequired
+	}
+	
+	if c.Status != StatusActive && c.Status != StatusInactive && c.Status != StatusDeleted {
+		return ErrCategoryStatusInvalid
 	}
 	
 	return nil

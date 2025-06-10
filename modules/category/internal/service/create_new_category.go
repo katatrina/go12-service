@@ -14,7 +14,7 @@ func (s *CategoryService) CreateNewCategory(ctx context.Context, data *categorym
 		return err
 	}
 	
-	data.Id, _ = uuid.NewV7()
+	data.ID, _ = uuid.NewV7()
 	
 	if err := s.catRepo.Insert(ctx, data); err != nil {
 		return err

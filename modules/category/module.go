@@ -13,5 +13,5 @@ func SetupCategoryModule(db *gorm.DB, g *gin.RouterGroup) {
 	catService := categoryservice.NewCategoryService(catRepo)
 	catCtl := categoryhttpgin.NewCategoryHTTPController(catService)
 	
-	g.POST("", catCtl.CreateCategoryAPI)
+	catCtl.SetupRoutes(g)
 }

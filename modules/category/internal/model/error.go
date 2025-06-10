@@ -5,6 +5,6 @@ import (
 )
 
 var (
-	ErrCategoryNotFound      = errors.New("category not found")
-	ErrCategoryStatusInvalid = errors.New("category status must be in (active, inactive, deleted)")
+	ErrNameRequired          = errors.New("name is required")
+	ErrCategoryStatusInvalid = errors.New("status must be in (active, inactive, deleted)")
 )

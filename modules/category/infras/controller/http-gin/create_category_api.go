@@ -21,5 +21,5 @@ func (ctl *CategoryHTTPController) CreateCategoryAPI(c *gin.Context) {
 		return
 	}
 	
-	c.JSON(http.StatusCreated, gin.H{"data": requestBodyData.Id})
+	c.JSON(http.StatusCreated, gin.H{"data": requestBodyData.ID})
 }

@@ -1,24 +1,11 @@
 package categorymodel
 
-// DTO = Data Transfer Object
 type CategoryUpdateDTO struct {
 	Name        *string `json:"name"`
 	Description *string `json:"description"`
 	Status      *int    `json:"status"`
 }
 
-type PagingDTO struct {
-	Page  int   `json:"page" form:"page"`
-	Limit int   `json:"limit" form:"limit"`
-	Total int64 `json:"total"`
-}
-
-func (p *PagingDTO) Process() {
-	if p.Page <= 0 {
-		p.Page = 1
-	}
-	
-	if p.Limit <= 0 {
-		p.Limit = 10
-	}
+type FilterCategoryDTO struct {
+	Status *string `json:"status" form:"status"`
 }

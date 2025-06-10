@@ -112,8 +112,6 @@ func main() {
 	{
 		categories := v1.Group("/categories")
 		{
-			categories.GET("", ListAPI(db))
-			categories.GET("/:id", GetAPI(db))
 			categories.PATCH("/:id", UpdateAPI(db))
 			categories.DELETE("/:id", DeleteAPI(db))
 		}
