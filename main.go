@@ -111,11 +111,6 @@ func main() {
 	
 	{
 		categories := v1.Group("/categories")
-		{
-			categories.PATCH("/:id", UpdateAPI(db))
-			categories.DELETE("/:id", DeleteAPI(db))
-		}
-		
 		categorymodule.SetupCategoryModule(db, categories)
 	}
 	

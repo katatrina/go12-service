@@ -7,15 +7,19 @@ import (
 	"github.com/katatrina/go12-service/modules/category/internal/model"
 )
 
-func (s *CategoryService) GetCategoryDetails(ctx context.Context, id uuid.UUID) (*categorymodel.Category, error) {
+func (s *CategoryService) DeleteCategoryByID(ctx context.Context, id uuid.UUID) error {
 	category, err := s.catRepo.FindByID(ctx, id)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	
 	if category.Status == categorymodel.StatusDeleted {
-		return nil, categorymodel.ErrCategoryNotFound
+		return categorymodel.ErrCategoryDeleted
 	}
 	
-	return category, nil
+	if err = s.catRepo.Delete(ctx, id, false); err != nil {
+		return err
+	}
+	
+	return nil
 }

@@ -1,9 +1,9 @@
 package categorymodel
 
-type CategoryUpdateDTO struct {
+type UpdateCategoryDTO struct {
 	Name        *string `json:"name"`
 	Description *string `json:"description"`
-	Status      *int    `json:"status"`
+	Status      *string `json:"status"`
 }
 
 type FilterCategoryDTO struct {

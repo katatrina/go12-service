@@ -5,12 +5,12 @@ import (
 	"errors"
 	
 	"github.com/google/uuid"
-	categorymodel "github.com/katatrina/go12-service/modules/category/internal/model"
+	"github.com/katatrina/go12-service/modules/category/internal/model"
 	sharedmodel "github.com/katatrina/go12-service/shared/model"
 	"gorm.io/gorm"
 )
 
-func (repo *CategoryRepository) FindByID(ctx context.Context, id uuid.UUID) (*categorymodel.Category, error) {
+func (repo *CategoryRepository) FindByID(ctx context.Context, id uuid.UUID) (*categorymodel.categorymodel, error) {
 	var category categorymodel.Category
 	
 	if err := repo.db.First(&category, "id = ?", id).Error; err != nil {
