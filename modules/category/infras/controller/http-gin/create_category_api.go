@@ -4,7 +4,7 @@ import (
 	"net/http"
 	
 	"github.com/gin-gonic/gin"
-	"github.com/katatrina/go12-service/modules/categorymodule/internal/model"
+	"github.com/katatrina/go12-service/modules/category/internal/model"
 )
 
 func (ctl *CategoryHTTPController) CreateCategoryAPI(c *gin.Context) {

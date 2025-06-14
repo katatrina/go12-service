@@ -4,7 +4,7 @@ import (
 	"context"
 	
 	"github.com/google/uuid"
-	"github.com/katatrina/go12-service/modules/categorymodule/internal/model"
+	"github.com/katatrina/go12-service/modules/category/internal/model"
 )
 
 func (repo *CategoryRepository) Delete(ctx context.Context, id uuid.UUID, isHard bool) error {

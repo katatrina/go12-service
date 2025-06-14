@@ -6,7 +6,7 @@ import (
 	
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	categoryservice "github.com/katatrina/go12-service/modules/categorymodule/internal/service"
+	categoryservice "github.com/katatrina/go12-service/modules/category/internal/service"
 	sharedmodel "github.com/katatrina/go12-service/shared/model"
 )
 

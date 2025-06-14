@@ -2,11 +2,11 @@
 
 // The build tag makes sure the stub is not built in the final build.
 
-package categorymodule
+package category
 
 import (
 	"github.com/google/wire"
-	categoryhttpgin "github.com/katatrina/go12-service/modules/categorymodule/infras/controller/http-gin"
+	categoryhttpgin "github.com/katatrina/go12-service/modules/category/infras/controller/http-gin"
 	"gorm.io/gorm"
 )
 

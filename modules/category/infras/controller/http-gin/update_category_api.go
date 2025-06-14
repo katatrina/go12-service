@@ -5,7 +5,7 @@ import (
 	
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/katatrina/go12-service/modules/categorymodule/internal/service"
+	"github.com/katatrina/go12-service/modules/category/internal/service"
 )
 
 func (ctl *CategoryHTTPController) UpdateCategoryByIDAPI(c *gin.Context) {

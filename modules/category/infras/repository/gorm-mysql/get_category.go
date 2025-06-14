@@ -5,7 +5,7 @@ import (
 	"errors"
 	
 	"github.com/google/uuid"
-	"github.com/katatrina/go12-service/modules/categorymodule/internal/model"
+	"github.com/katatrina/go12-service/modules/category/internal/model"
 	sharedmodel "github.com/katatrina/go12-service/shared/model"
 	"gorm.io/gorm"
 )

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	
 	"github.com/gin-gonic/gin"
-	"github.com/katatrina/go12-service/modules/categorymodule/internal/service"
+	"github.com/katatrina/go12-service/modules/category/internal/service"
 )
 
 func (ctl *CategoryHTTPController) ListCategoriesAPI(c *gin.Context) {

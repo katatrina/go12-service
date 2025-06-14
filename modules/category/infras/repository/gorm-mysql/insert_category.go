@@ -3,7 +3,7 @@ package categorygormmysql
 import (
 	"context"
 	
-	"github.com/katatrina/go12-service/modules/categorymodule/internal/model"
+	"github.com/katatrina/go12-service/modules/category/internal/model"
 )
 
 func (repo *CategoryRepository) Insert(ctx context.Context, data *categorymodel.Category) error {
