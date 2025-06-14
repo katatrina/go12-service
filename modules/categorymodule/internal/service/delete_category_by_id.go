@@ -4,7 +4,7 @@ import (
 	"context"
 	
 	"github.com/google/uuid"
-	"github.com/katatrina/go12-service/modules/category/internal/model"
+	"github.com/katatrina/go12-service/modules/categorymodule/internal/model"
 )
 
 func (s *CategoryService) DeleteCategoryByID(ctx context.Context, id uuid.UUID) error {

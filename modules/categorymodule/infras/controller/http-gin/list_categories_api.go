@@ -4,11 +4,11 @@ import (
 	"net/http"
 	
 	"github.com/gin-gonic/gin"
-	"github.com/katatrina/go12-service/modules/category/internal/service"
+	"github.com/katatrina/go12-service/modules/categorymodule/internal/service"
 )
 
 func (ctl *CategoryHTTPController) ListCategoriesAPI(c *gin.Context) {
-	var dto categoryservice.categoryservice
+	var dto categoryservice.ListCategoriesDTO
 	
 	if err := c.ShouldBindQuery(&dto); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

@@ -4,10 +4,10 @@ import (
 	"context"
 	
 	"github.com/google/uuid"
-	"github.com/katatrina/go12-service/modules/category/internal/model"
+	"github.com/katatrina/go12-service/modules/categorymodule/internal/model"
 )
 
-func (s *CategoryService) CreateNewCategory(ctx context.Context, data *categorymodel.categorymodel) error {
+func (s *CategoryService) CreateNewCategory(ctx context.Context, data *categorymodel.Category) error {
 	// business logic to create a new category
 	
 	if err := data.Validate(); err != nil {

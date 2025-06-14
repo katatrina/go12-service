@@ -3,7 +3,7 @@ package categoryservice
 import (
 	"context"
 	
-	"github.com/katatrina/go12-service/modules/category/internal/model"
+	"github.com/katatrina/go12-service/modules/categorymodule/internal/model"
 	sharedmodel "github.com/katatrina/go12-service/shared/model"
 )
 

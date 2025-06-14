@@ -1,75 +1,16 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
-	"strings"
-	"time"
 	
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
-	categorymodule "github.com/katatrina/go12-service/modules/category"
+	categorymodule "github.com/katatrina/go12-service/modules/categorymodule"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
-
-type Category struct {
-	Id          uuid.UUID  `json:"id" gorm:"column:id"`
-	Name        string     `json:"name" gorm:"column:name"`
-	Description string     `json:"description" gorm:"column:description"`
-	Status      string     `json:"status" gorm:"column:status"`
-	CreatedAt   *time.Time `json:"createdAt" gorm:"column:created_at"`
-	UpdatedAt   *time.Time `json:"updatedAt" gorm:"column:updated_at"`
-}
-
-func (Category) TableName() string {
-	return "categories"
-}
-
-const (
-	StatusActive   = "active"
-	StatusInactive = "inactive"
-	StatusDeleted  = "deleted"
-)
-
-func (c *Category) Validate() error {
-	c.Name = strings.TrimSpace(c.Name)
-	
-	if c.Name == "" {
-		return errors.New("name is required")
-	}
-	
-	if c.Status != StatusActive && c.Status != StatusInactive && c.Status != StatusDeleted {
-		return errors.New("status must be active, inactive or deleted")
-	}
-	
-	return nil
-}
-
-type CategoryUpdateDTO struct {
-	Name        *string `json:"name"`
-	Description *string `json:"description"`
-	Status      *int    `json:"status"`
-}
-
-type PagingDTO struct {
-	Page  int   `json:"page" form:"page"`
-	Limit int   `json:"limit" form:"limit"`
-	Total int64 `json:"total"`
-}
-
-func (p *PagingDTO) Process() {
-	if p.Page <= 0 {
-		p.Page = 1
-	}
-	
-	if p.Limit <= 0 {
-		p.Limit = 10
-	}
-}
 
 func main() {
 	port := os.Getenv("PORT")

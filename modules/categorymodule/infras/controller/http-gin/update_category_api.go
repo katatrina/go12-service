@@ -5,7 +5,7 @@ import (
 	
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/katatrina/go12-service/modules/category/internal/service"
+	"github.com/katatrina/go12-service/modules/categorymodule/internal/service"
 )
 
 func (ctl *CategoryHTTPController) UpdateCategoryByIDAPI(c *gin.Context) {
@@ -18,7 +18,7 @@ func (ctl *CategoryHTTPController) UpdateCategoryByIDAPI(c *gin.Context) {
 		return
 	}
 	
-	var dto categoryservice.categoryservice
+	var dto categoryservice.UpdateCategoryCommandDTO
 	
 	if err = c.ShouldBindJSON(&dto); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{

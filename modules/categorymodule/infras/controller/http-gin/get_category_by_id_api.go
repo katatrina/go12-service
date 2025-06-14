@@ -6,6 +6,7 @@ import (
 	
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	categoryservice "github.com/katatrina/go12-service/modules/categorymodule/internal/service"
 	sharedmodel "github.com/katatrina/go12-service/shared/model"
 )
 
@@ -21,7 +22,7 @@ func (ctl *CategoryHTTPController) GetCategoryByIDAPI(c *gin.Context) {
 	}
 	
 	// Gọi service để lấy thông tin category
-	category, err := ctl.catService.GetCategoryDetails(c.Request.Context(), id)
+	category, err := ctl.getDetailQryHdl.Execute(c.Request.Context(), &categoryservice.GetDetailQuery{ID: id})
 	if err != nil {
 		if errors.Is(err, sharedmodel.ErrRecordNotFound) {
 			c.JSON(http.StatusNotFound, gin.H{
