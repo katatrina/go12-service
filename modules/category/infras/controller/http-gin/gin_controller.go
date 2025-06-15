@@ -10,7 +10,7 @@ import (
 )
 
 type ICategoryService interface {
-	CreateNewCategory(ctx context.Context, data *categorymodel.Category) error
+	// CreateNewCategory(ctx context.Context, data *categorymodel.Category) error
 	// GetCategoryDetails(ctx context.Context, id uuid.UUID) (*categorymodel.Category, error)
 	ListCategories(ctx context.Context,
 		dto *categoryservice.ListCategoriesDTO,
@@ -23,18 +23,25 @@ type IDetailQueryHandler interface {
 	Execute(ctx context.Context, query *categoryservice.GetDetailQuery) (*categorymodel.Category, error)
 }
 
+type ICreateNewCommandHandler interface {
+	Execute(ctx context.Context, cmd *categoryservice.CreateNewCommand) (*uuid.UUID, error)
+}
+
 type CategoryHTTPController struct {
 	catService      ICategoryService
 	getDetailQryHdl IDetailQueryHandler
+	createNewCmdHdl ICreateNewCommandHandler
 }
 
 func NewCategoryHTTPController(
 	catService ICategoryService,
 	getDetailQryHdl IDetailQueryHandler,
+	createNewCmdHdl ICreateNewCommandHandler,
 ) *CategoryHTTPController {
 	return &CategoryHTTPController{
 		catService:      catService,
 		getDetailQryHdl: getDetailQryHdl,
+		createNewCmdHdl: createNewCmdHdl,
 	}
 }
 

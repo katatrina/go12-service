@@ -19,6 +19,7 @@ func InitializeCategoryController(db *gorm.DB) *categoryhttpgin.CategoryHTTPCont
 	categoryRepository := categorygormmysql.NewCategoryRepository(db)
 	categoryService := categoryservice.NewCategoryService(categoryRepository)
 	getDetailQueryHandler := categoryservice.NewGetDetailQueryHandler(categoryRepository)
-	categoryHTTPController := categoryhttpgin.NewCategoryHTTPController(categoryService, getDetailQueryHandler)
+	createNewCommandHandler := categoryservice.NewCreateNewCommandHandler(categoryRepository)
+	categoryHTTPController := categoryhttpgin.NewCategoryHTTPController(categoryService, getDetailQueryHandler, createNewCommandHandler)
 	return categoryHTTPController
 }

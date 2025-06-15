@@ -5,6 +5,7 @@ import (
 	
 	"github.com/gin-gonic/gin"
 	"github.com/katatrina/go12-service/modules/category/internal/model"
+	categoryservice "github.com/katatrina/go12-service/modules/category/internal/service"
 )
 
 func (ctl *CategoryHTTPController) CreateCategoryAPI(c *gin.Context) {
@@ -15,11 +16,12 @@ func (ctl *CategoryHTTPController) CreateCategoryAPI(c *gin.Context) {
 		return
 	}
 	
-	// call business logic in service
-	if err := ctl.catService.CreateNewCategory(c.Request.Context(), &requestBodyData); err != nil {
+	cmd := categoryservice.CreateNewCommand{Dto: requestBodyData}
+	id, err := ctl.createNewCmdHdl.Execute(c.Request.Context(), &cmd)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	
-	c.JSON(http.StatusCreated, gin.H{"data": requestBodyData.ID})
+	c.JSON(http.StatusCreated, gin.H{"data": id})
 }

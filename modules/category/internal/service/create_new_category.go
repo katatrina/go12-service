@@ -7,18 +7,28 @@ import (
 	"github.com/katatrina/go12-service/modules/category/internal/model"
 )
 
-func (s *CategoryService) CreateNewCategory(ctx context.Context, data *categorymodel.Category) error {
-	// business logic to create a new category
-	
-	if err := data.Validate(); err != nil {
-		return err
+type CreateNewCommand struct {
+	Dto categorymodel.Category
+}
+
+type CreateNewCommandHandler struct {
+	catRepo ICategoryCommandRepo
+}
+
+func NewCreateNewCommandHandler(catRepo ICategoryCommandRepo) *CreateNewCommandHandler {
+	return &CreateNewCommandHandler{catRepo: catRepo}
+}
+
+func (hdl *CreateNewCommandHandler) Execute(ctx context.Context, cmd *CreateNewCommand) (*uuid.UUID, error) {
+	if err := cmd.Dto.Validate(); err != nil {
+		return nil, err
 	}
 	
-	data.ID, _ = uuid.NewV7()
+	cmd.Dto.ID, _ = uuid.NewV7()
 	
-	if err := s.catRepo.Insert(ctx, data); err != nil {
-		return err
+	if err := hdl.catRepo.Insert(ctx, &cmd.Dto); err != nil {
+		return nil, err
 	}
 	
-	return nil
+	return &cmd.Dto.ID, nil
 }
