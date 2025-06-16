@@ -6,12 +6,11 @@ import (
 	
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	categorymodel "github.com/katatrina/go12-service/modules/category/internal/model"
 	categoryservice "github.com/katatrina/go12-service/modules/category/internal/service"
-	sharedmodel "github.com/katatrina/go12-service/shared/model"
 )
 
-func (ctl *CategoryHTTPController) GetCategoryByIDAPI(c *gin.Context) {
-	// Lấy ID từ URL parameter
+func (ctl *CategoryHTTPController) GetCategoryByID(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := uuid.Parse(idStr)
 	if err != nil {
@@ -21,22 +20,24 @@ func (ctl *CategoryHTTPController) GetCategoryByIDAPI(c *gin.Context) {
 		return
 	}
 	
-	// Gọi service để lấy thông tin category
-	category, err := ctl.getDetailQryHdl.Execute(c.Request.Context(), &categoryservice.GetDetailQuery{ID: id})
+	query := &categoryservice.GetDetailQuery{
+		ID: id,
+	}
+	category, err := ctl.getDetailQryHdl.Execute(c.Request.Context(), query)
 	if err != nil {
-		if errors.Is(err, sharedmodel.ErrRecordNotFound) {
+		if errors.Is(err, categorymodel.ErrCategoryNotFound) || errors.Is(err, categorymodel.ErrCategoryDeleted) {
 			c.JSON(http.StatusNotFound, gin.H{
 				"error": "category not found",
 			})
 			return
 		}
+		
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
 	
-	// Trả về thông tin category
 	c.JSON(http.StatusOK, gin.H{
 		"data": category,
 	})

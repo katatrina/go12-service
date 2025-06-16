@@ -5,21 +5,25 @@ import (
 	
 	"github.com/google/uuid"
 	"github.com/katatrina/go12-service/modules/category/internal/model"
+	"github.com/katatrina/go12-service/shared/datatype"
 )
 
-type GetDetailQuery struct {
-	ID uuid.UUID
-	// mores...
+type IGetDetailRepo interface {
+	FindByID(ctx context.Context, id uuid.UUID) (*categorymodel.Category, error)
 }
 
 type GetDetailQueryHandler struct {
-	catRepo ICategoryQueryRepo
+	catRepo IGetDetailRepo
 }
 
-func NewGetDetailQueryHandler(catRepo ICategoryQueryRepo) *GetDetailQueryHandler {
+func NewGetDetailQueryHandler(catRepo IGetDetailRepo) *GetDetailQueryHandler {
 	return &GetDetailQueryHandler{
 		catRepo: catRepo,
 	}
+}
+
+type GetDetailQuery struct {
+	ID uuid.UUID
 }
 
 func (hdl *GetDetailQueryHandler) Execute(ctx context.Context, query *GetDetailQuery) (*categorymodel.Category, error) {
@@ -28,8 +32,8 @@ func (hdl *GetDetailQueryHandler) Execute(ctx context.Context, query *GetDetailQ
 		return nil, err
 	}
 	
-	if category.Status == categorymodel.StatusDeleted {
-		return nil, categorymodel.ErrCategoryNotFound
+	if category.Status == datatype.StatusDeleted {
+		return nil, categorymodel.ErrCategoryDeleted
 	}
 	
 	return category, nil
