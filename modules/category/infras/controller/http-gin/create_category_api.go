@@ -8,20 +8,20 @@ import (
 	categoryservice "github.com/katatrina/go12-service/modules/category/internal/service"
 )
 
-func (ctl *CategoryHTTPController) CreateCategoryAPI(c *gin.Context) {
-	var requestBodyData categorymodel.Category
+func (ctl *CategoryHTTPController) CreateCategory(c *gin.Context) {
+	var requestBodyData categorymodel.CreateCategoryDTO
 	
 	if err := c.ShouldBindJSON(&requestBodyData); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	
-	cmd := categoryservice.CreateNewCommand{Dto: requestBodyData}
-	id, err := ctl.createNewCmdHdl.Execute(c.Request.Context(), &cmd)
+	cmd := categoryservice.CreateCommand{Dto: &requestBodyData}
+	category, err := ctl.createCmdHdl.Execute(c.Request.Context(), &cmd)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	
-	c.JSON(http.StatusCreated, gin.H{"data": id})
+	c.JSON(http.StatusCreated, gin.H{"data": category.ID})
 }

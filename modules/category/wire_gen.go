@@ -4,7 +4,7 @@
 //go:build !wireinject
 // +build !wireinject
 
-package category
+package categorymodule
 
 import (
 	"github.com/katatrina/go12-service/modules/category/infras/controller/http-gin"
@@ -19,7 +19,7 @@ func InitializeCategoryController(db *gorm.DB) *categoryhttpgin.CategoryHTTPCont
 	categoryRepository := categorygormmysql.NewCategoryRepository(db)
 	categoryService := categoryservice.NewCategoryService(categoryRepository)
 	getDetailQueryHandler := categoryservice.NewGetDetailQueryHandler(categoryRepository)
-	createNewCommandHandler := categoryservice.NewCreateNewCommandHandler(categoryRepository)
+	createNewCommandHandler := categoryservice.NewCreateCommandHandler(categoryRepository)
 	categoryHTTPController := categoryhttpgin.NewCategoryHTTPController(categoryService, getDetailQueryHandler, createNewCommandHandler)
 	return categoryHTTPController
 }

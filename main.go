@@ -7,7 +7,7 @@ import (
 	"os"
 	
 	"github.com/gin-gonic/gin"
-	categorymodule "github.com/katatrina/go12-service/modules/categorymodule"
+	categorymodule "github.com/katatrina/go12-service/modules/category"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

@@ -5,38 +5,35 @@ import (
 	"time"
 	
 	"github.com/google/uuid"
+	"github.com/katatrina/go12-service/shared/datatype"
 )
 
 type Category struct {
-	ID          uuid.UUID  `json:"id" gorm:"column:id"`
-	Name        string     `json:"name" gorm:"column:name"`
-	Description string     `json:"description" gorm:"column:description"`
-	Status      string     `json:"status" gorm:"column:status"`
-	Icon        []byte     `json:"icon" gorm:"column:icon"`
-	CreatedAt   *time.Time `json:"createdAt" gorm:"column:created_at"`
-	UpdatedAt   *time.Time `json:"updatedAt" gorm:"column:updated_at"`
+	ID          uuid.UUID       `json:"id" gorm:"column:id"`
+	Name        string          `json:"name" gorm:"column:name"`
+	Description *string         `json:"description" gorm:"column:description"`
+	Status      datatype.Status `json:"status" gorm:"column:status"`
+	CreatedAt   *time.Time      `json:"createdAt" gorm:"column:created_at"`
+	UpdatedAt   *time.Time      `json:"updatedAt" gorm:"column:updated_at"`
 }
 
 func (c *Category) TableName() string {
 	return "categories"
 }
 
-const (
-	StatusActive   = "active"
-	StatusInactive = "inactive"
-	StatusDeleted  = "deleted"
-)
-
-func (c *Category) Validate() error {
-	c.Name = strings.TrimSpace(c.Name)
+func (dto *CreateCategoryDTO) Validate() error {
+	// Validate name
+	dto.Name = strings.TrimSpace(dto.Name)
 	
-	if c.Name == "" {
+	if dto.Name == "" {
 		return ErrNameRequired
 	}
 	
-	if c.Status != StatusActive && c.Status != StatusInactive && c.Status != StatusDeleted {
-		return ErrCategoryStatusInvalid
+	if len(dto.Name) > 100 {
+		return ErrInvalidNameLength
 	}
+	
+	// TODO: Validate description (if provided)
 	
 	return nil
 }

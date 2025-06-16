@@ -2,7 +2,7 @@
 
 // The build tag makes sure the stub is not built in the final build.
 
-package category
+package categorymodule
 
 import (
 	"github.com/google/wire"

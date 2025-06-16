@@ -19,36 +19,36 @@ type ICategoryService interface {
 	DeleteCategoryByID(ctx context.Context, id uuid.UUID) error
 }
 
+type ICreateCommandHandler interface {
+	Execute(ctx context.Context, cmd *categoryservice.CreateCommand) (*categorymodel.Category, error)
+}
+
 type IDetailQueryHandler interface {
 	Execute(ctx context.Context, query *categoryservice.GetDetailQuery) (*categorymodel.Category, error)
 }
 
-type ICreateNewCommandHandler interface {
-	Execute(ctx context.Context, cmd *categoryservice.CreateNewCommand) (*uuid.UUID, error)
-}
-
 type CategoryHTTPController struct {
 	catService      ICategoryService
+	createCmdHdl    ICreateCommandHandler
 	getDetailQryHdl IDetailQueryHandler
-	createNewCmdHdl ICreateNewCommandHandler
 }
 
 func NewCategoryHTTPController(
 	catService ICategoryService,
 	getDetailQryHdl IDetailQueryHandler,
-	createNewCmdHdl ICreateNewCommandHandler,
+	createNewCmdHdl ICreateCommandHandler,
 ) *CategoryHTTPController {
 	return &CategoryHTTPController{
 		catService:      catService,
 		getDetailQryHdl: getDetailQryHdl,
-		createNewCmdHdl: createNewCmdHdl,
+		createCmdHdl:    createNewCmdHdl,
 	}
 }
 
 func (ctl *CategoryHTTPController) SetupRoutes(g *gin.RouterGroup) {
-	g.POST("", ctl.CreateCategoryAPI)
+	g.POST("", ctl.CreateCategory)
 	g.GET("", ctl.ListCategoriesAPI)
-	g.GET(":id", ctl.GetCategoryByIDAPI)
-	g.PATCH(":id", ctl.UpdateCategoryByIDAPI)
-	g.DELETE(":id", ctl.DeleteCategoryByIDAPI)
+	g.GET("/:id", ctl.GetCategoryByIDAPI)
+	g.PATCH("/:id", ctl.UpdateCategoryByIDAPI)
+	g.DELETE("/:id", ctl.DeleteCategoryByIDAPI)
 }
