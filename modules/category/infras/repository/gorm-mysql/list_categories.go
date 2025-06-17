@@ -4,6 +4,7 @@ import (
 	"context"
 	
 	"github.com/katatrina/go12-service/modules/category/internal/model"
+	"github.com/katatrina/go12-service/shared/datatype"
 	sharedmodel "github.com/katatrina/go12-service/shared/model"
 )
 
@@ -14,23 +15,21 @@ func (repo *CategoryRepository) ListCategories(
 ) ([]categorymodel.Category, error) {
 	var categories []categorymodel.Category
 	
-	query := repo.db.WithContext(ctx).
-		Where("status in (?)", []string{categorymodel.StatusActive})
+	// TODO: Check the logic again for best practices
 	
-	// Lấy tổng số records sau khi đã filterDTO
+	query := repo.db.WithContext(ctx).
+		Where("status in (?)", []string{string(datatype.StatusActive)})
+	
 	if err := query.Table((&categorymodel.Category{}).TableName()).Count(&pagingDTO.Total).Error; err != nil {
 		return nil, err
 	}
 	
-	// Nếu không có records nào, trả về slice rỗng
 	if pagingDTO.Total == 0 {
 		return categories, nil
 	}
 	
-	// Tính toán offset và limit
 	offset := (pagingDTO.Page - 1) * pagingDTO.Limit
 	
-	// Lấy data với pagingDTO và sắp xếp
 	if err := query.
 		Order("created_at desc").
 		Offset(offset).
