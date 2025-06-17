@@ -5,6 +5,7 @@ import (
 	
 	"github.com/google/uuid"
 	"github.com/katatrina/go12-service/modules/category/internal/model"
+	"github.com/katatrina/go12-service/shared/datatype"
 )
 
 func (repo *CategoryRepository) Delete(ctx context.Context, id uuid.UUID, isHard bool) error {
@@ -16,7 +17,7 @@ func (repo *CategoryRepository) Delete(ctx context.Context, id uuid.UUID, isHard
 		return nil
 	}
 	
-	if err := repo.db.Model(&categorymodel.Category{}).Where("id = ?", id).Update("status", categorymodel.StatusDeleted).Error; err != nil {
+	if err := repo.db.Model(&categorymodel.Category{}).Where("id = ?", id).Update("status", datatype.StatusDeleted).Error; err != nil {
 		return err
 	}
 	

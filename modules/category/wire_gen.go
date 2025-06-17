@@ -17,9 +17,11 @@ import (
 
 func InitializeCategoryController(db *gorm.DB) *categoryhttpgin.CategoryHTTPController {
 	categoryRepository := categorygormmysql.NewCategoryRepository(db)
-	categoryService := categoryservice.NewCategoryService(categoryRepository)
+	createCommandHandler := categoryservice.NewCreateCommandHandler(categoryRepository)
 	getDetailQueryHandler := categoryservice.NewGetDetailQueryHandler(categoryRepository)
-	createNewCommandHandler := categoryservice.NewCreateCommandHandler(categoryRepository)
-	categoryHTTPController := categoryhttpgin.NewCategoryHTTPController(categoryService, getDetailQueryHandler, createNewCommandHandler)
+	listCategoriesQueryHandler := categoryservice.NewListCategoriesQueryHandler(categoryRepository)
+	updateByIDCommandHandler := categoryservice.NewUpdateByIDCommandHandler(categoryRepository)
+	deleteByIDCommandHandler := categoryservice.NewDeleteByIDCommandHandler(categoryRepository)
+	categoryHTTPController := categoryhttpgin.NewCategoryHTTPController(createCommandHandler, getDetailQueryHandler, listCategoriesQueryHandler, updateByIDCommandHandler, deleteByIDCommandHandler)
 	return categoryHTTPController
 }

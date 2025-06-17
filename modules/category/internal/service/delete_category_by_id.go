@@ -5,19 +5,39 @@ import (
 	
 	"github.com/google/uuid"
 	"github.com/katatrina/go12-service/modules/category/internal/model"
+	"github.com/katatrina/go12-service/shared/datatype"
 )
 
-func (s *CategoryService) DeleteCategoryByID(ctx context.Context, id uuid.UUID) error {
-	category, err := s.catRepo.FindByID(ctx, id)
+type IDeleteByIDRepo interface {
+	FindByID(ctx context.Context, id uuid.UUID) (*categorymodel.Category, error)
+	Delete(ctx context.Context, id uuid.UUID, isHard bool) error
+}
+
+type DeleteByIDCommandHandler struct {
+	catRepo IDeleteByIDRepo
+}
+
+func NewDeleteByIDCommandHandler(catRepo IDeleteByIDRepo) *DeleteByIDCommandHandler {
+	return &DeleteByIDCommandHandler{
+		catRepo: catRepo,
+	}
+}
+
+type DeleteByIDCommand struct {
+	ID uuid.UUID
+}
+
+func (hdl *DeleteByIDCommandHandler) Execute(ctx context.Context, cmd *DeleteByIDCommand) error {
+	category, err := hdl.catRepo.FindByID(ctx, cmd.ID)
 	if err != nil {
 		return err
 	}
 	
-	if category.Status == categorymodel.StatusDeleted {
+	if category.Status == datatype.StatusDeleted {
 		return categorymodel.ErrCategoryDeleted
 	}
 	
-	if err = s.catRepo.Delete(ctx, id, false); err != nil {
+	if err = hdl.catRepo.Delete(ctx, cmd.ID, false); err != nil {
 		return err
 	}
 	

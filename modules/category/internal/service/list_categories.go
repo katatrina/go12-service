@@ -16,8 +16,8 @@ type IListRepo interface {
 }
 
 type ListQuery struct {
-	*categorymodel.FilterCategoryDTO
-	*sharedmodel.PagingDTO
+	categorymodel.FilterCategoryDTO
+	sharedmodel.PagingDTO
 }
 
 type ListCategoriesQueryHandler struct {
@@ -34,7 +34,7 @@ func (hdl *ListCategoriesQueryHandler) Execute(
 	ctx context.Context,
 	query *ListQuery,
 ) ([]categorymodel.Category, error) {
-	categories, err := hdl.catRepo.ListCategories(ctx, query.PagingDTO, query.FilterCategoryDTO)
+	categories, err := hdl.catRepo.ListCategories(ctx, &query.PagingDTO, &query.FilterCategoryDTO)
 	if err != nil {
 		return nil, err
 	}
