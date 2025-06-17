@@ -1,14 +1,16 @@
 package categoryhttpgin
 
 import (
+	"errors"
 	"net/http"
 	
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/katatrina/go12-service/modules/category/internal/service"
+	categorymodel "github.com/katatrina/go12-service/modules/category/internal/model"
+	categoryservice "github.com/katatrina/go12-service/modules/category/internal/service"
 )
 
-func (ctl *CategoryHTTPController) UpdateCategoryByIDAPI(c *gin.Context) {
+func (ctl *CategoryHTTPController) UpdateCategoryByID(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := uuid.Parse(idStr)
 	if err != nil {
@@ -18,7 +20,7 @@ func (ctl *CategoryHTTPController) UpdateCategoryByIDAPI(c *gin.Context) {
 		return
 	}
 	
-	var dto categoryservice.UpdateCategoryCommandDTO
+	var dto categorymodel.UpdateCategoryDTO
 	
 	if err = c.ShouldBindJSON(&dto); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -27,10 +29,19 @@ func (ctl *CategoryHTTPController) UpdateCategoryByIDAPI(c *gin.Context) {
 		return
 	}
 	
-	dto.ID = id
-	
-	err = ctl.catService.UpdateCategoryByID(c.Request.Context(), &dto)
+	cmd := categoryservice.UpdateByIDCommand{
+		ID:  id,
+		Dto: &dto,
+	}
+	err = ctl.updateCmdHdl.Execute(c.Request.Context(), &cmd)
 	if err != nil {
+		if errors.Is(err, categorymodel.ErrCategoryNotFound) || errors.Is(err, categorymodel.ErrCategoryDeleted) {
+			c.JSON(http.StatusNotFound, gin.H{
+				"error": "category not found",
+			})
+			return
+		}
+		
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})

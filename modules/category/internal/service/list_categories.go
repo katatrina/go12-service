@@ -7,7 +7,7 @@ import (
 	sharedmodel "github.com/katatrina/go12-service/shared/model"
 )
 
-type IListCategoriesRepo interface {
+type IListRepo interface {
 	ListCategories(
 		ctx context.Context,
 		pagingDTO *sharedmodel.PagingDTO,
@@ -21,10 +21,10 @@ type ListQuery struct {
 }
 
 type ListCategoriesQueryHandler struct {
-	catRepo IListCategoriesRepo
+	catRepo IListRepo
 }
 
-func NewListCategoriesQueryHandler(catRepo IListCategoriesRepo) *ListCategoriesQueryHandler {
+func NewListCategoriesQueryHandler(catRepo IListRepo) *ListCategoriesQueryHandler {
 	return &ListCategoriesQueryHandler{
 		catRepo: catRepo,
 	}

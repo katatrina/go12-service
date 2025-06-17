@@ -18,16 +18,18 @@ var CategorySet = wire.NewSet(
 	categoryservice.NewCreateCommandHandler,
 	categoryservice.NewGetDetailQueryHandler,
 	categoryservice.NewListCategoriesQueryHandler,
+	categoryservice.NewUpdateByIDCommandHandler,
 	
 	wire.Bind(new(categoryhttpgin.ICategoryService), new(*categoryservice.CategoryService)),
 	wire.Bind(new(categoryhttpgin.ICreateCommandHandler), new(*categoryservice.CreateCommandHandler)),
 	wire.Bind(new(categoryhttpgin.IGetDetailQueryHandler), new(*categoryservice.GetDetailQueryHandler)),
-	wire.Bind(new(categoryhttpgin.IListCategoriesQueryHandler), new(*categoryservice.ListCategoriesQueryHandler)),
+	wire.Bind(new(categoryhttpgin.IListQueryHandler), new(*categoryservice.ListCategoriesQueryHandler)),
+	wire.Bind(new(categoryhttpgin.IUpdateByIDCommandHandler), new(*categoryservice.UpdateByIDCommandHandler)),
 	
 	wire.Bind(new(categoryservice.ICreateRepo), new(*categorygormmysql.CategoryRepository)),
 	wire.Bind(new(categoryservice.IGetDetailRepo), new(*categorygormmysql.CategoryRepository)),
-	wire.Bind(new(categoryservice.ICategoryCommandRepo), new(*categorygormmysql.CategoryRepository)),
-	wire.Bind(new(categoryservice.IListCategoriesRepo), new(*categorygormmysql.CategoryRepository)),
+	wire.Bind(new(categoryservice.IListRepo), new(*categorygormmysql.CategoryRepository)),
+	wire.Bind(new(categoryservice.IUpdateByIDRepo), new(*categorygormmysql.CategoryRepository)),
 )
 
 func SetupCategoryModule(db *gorm.DB, g *gin.RouterGroup) {
