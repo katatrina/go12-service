@@ -1,4 +1,4 @@
-package categoryservice
+package service
 
 import (
 	"context"
@@ -9,8 +9,8 @@ import (
 )
 
 type IUpdateByIDRepo interface {
-	FindByID(ctx context.Context, id uuid.UUID) (*categorymodel.Category, error)
-	Update(ctx context.Context, id uuid.UUID, dto *categorymodel.UpdateCategoryDTO) error
+	FindByID(ctx context.Context, id uuid.UUID) (*model.Category, error)
+	Update(ctx context.Context, id uuid.UUID, dto *model.UpdateCategoryDTO) error
 }
 
 type UpdateByIDCommandHandler struct {
@@ -19,7 +19,7 @@ type UpdateByIDCommandHandler struct {
 
 type UpdateByIDCommand struct {
 	ID  uuid.UUID
-	Dto *categorymodel.UpdateCategoryDTO
+	DTO *model.UpdateCategoryDTO
 }
 
 func NewUpdateByIDCommandHandler(catRepo IUpdateByIDRepo) *UpdateByIDCommandHandler {
@@ -29,7 +29,7 @@ func NewUpdateByIDCommandHandler(catRepo IUpdateByIDRepo) *UpdateByIDCommandHand
 }
 
 func (hdl *UpdateByIDCommandHandler) Execute(ctx context.Context, cmd *UpdateByIDCommand) error {
-	if err := cmd.Dto.Validate(); err != nil {
+	if err := cmd.DTO.Validate(); err != nil {
 		return err
 	}
 	
@@ -39,10 +39,10 @@ func (hdl *UpdateByIDCommandHandler) Execute(ctx context.Context, cmd *UpdateByI
 	}
 	
 	if category.Status == datatype.StatusDeleted {
-		return categorymodel.ErrCategoryDeleted
+		return model.ErrCategoryDeleted
 	}
 	
-	if err = hdl.catRepo.Update(ctx, cmd.ID, cmd.Dto); err != nil {
+	if err = hdl.catRepo.Update(ctx, cmd.ID, cmd.DTO); err != nil {
 		return err
 	}
 	

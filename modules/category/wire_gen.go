@@ -7,21 +7,21 @@
 package categorymodule
 
 import (
-	"github.com/katatrina/go12-service/modules/category/infras/controller/http-gin"
-	"github.com/katatrina/go12-service/modules/category/infras/repository/gorm-mysql"
+	"github.com/katatrina/go12-service/modules/category/infras/controller/controller"
+	"github.com/katatrina/go12-service/modules/category/infras/repository/mysql"
 	"github.com/katatrina/go12-service/modules/category/internal/service"
 	"gorm.io/gorm"
 )
 
 // Injectors from wire.go:
 
-func InitializeCategoryController(db *gorm.DB) *categoryhttpgin.CategoryHTTPController {
-	categoryRepository := categorygormmysql.NewCategoryRepository(db)
-	createCommandHandler := categoryservice.NewCreateCommandHandler(categoryRepository)
-	getDetailQueryHandler := categoryservice.NewGetDetailQueryHandler(categoryRepository)
-	listCategoriesQueryHandler := categoryservice.NewListCategoriesQueryHandler(categoryRepository)
-	updateByIDCommandHandler := categoryservice.NewUpdateByIDCommandHandler(categoryRepository)
-	deleteByIDCommandHandler := categoryservice.NewDeleteByIDCommandHandler(categoryRepository)
-	categoryHTTPController := categoryhttpgin.NewCategoryHTTPController(createCommandHandler, getDetailQueryHandler, listCategoriesQueryHandler, updateByIDCommandHandler, deleteByIDCommandHandler)
+func InitializeCategoryController(db *gorm.DB) *controller.CategoryHTTPController {
+	categoryRepository := repository.NewCategoryRepository(db)
+	createCommandHandler := service.NewCreateCommandHandler(categoryRepository)
+	getByIDQueryHandler := service.NewGetDetailQueryHandler(categoryRepository)
+	listCategoriesQueryHandler := service.NewListCategoriesQueryHandler(categoryRepository)
+	updateByIDCommandHandler := service.NewUpdateByIDCommandHandler(categoryRepository)
+	deleteByIDCommandHandler := service.NewDeleteByIDCommandHandler(categoryRepository)
+	categoryHTTPController := controller.NewCategoryHTTPController(createCommandHandler, getByIDQueryHandler, listCategoriesQueryHandler, updateByIDCommandHandler, deleteByIDCommandHandler)
 	return categoryHTTPController
 }
