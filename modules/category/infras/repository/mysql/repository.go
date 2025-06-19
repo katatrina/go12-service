@@ -1,4 +1,4 @@
-package categorygormmysql
+package repository
 
 import (
 	"gorm.io/gorm"

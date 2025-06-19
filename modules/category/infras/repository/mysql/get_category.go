@@ -1,4 +1,4 @@
-package categorygormmysql
+package repository
 
 import (
 	"context"
@@ -9,12 +9,12 @@ import (
 	"gorm.io/gorm"
 )
 
-func (repo *CategoryRepository) FindByID(ctx context.Context, id uuid.UUID) (*categorymodel.Category, error) {
-	var category categorymodel.Category
+func (repo *CategoryRepository) FindByID(ctx context.Context, id uuid.UUID) (*model.Category, error) {
+	var category model.Category
 	
 	if err := repo.db.First(&category, "id = ?", id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, categorymodel.ErrCategoryNotFound
+			return nil, model.ErrCategoryNotFound
 		}
 		return nil, err
 	}

@@ -1,4 +1,4 @@
-package categoryservice
+package service
 
 import (
 	"context"
@@ -11,12 +11,12 @@ type IListRepo interface {
 	ListCategories(
 		ctx context.Context,
 		pagingDTO *sharedmodel.PagingDTO,
-		filterDTO *categorymodel.FilterCategoryDTO,
-	) ([]categorymodel.Category, error)
+		filterDTO *model.FilterCategoryDTO,
+	) ([]model.Category, error)
 }
 
 type ListQuery struct {
-	categorymodel.FilterCategoryDTO
+	model.FilterCategoryDTO
 	sharedmodel.PagingDTO
 }
 
@@ -33,7 +33,7 @@ func NewListCategoriesQueryHandler(catRepo IListRepo) *ListCategoriesQueryHandle
 func (hdl *ListCategoriesQueryHandler) Execute(
 	ctx context.Context,
 	query *ListQuery,
-) ([]categorymodel.Category, error) {
+) ([]model.Category, error) {
 	categories, err := hdl.catRepo.ListCategories(ctx, &query.PagingDTO, &query.FilterCategoryDTO)
 	if err != nil {
 		return nil, err

@@ -1,4 +1,4 @@
-package categoryhttpgin
+package controller
 
 import (
 	"net/http"
@@ -8,7 +8,7 @@ import (
 )
 
 func (ctl *CategoryHTTPController) ListCategories(c *gin.Context) {
-	var dto categoryservice.ListQuery
+	var dto service.ListQuery
 	
 	if err := c.ShouldBindQuery(&dto); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

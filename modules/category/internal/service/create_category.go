@@ -1,4 +1,4 @@
-package categoryservice
+package service
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 )
 
 type CreateCommand struct {
-	Dto *categorymodel.CreateCategoryDTO
+	DTO *model.CreateCategoryDTO
 }
 
 type CreateCommandHandler struct {
@@ -17,15 +17,15 @@ type CreateCommandHandler struct {
 }
 
 type ICreateRepo interface {
-	Insert(ctx context.Context, data *categorymodel.Category) error
+	Insert(ctx context.Context, data *model.Category) error
 }
 
 func NewCreateCommandHandler(catRepo ICreateRepo) *CreateCommandHandler {
 	return &CreateCommandHandler{catRepo: catRepo}
 }
 
-func (hdl *CreateCommandHandler) Execute(ctx context.Context, cmd *CreateCommand) (*categorymodel.Category, error) {
-	if err := cmd.Dto.Validate(); err != nil {
+func (hdl *CreateCommandHandler) Execute(ctx context.Context, cmd *CreateCommand) (*model.Category, error) {
+	if err := cmd.DTO.Validate(); err != nil {
 		return nil, err
 	}
 	
@@ -34,10 +34,10 @@ func (hdl *CreateCommandHandler) Execute(ctx context.Context, cmd *CreateCommand
 		return nil, err
 	}
 	
-	category := categorymodel.Category{
+	category := model.Category{
 		ID:          categoryID,
-		Name:        cmd.Dto.Name,
-		Description: cmd.Dto.Description,
+		Name:        cmd.DTO.Name,
+		Description: cmd.DTO.Description,
 		Status:      datatype.StatusActive,
 	}
 	

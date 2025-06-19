@@ -1,4 +1,4 @@
-package categorygormmysql
+package repository
 
 import (
 	"context"
@@ -11,16 +11,16 @@ import (
 func (repo *CategoryRepository) ListCategories(
 	ctx context.Context,
 	pagingDTO *sharedmodel.PagingDTO,
-	filterDTO *categorymodel.FilterCategoryDTO,
-) ([]categorymodel.Category, error) {
-	var categories []categorymodel.Category
+	filterDTO *model.FilterCategoryDTO,
+) ([]model.Category, error) {
+	var categories []model.Category
 	
 	// TODO: Check the logic again for best practices
 	
 	query := repo.db.WithContext(ctx).
 		Where("status in (?)", []string{string(datatype.StatusActive)})
 	
-	if err := query.Table((&categorymodel.Category{}).TableName()).Count(&pagingDTO.Total).Error; err != nil {
+	if err := query.Table((&model.Category{}).TableName()).Count(&pagingDTO.Total).Error; err != nil {
 		return nil, err
 	}
 	

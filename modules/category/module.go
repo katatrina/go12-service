@@ -3,33 +3,33 @@ package categorymodule
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
-	categoryhttpgin "github.com/katatrina/go12-service/modules/category/infras/controller/http-gin"
-	categorygormmysql "github.com/katatrina/go12-service/modules/category/infras/repository/gorm-mysql"
-	categoryservice "github.com/katatrina/go12-service/modules/category/internal/service"
+	httpcontroller "github.com/katatrina/go12-service/modules/category/infras/controller/http"
+	mysqlrepository "github.com/katatrina/go12-service/modules/category/infras/repository/mysql"
+	"github.com/katatrina/go12-service/modules/category/internal/service"
 	"gorm.io/gorm"
 )
 
 var CategorySet = wire.NewSet(
-	categorygormmysql.NewCategoryRepository,
+	mysqlrepository.NewCategoryRepository,
 	
-	categoryhttpgin.NewCategoryHTTPController,
-	categoryservice.NewCreateCommandHandler,
-	categoryservice.NewGetDetailQueryHandler,
-	categoryservice.NewListCategoriesQueryHandler,
-	categoryservice.NewUpdateByIDCommandHandler,
-	categoryservice.NewDeleteByIDCommandHandler,
+	httpcontroller.NewCategoryHTTPController,
+	service.NewCreateCommandHandler,
+	service.NewGetDetailQueryHandler,
+	service.NewListCategoriesQueryHandler,
+	service.NewUpdateByIDCommandHandler,
+	service.NewDeleteByIDCommandHandler,
 	
-	wire.Bind(new(categoryhttpgin.ICreateCommandHandler), new(*categoryservice.CreateCommandHandler)),
-	wire.Bind(new(categoryhttpgin.IGetDetailQueryHandler), new(*categoryservice.GetDetailQueryHandler)),
-	wire.Bind(new(categoryhttpgin.IListQueryHandler), new(*categoryservice.ListCategoriesQueryHandler)),
-	wire.Bind(new(categoryhttpgin.IUpdateByIDCommandHandler), new(*categoryservice.UpdateByIDCommandHandler)),
-	wire.Bind(new(categoryhttpgin.IDeleteByIDCommandHandler), new(*categoryservice.DeleteByIDCommandHandler)),
+	wire.Bind(new(httpcontroller.ICreateCommandHandler), new(*service.CreateCommandHandler)),
+	wire.Bind(new(httpcontroller.IGetByIDQueryHandler), new(*service.GetByIDQueryHandler)),
+	wire.Bind(new(httpcontroller.IListQueryHandler), new(*service.ListCategoriesQueryHandler)),
+	wire.Bind(new(httpcontroller.IUpdateByIDCommandHandler), new(*service.UpdateByIDCommandHandler)),
+	wire.Bind(new(httpcontroller.IDeleteByIDCommandHandler), new(*service.DeleteByIDCommandHandler)),
 	
-	wire.Bind(new(categoryservice.ICreateRepo), new(*categorygormmysql.CategoryRepository)),
-	wire.Bind(new(categoryservice.IGetDetailRepo), new(*categorygormmysql.CategoryRepository)),
-	wire.Bind(new(categoryservice.IListRepo), new(*categorygormmysql.CategoryRepository)),
-	wire.Bind(new(categoryservice.IUpdateByIDRepo), new(*categorygormmysql.CategoryRepository)),
-	wire.Bind(new(categoryservice.IDeleteByIDRepo), new(*categorygormmysql.CategoryRepository)),
+	wire.Bind(new(service.ICreateRepo), new(*mysqlrepository.CategoryRepository)),
+	wire.Bind(new(service.IGetByIDRepo), new(*mysqlrepository.CategoryRepository)),
+	wire.Bind(new(service.IListRepo), new(*mysqlrepository.CategoryRepository)),
+	wire.Bind(new(service.IUpdateByIDRepo), new(*mysqlrepository.CategoryRepository)),
+	wire.Bind(new(service.IDeleteByIDRepo), new(*mysqlrepository.CategoryRepository)),
 )
 
 func SetupCategoryModule(db *gorm.DB, g *gin.RouterGroup) {

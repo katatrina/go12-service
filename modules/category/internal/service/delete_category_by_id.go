@@ -1,4 +1,4 @@
-package categoryservice
+package service
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 )
 
 type IDeleteByIDRepo interface {
-	FindByID(ctx context.Context, id uuid.UUID) (*categorymodel.Category, error)
+	FindByID(ctx context.Context, id uuid.UUID) (*model.Category, error)
 	Delete(ctx context.Context, id uuid.UUID, isHard bool) error
 }
 
@@ -34,7 +34,7 @@ func (hdl *DeleteByIDCommandHandler) Execute(ctx context.Context, cmd *DeleteByI
 	}
 	
 	if category.Status == datatype.StatusDeleted {
-		return categorymodel.ErrCategoryDeleted
+		return model.ErrCategoryDeleted
 	}
 	
 	if err = hdl.catRepo.Delete(ctx, cmd.ID, false); err != nil {
