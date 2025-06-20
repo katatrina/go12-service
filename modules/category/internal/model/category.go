@@ -3,7 +3,7 @@ package model
 import (
 	"strings"
 	"time"
-	
+
 	"github.com/google/uuid"
 	"github.com/katatrina/go12-service/shared/datatype"
 )
@@ -24,16 +24,16 @@ func (c *Category) TableName() string {
 func (dto *CreateCategoryDTO) Validate() error {
 	// Validate name
 	dto.Name = strings.TrimSpace(dto.Name)
-	
+
 	if dto.Name == "" {
 		return ErrNameRequired
 	}
-	
+
 	if len(dto.Name) > 100 {
 		return ErrInvalidNameLength
 	}
-	
+
 	// TODO: Validate description (if provided)
-	
+
 	return nil
 }

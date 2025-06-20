@@ -6,7 +6,7 @@ package categorymodule
 
 import (
 	"github.com/google/wire"
-	"github.com/katatrina/go12-service/modules/category/infras/controller/http"
+	controller "github.com/katatrina/go12-service/modules/category/infras/controller/http"
 	"gorm.io/gorm"
 )
 
@@ -14,6 +14,6 @@ func InitializeCategoryController(db *gorm.DB) *controller.CategoryHTTPControlle
 	wire.Build(
 		CategorySet,
 	)
-	
+
 	return &controller.CategoryHTTPController{}
 }

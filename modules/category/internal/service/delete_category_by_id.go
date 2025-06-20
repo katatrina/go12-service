@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	
+
 	"github.com/google/uuid"
 	"github.com/katatrina/go12-service/modules/category/internal/model"
 	"github.com/katatrina/go12-service/shared/datatype"
@@ -32,14 +32,14 @@ func (hdl *DeleteByIDCommandHandler) Execute(ctx context.Context, cmd *DeleteByI
 	if err != nil {
 		return err
 	}
-	
+
 	if category.Status == datatype.StatusDeleted {
 		return model.ErrCategoryDeleted
 	}
-	
+
 	if err = hdl.catRepo.Delete(ctx, cmd.ID, false); err != nil {
 		return err
 	}
-	
+
 	return nil
 }

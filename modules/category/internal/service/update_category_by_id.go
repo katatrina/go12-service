@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	
+
 	"github.com/google/uuid"
 	"github.com/katatrina/go12-service/modules/category/internal/model"
 	"github.com/katatrina/go12-service/shared/datatype"
@@ -32,19 +32,19 @@ func (hdl *UpdateByIDCommandHandler) Execute(ctx context.Context, cmd *UpdateByI
 	if err := cmd.DTO.Validate(); err != nil {
 		return err
 	}
-	
+
 	category, err := hdl.catRepo.FindByID(ctx, cmd.ID)
 	if err != nil {
 		return err
 	}
-	
+
 	if category.Status == datatype.StatusDeleted {
 		return model.ErrCategoryDeleted
 	}
-	
+
 	if err = hdl.catRepo.Update(ctx, cmd.ID, cmd.DTO); err != nil {
 		return err
 	}
-	
+
 	return nil
 }

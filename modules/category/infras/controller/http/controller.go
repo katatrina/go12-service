@@ -2,7 +2,7 @@ package controller
 
 import (
 	"context"
-	
+
 	"github.com/gin-gonic/gin"
 	"github.com/katatrina/go12-service/modules/category/internal/model"
 	"github.com/katatrina/go12-service/modules/category/internal/service"

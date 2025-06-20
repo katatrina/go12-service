@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	
+
 	"github.com/katatrina/go12-service/modules/category/internal/model"
 	sharedmodel "github.com/katatrina/go12-service/shared/model"
 )
@@ -38,6 +38,6 @@ func (hdl *ListCategoriesQueryHandler) Execute(
 	if err != nil {
 		return nil, err
 	}
-	
+
 	return categories, nil
 }

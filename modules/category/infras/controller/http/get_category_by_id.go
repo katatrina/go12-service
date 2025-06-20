@@ -3,7 +3,7 @@ package controller
 import (
 	"errors"
 	"net/http"
-	
+
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/katatrina/go12-service/modules/category/internal/model"
@@ -19,7 +19,7 @@ func (ctl *CategoryHTTPController) GetCategoryByID(c *gin.Context) {
 		})
 		return
 	}
-	
+
 	query := &service.GetByIDQuery{
 		ID: id,
 	}
@@ -31,13 +31,13 @@ func (ctl *CategoryHTTPController) GetCategoryByID(c *gin.Context) {
 			})
 			return
 		}
-		
+
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
-	
+
 	c.JSON(http.StatusOK, gin.H{
 		"data": category,
 	})

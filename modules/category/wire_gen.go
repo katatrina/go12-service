@@ -7,8 +7,8 @@
 package categorymodule
 
 import (
-	"github.com/katatrina/go12-service/modules/category/infras/controller/http"
-	"github.com/katatrina/go12-service/modules/category/infras/repository/mysql"
+	controller "github.com/katatrina/go12-service/modules/category/infras/controller/http"
+	repository "github.com/katatrina/go12-service/modules/category/infras/repository/mysql"
 	"github.com/katatrina/go12-service/modules/category/internal/service"
 	"gorm.io/gorm"
 )

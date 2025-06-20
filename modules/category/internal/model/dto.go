@@ -24,17 +24,17 @@ func (dto *UpdateCategoryDTO) Validate() error {
 		if *dto.Name == "" {
 			return ErrNameRequired
 		}
-		
+
 		if len(*dto.Name) > 100 {
 			return ErrInvalidNameLength
 		}
 	}
-	
+
 	if dto.Description != nil {
 		*dto.Description = strings.TrimSpace(*dto.Description)
 	}
-	
+
 	// TODO: Add more validation rules if needed
-	
+
 	return nil
 }
