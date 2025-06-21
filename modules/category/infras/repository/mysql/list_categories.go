@@ -15,7 +15,7 @@ func (repo *CategoryRepository) ListCategories(
 ) ([]model.Category, error) {
 	var categories []model.Category
 	
-	// Build base query (only get active categories)
+	// Build base query
 	baseQuery := repo.db.WithContext(ctx).Model(&model.Category{})
 	
 	// Apply filters if any
@@ -26,7 +26,7 @@ func (repo *CategoryRepository) ListCategories(
 		baseQuery = baseQuery.Where("status = ?", datatype.StatusActive)
 	}
 	
-	// Count total (clone query to avoid side effects)
+	// Count total
 	if err := baseQuery.Count(&pagingDTO.Total).Error; err != nil {
 		return nil, err
 	}

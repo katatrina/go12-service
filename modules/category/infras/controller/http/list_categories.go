@@ -15,11 +15,11 @@ func (ctl *CategoryController) ListCategories(c *gin.Context) {
 		return
 	}
 	
-	query.PagingDTO.Process()
 	if err := query.FilterCategoryDTO.Validate(); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	query.PagingDTO.Process()
 	
 	categories, err := ctl.listQryHdl.Execute(c.Request.Context(), &query)
 	if err != nil {
