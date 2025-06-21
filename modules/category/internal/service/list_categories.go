@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-
+	
 	"github.com/katatrina/go12-service/modules/category/internal/model"
 	sharedmodel "github.com/katatrina/go12-service/shared/model"
 )
@@ -15,11 +15,6 @@ type IListRepo interface {
 	) ([]model.Category, error)
 }
 
-type ListQuery struct {
-	model.FilterCategoryDTO
-	sharedmodel.PagingDTO
-}
-
 type ListCategoriesQueryHandler struct {
 	catRepo IListRepo
 }
@@ -30,6 +25,11 @@ func NewListCategoriesQueryHandler(catRepo IListRepo) *ListCategoriesQueryHandle
 	}
 }
 
+type ListQuery struct {
+	model.FilterCategoryDTO
+	sharedmodel.PagingDTO
+}
+
 func (hdl *ListCategoriesQueryHandler) Execute(
 	ctx context.Context,
 	query *ListQuery,
@@ -38,6 +38,6 @@ func (hdl *ListCategoriesQueryHandler) Execute(
 	if err != nil {
 		return nil, err
 	}
-
+	
 	return categories, nil
 }

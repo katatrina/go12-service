@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-
+	
 	"github.com/katatrina/go12-service/modules/category/internal/model"
 	"github.com/katatrina/go12-service/shared/datatype"
 	sharedmodel "github.com/katatrina/go12-service/shared/model"
@@ -14,29 +14,36 @@ func (repo *CategoryRepository) ListCategories(
 	filterDTO *model.FilterCategoryDTO,
 ) ([]model.Category, error) {
 	var categories []model.Category
-
-	// TODO: Check the logic again for best practices
-
-	query := repo.db.WithContext(ctx).
-		Where("status in (?)", []string{string(datatype.StatusActive)})
-
-	if err := query.Table((&model.Category{}).TableName()).Count(&pagingDTO.Total).Error; err != nil {
+	
+	// Build base query (only get active categories)
+	baseQuery := repo.db.WithContext(ctx).Model(&model.Category{})
+	
+	// Apply filters if any
+	if filterDTO.Status != nil {
+		baseQuery = baseQuery.Where("status = ?", *filterDTO.Status)
+	} else {
+		// Default to active status if no filter is provided
+		baseQuery = baseQuery.Where("status = ?", datatype.StatusActive)
+	}
+	
+	// Count total (clone query to avoid side effects)
+	if err := baseQuery.Count(&pagingDTO.Total).Error; err != nil {
 		return nil, err
 	}
-
+	
 	if pagingDTO.Total == 0 {
 		return categories, nil
 	}
-
+	
+	// Get paginated results
 	offset := (pagingDTO.Page - 1) * pagingDTO.Limit
-
-	if err := query.
-		Order("created_at desc").
+	if err := baseQuery.
+		Order("created_at DESC").
 		Offset(offset).
 		Limit(pagingDTO.Limit).
 		Find(&categories).Error; err != nil {
 		return nil, err
 	}
-
+	
 	return categories, nil
 }

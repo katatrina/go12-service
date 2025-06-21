@@ -11,20 +11,20 @@ import (
 
 var CategorySet = wire.NewSet(
 	mysqlrepository.NewCategoryRepository,
-
-	httpcontroller.NewCategoryHTTPController,
+	
+	httpcontroller.NewCategoryController,
 	service.NewCreateCommandHandler,
 	service.NewGetDetailQueryHandler,
 	service.NewListCategoriesQueryHandler,
 	service.NewUpdateByIDCommandHandler,
 	service.NewDeleteByIDCommandHandler,
-
+	
 	wire.Bind(new(httpcontroller.ICreateCommandHandler), new(*service.CreateCommandHandler)),
 	wire.Bind(new(httpcontroller.IGetByIDQueryHandler), new(*service.GetByIDQueryHandler)),
 	wire.Bind(new(httpcontroller.IListQueryHandler), new(*service.ListCategoriesQueryHandler)),
 	wire.Bind(new(httpcontroller.IUpdateByIDCommandHandler), new(*service.UpdateByIDCommandHandler)),
 	wire.Bind(new(httpcontroller.IDeleteByIDCommandHandler), new(*service.DeleteByIDCommandHandler)),
-
+	
 	wire.Bind(new(service.ICreateRepo), new(*mysqlrepository.CategoryRepository)),
 	wire.Bind(new(service.IGetByIDRepo), new(*mysqlrepository.CategoryRepository)),
 	wire.Bind(new(service.IListRepo), new(*mysqlrepository.CategoryRepository)),
@@ -34,6 +34,6 @@ var CategorySet = wire.NewSet(
 
 func SetupCategoryModule(db *gorm.DB, g *gin.RouterGroup) {
 	catCtl := InitializeCategoryController(db)
-
+	
 	catCtl.SetupRoutes(g)
 }

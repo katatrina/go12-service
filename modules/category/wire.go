@@ -10,10 +10,10 @@ import (
 	"gorm.io/gorm"
 )
 
-func InitializeCategoryController(db *gorm.DB) *controller.CategoryHTTPController {
+func InitializeCategoryController(db *gorm.DB) *controller.CategoryController {
 	wire.Build(
 		CategorySet,
 	)
-
-	return &controller.CategoryHTTPController{}
+	
+	return &controller.CategoryController{}
 }

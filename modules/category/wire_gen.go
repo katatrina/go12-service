@@ -15,13 +15,13 @@ import (
 
 // Injectors from wire.go:
 
-func InitializeCategoryController(db *gorm.DB) *controller.CategoryHTTPController {
+func InitializeCategoryController(db *gorm.DB) *controller.CategoryController {
 	categoryRepository := repository.NewCategoryRepository(db)
 	createCommandHandler := service.NewCreateCommandHandler(categoryRepository)
 	getByIDQueryHandler := service.NewGetDetailQueryHandler(categoryRepository)
 	listCategoriesQueryHandler := service.NewListCategoriesQueryHandler(categoryRepository)
 	updateByIDCommandHandler := service.NewUpdateByIDCommandHandler(categoryRepository)
 	deleteByIDCommandHandler := service.NewDeleteByIDCommandHandler(categoryRepository)
-	categoryHTTPController := controller.NewCategoryHTTPController(createCommandHandler, getByIDQueryHandler, listCategoriesQueryHandler, updateByIDCommandHandler, deleteByIDCommandHandler)
+	categoryHTTPController := controller.NewCategoryController(createCommandHandler, getByIDQueryHandler, listCategoriesQueryHandler, updateByIDCommandHandler, deleteByIDCommandHandler)
 	return categoryHTTPController
 }

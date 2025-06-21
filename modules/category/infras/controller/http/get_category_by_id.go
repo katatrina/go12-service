@@ -3,14 +3,14 @@ package controller
 import (
 	"errors"
 	"net/http"
-
+	
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/katatrina/go12-service/modules/category/internal/model"
 	"github.com/katatrina/go12-service/modules/category/internal/service"
 )
 
-func (ctl *CategoryHTTPController) GetCategoryByID(c *gin.Context) {
+func (ctl *CategoryController) GetCategoryByID(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := uuid.Parse(idStr)
 	if err != nil {
@@ -19,11 +19,11 @@ func (ctl *CategoryHTTPController) GetCategoryByID(c *gin.Context) {
 		})
 		return
 	}
-
-	query := &service.GetByIDQuery{
+	
+	query := service.GetByIDQuery{
 		ID: id,
 	}
-	category, err := ctl.getQryHdl.Execute(c.Request.Context(), query)
+	category, err := ctl.getQryHdl.Execute(c.Request.Context(), &query)
 	if err != nil {
 		if errors.Is(err, model.ErrCategoryNotFound) || errors.Is(err, model.ErrCategoryDeleted) {
 			c.JSON(http.StatusNotFound, gin.H{
@@ -31,13 +31,13 @@ func (ctl *CategoryHTTPController) GetCategoryByID(c *gin.Context) {
 			})
 			return
 		}
-
+		
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
-
+	
 	c.JSON(http.StatusOK, gin.H{
 		"data": category,
 	})

@@ -3,14 +3,14 @@ package controller
 import (
 	"errors"
 	"net/http"
-
+	
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/katatrina/go12-service/modules/category/internal/model"
 	"github.com/katatrina/go12-service/modules/category/internal/service"
 )
 
-func (ctl *CategoryHTTPController) DeleteCategoryByIDAPI(c *gin.Context) {
+func (ctl *CategoryController) DeleteCategoryByIDAPI(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := uuid.Parse(idStr)
 	if err != nil {
@@ -19,7 +19,7 @@ func (ctl *CategoryHTTPController) DeleteCategoryByIDAPI(c *gin.Context) {
 		})
 		return
 	}
-
+	
 	cmd := service.DeleteByIDCommand{ID: id}
 	err = ctl.deleteCmdHdl.Execute(c.Request.Context(), &cmd)
 	if err != nil {
@@ -29,13 +29,13 @@ func (ctl *CategoryHTTPController) DeleteCategoryByIDAPI(c *gin.Context) {
 			})
 			return
 		}
-
+		
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
-
+	
 	c.JSON(http.StatusOK, gin.H{
 		"data": true,
 	})

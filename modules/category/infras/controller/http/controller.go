@@ -2,7 +2,7 @@ package controller
 
 import (
 	"context"
-
+	
 	"github.com/gin-gonic/gin"
 	"github.com/katatrina/go12-service/modules/category/internal/model"
 	"github.com/katatrina/go12-service/modules/category/internal/service"
@@ -28,7 +28,7 @@ type IDeleteByIDCommandHandler interface {
 	Execute(ctx context.Context, cmd *service.DeleteByIDCommand) error
 }
 
-type CategoryHTTPController struct {
+type CategoryController struct {
 	createCmdHdl ICreateCommandHandler
 	getQryHdl    IGetByIDQueryHandler
 	listQryHdl   IListQueryHandler
@@ -36,14 +36,14 @@ type CategoryHTTPController struct {
 	deleteCmdHdl IDeleteByIDCommandHandler
 }
 
-func NewCategoryHTTPController(
+func NewCategoryController(
 	createNewCmdHdl ICreateCommandHandler,
 	getDetailQryHdl IGetByIDQueryHandler,
 	listQryHdl IListQueryHandler,
 	updateCmdHdl IUpdateByIDCommandHandler,
 	deleteCmdHdl IDeleteByIDCommandHandler,
-) *CategoryHTTPController {
-	return &CategoryHTTPController{
+) *CategoryController {
+	return &CategoryController{
 		createCmdHdl: createNewCmdHdl,
 		getQryHdl:    getDetailQryHdl,
 		listQryHdl:   listQryHdl,
@@ -52,7 +52,7 @@ func NewCategoryHTTPController(
 	}
 }
 
-func (ctl *CategoryHTTPController) SetupRoutes(g *gin.RouterGroup) {
+func (ctl *CategoryController) SetupRoutes(g *gin.RouterGroup) {
 	g.POST("", ctl.CreateCategory)
 	g.GET("", ctl.ListCategories)
 	g.GET("/:id", ctl.GetCategoryByID)
