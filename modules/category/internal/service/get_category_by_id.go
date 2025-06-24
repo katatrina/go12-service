@@ -33,7 +33,7 @@ func (hdl *GetByIDQueryHandler) Execute(ctx context.Context, query *GetByIDQuery
 	}
 	
 	if category.Status == datatype.StatusDeleted {
-		return nil, model.ErrCategoryDeleted
+		return nil, model.ErrCategoryAlreadyDeleted
 	}
 	
 	return category, nil

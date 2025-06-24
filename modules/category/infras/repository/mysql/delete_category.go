@@ -10,29 +10,21 @@ import (
 
 func (repo *CategoryRepository) Delete(ctx context.Context, id uuid.UUID, isHard bool) error {
 	if isHard {
-		result := repo.db.WithContext(ctx).Where("id = ?", id).Delete(&model.Category{})
-		if result.Error != nil {
-			return result.Error
-		}
-		
-		if result.RowsAffected == 0 {
-			return model.ErrCategoryNotFound
+		err := repo.db.WithContext(ctx).Where("id = ?", id).Delete(&model.Category{}).Error
+		if err != nil {
+			return err
 		}
 		
 		return nil
 	}
 	
 	// Soft delete
-	result := repo.db.WithContext(ctx).Model(&model.Category{}).
+	err := repo.db.WithContext(ctx).Model(&model.Category{}).
 		Where("id = ?", id).
-		Update("status", datatype.StatusDeleted)
+		Update("status", datatype.StatusDeleted).Error
 	
-	if result.Error != nil {
-		return result.Error
-	}
-	
-	if result.RowsAffected == 0 {
-		return model.ErrCategoryNotFound
+	if err != nil {
+		return err
 	}
 	
 	return nil

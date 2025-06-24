@@ -40,7 +40,7 @@ func (ctl *CategoryController) UpdateCategoryByID(c *gin.Context) {
 			c.JSON(http.StatusNotFound, gin.H{
 				"error": err.Error(),
 			})
-		case errors.Is(err, model.ErrCategoryDeleted):
+		case errors.Is(err, model.ErrCategoryAlreadyDeleted):
 			c.JSON(http.StatusConflict, gin.H{
 				"error": err.Error(),
 			})

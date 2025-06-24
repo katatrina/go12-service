@@ -25,7 +25,7 @@ func (ctl *CategoryController) GetCategoryByID(c *gin.Context) {
 	}
 	category, err := ctl.getQryHdl.Execute(c.Request.Context(), &query)
 	if err != nil {
-		if errors.Is(err, model.ErrCategoryNotFound) || errors.Is(err, model.ErrCategoryDeleted) {
+		if errors.Is(err, model.ErrCategoryNotFound) || errors.Is(err, model.ErrCategoryAlreadyDeleted) {
 			c.JSON(http.StatusNotFound, gin.H{
 				"error": "category not found",
 			})

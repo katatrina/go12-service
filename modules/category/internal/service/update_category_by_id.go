@@ -39,7 +39,7 @@ func (hdl *UpdateByIDCommandHandler) Execute(ctx context.Context, cmd *UpdateByI
 	}
 	
 	if category.Status == datatype.StatusDeleted {
-		return model.ErrCategoryDeleted
+		return model.ErrCategoryAlreadyDeleted
 	}
 	
 	if err = hdl.catRepo.Update(ctx, cmd.ID, cmd.DTO); err != nil {
