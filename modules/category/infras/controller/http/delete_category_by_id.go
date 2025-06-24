@@ -10,7 +10,7 @@ import (
 	"github.com/katatrina/go12-service/modules/category/internal/service"
 )
 
-func (ctl *CategoryController) DeleteCategoryByIDAPI(c *gin.Context) {
+func (ctl *CategoryController) DeleteCategoryByID(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := uuid.Parse(idStr)
 	if err != nil {
@@ -23,9 +23,9 @@ func (ctl *CategoryController) DeleteCategoryByIDAPI(c *gin.Context) {
 	cmd := service.DeleteByIDCommand{ID: id}
 	err = ctl.deleteCmdHdl.Execute(c.Request.Context(), &cmd)
 	if err != nil {
-		if errors.Is(err, model.ErrCategoryNotFound) || errors.Is(err, model.ErrCategoryDeleted) {
+		if errors.Is(err, model.ErrCategoryNotFound) {
 			c.JSON(http.StatusNotFound, gin.H{
-				"error": "category not found",
+				"error": err.Error(),
 			})
 			return
 		}
@@ -36,7 +36,5 @@ func (ctl *CategoryController) DeleteCategoryByIDAPI(c *gin.Context) {
 		return
 	}
 	
-	c.JSON(http.StatusOK, gin.H{
-		"data": true,
-	})
+	c.Status(http.StatusNoContent)
 }

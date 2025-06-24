@@ -57,5 +57,5 @@ func (ctl *CategoryController) SetupRoutes(g *gin.RouterGroup) {
 	g.GET("", ctl.ListCategories)
 	g.GET("/:id", ctl.GetCategoryByID)
 	g.PATCH("/:id", ctl.UpdateCategoryByID)
-	g.DELETE("/:id", ctl.DeleteCategoryByIDAPI)
+	g.DELETE("/:id", ctl.DeleteCategoryByID)
 }

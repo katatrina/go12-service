@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-
+	
 	"github.com/google/uuid"
 	"github.com/katatrina/go12-service/modules/category/internal/model"
 	"github.com/katatrina/go12-service/shared/datatype"
@@ -31,10 +31,10 @@ func (hdl *GetByIDQueryHandler) Execute(ctx context.Context, query *GetByIDQuery
 	if err != nil {
 		return nil, err
 	}
-
+	
 	if category.Status == datatype.StatusDeleted {
 		return nil, model.ErrCategoryDeleted
 	}
-
+	
 	return category, nil
 }

@@ -35,20 +35,22 @@ func (ctl *CategoryController) UpdateCategoryByID(c *gin.Context) {
 	}
 	err = ctl.updateCmdHdl.Execute(c.Request.Context(), &cmd)
 	if err != nil {
-		if errors.Is(err, model.ErrCategoryNotFound) || errors.Is(err, model.ErrCategoryDeleted) {
+		switch {
+		case errors.Is(err, model.ErrCategoryNotFound):
 			c.JSON(http.StatusNotFound, gin.H{
-				"error": "category not found",
+				"error": err.Error(),
 			})
-			return
+		case errors.Is(err, model.ErrCategoryDeleted):
+			c.JSON(http.StatusConflict, gin.H{
+				"error": err.Error(),
+			})
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
 		}
-		
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
 		return
 	}
 	
-	c.JSON(http.StatusOK, gin.H{
-		"data": true,
-	})
+	c.JSON(http.StatusOK, gin.H{"data": true})
 }
