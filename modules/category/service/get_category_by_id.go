@@ -4,7 +4,7 @@ import (
 	"context"
 	
 	"github.com/google/uuid"
-	"github.com/katatrina/go12-service/modules/category/internal/model"
+	"github.com/katatrina/go12-service/modules/category/model"
 	"github.com/katatrina/go12-service/shared/datatype"
 )
 

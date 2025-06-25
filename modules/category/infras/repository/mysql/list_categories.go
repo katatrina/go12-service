@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 	
-	"github.com/katatrina/go12-service/modules/category/internal/model"
+	"github.com/katatrina/go12-service/modules/category/model"
 	"github.com/katatrina/go12-service/shared/datatype"
 	sharedmodel "github.com/katatrina/go12-service/shared/model"
 )

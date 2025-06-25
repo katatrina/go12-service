@@ -7,9 +7,9 @@
 package categorymodule
 
 import (
-	controller "github.com/katatrina/go12-service/modules/category/infras/controller/http"
-	repository "github.com/katatrina/go12-service/modules/category/infras/repository/mysql"
-	"github.com/katatrina/go12-service/modules/category/internal/service"
+	"github.com/katatrina/go12-service/modules/category/infras/controller/http"
+	"github.com/katatrina/go12-service/modules/category/infras/repository/mysql"
+	"github.com/katatrina/go12-service/modules/category/service"
 	"gorm.io/gorm"
 )
 
@@ -22,6 +22,6 @@ func InitializeCategoryController(db *gorm.DB) *controller.CategoryController {
 	listCategoriesQueryHandler := service.NewListCategoriesQueryHandler(categoryRepository)
 	updateByIDCommandHandler := service.NewUpdateByIDCommandHandler(categoryRepository)
 	deleteByIDCommandHandler := service.NewDeleteByIDCommandHandler(categoryRepository)
-	categoryHTTPController := controller.NewCategoryController(createCommandHandler, getByIDQueryHandler, listCategoriesQueryHandler, updateByIDCommandHandler, deleteByIDCommandHandler)
-	return categoryHTTPController
+	categoryController := controller.NewCategoryController(createCommandHandler, getByIDQueryHandler, listCategoriesQueryHandler, updateByIDCommandHandler, deleteByIDCommandHandler)
+	return categoryController
 }

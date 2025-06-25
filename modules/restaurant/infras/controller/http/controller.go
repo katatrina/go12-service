@@ -4,20 +4,20 @@ import (
 	"context"
 	
 	"github.com/gin-gonic/gin"
-	"github.com/katatrina/go12-service/modules/category/model"
-	"github.com/katatrina/go12-service/modules/category/service"
+	"github.com/katatrina/go12-service/modules/restaurant/model"
+	"github.com/katatrina/go12-service/modules/restaurant/service"
 )
 
 type ICreateCommandHandler interface {
-	Execute(ctx context.Context, cmd *service.CreateCommand) (*model.Category, error)
+	Execute(ctx context.Context, cmd *service.CreateCommand) (*model.Restaurant, error)
 }
 
 type IGetByIDQueryHandler interface {
-	Execute(ctx context.Context, query *service.GetByIDQuery) (*model.Category, error)
+	Execute(ctx context.Context, query *service.GetByIDQuery) (*model.Restaurant, error)
 }
 
 type IListQueryHandler interface {
-	Execute(ctx context.Context, query *service.ListQuery) ([]model.Category, error)
+	Execute(ctx context.Context, query *service.ListQuery) ([]model.Restaurant, error)
 }
 
 type IUpdateByIDCommandHandler interface {
@@ -28,7 +28,7 @@ type IDeleteByIDCommandHandler interface {
 	Execute(ctx context.Context, cmd *service.DeleteByIDCommand) error
 }
 
-type CategoryController struct {
+type RestaurantController struct {
 	createCmdHdl ICreateCommandHandler
 	getQryHdl    IGetByIDQueryHandler
 	listQryHdl   IListQueryHandler
@@ -36,14 +36,14 @@ type CategoryController struct {
 	deleteCmdHdl IDeleteByIDCommandHandler
 }
 
-func NewCategoryController(
+func NewRestaurantController(
 	createNewCmdHdl ICreateCommandHandler,
 	getDetailQryHdl IGetByIDQueryHandler,
 	listQryHdl IListQueryHandler,
 	updateCmdHdl IUpdateByIDCommandHandler,
 	deleteCmdHdl IDeleteByIDCommandHandler,
-) *CategoryController {
-	return &CategoryController{
+) *RestaurantController {
+	return &RestaurantController{
 		createCmdHdl: createNewCmdHdl,
 		getQryHdl:    getDetailQryHdl,
 		listQryHdl:   listQryHdl,
@@ -52,10 +52,10 @@ func NewCategoryController(
 	}
 }
 
-func (ctl *CategoryController) SetupRoutes(g *gin.RouterGroup) {
-	g.POST("", ctl.CreateCategory)
-	g.GET("", ctl.ListCategories)
-	g.GET("/:id", ctl.GetCategoryByID)
-	g.PATCH("/:id", ctl.UpdateCategoryByID)
-	g.DELETE("/:id", ctl.DeleteCategoryByID)
+func (ctl *RestaurantController) SetupRoutes(g *gin.RouterGroup) {
+	g.POST("", ctl.CreateRestaurant)
+	g.GET("", ctl.ListRestaurants)
+	g.GET("/:id", ctl.GetRestaurantByID)
+	g.PATCH("/:id", ctl.UpdateRestaurantByID)
+	g.DELETE("/:id", ctl.DeleteRestaurantByID)
 }

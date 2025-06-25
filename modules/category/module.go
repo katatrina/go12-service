@@ -5,7 +5,7 @@ import (
 	"github.com/google/wire"
 	httpcontroller "github.com/katatrina/go12-service/modules/category/infras/controller/http"
 	mysqlrepository "github.com/katatrina/go12-service/modules/category/infras/repository/mysql"
-	"github.com/katatrina/go12-service/modules/category/internal/service"
+	"github.com/katatrina/go12-service/modules/category/service"
 	"gorm.io/gorm"
 )
 

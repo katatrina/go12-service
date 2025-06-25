@@ -8,6 +8,7 @@ import (
 	
 	"github.com/gin-gonic/gin"
 	categorymodule "github.com/katatrina/go12-service/modules/category"
+	restaurantmodule "github.com/katatrina/go12-service/modules/restaurant"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -54,6 +55,9 @@ func main() {
 	{
 		categories := v1.Group("/categories")
 		categorymodule.SetupCategoryModule(db, categories)
+		
+		restaurants := v1.Group("/restaurants")
+		restaurantmodule.SetupRestaurantModule(db, restaurants)
 	}
 	
 	r.Run(fmt.Sprintf(":%s", port)) // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")

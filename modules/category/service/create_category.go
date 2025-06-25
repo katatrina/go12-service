@@ -2,9 +2,9 @@ package service
 
 import (
 	"context"
-
+	
 	"github.com/google/uuid"
-	"github.com/katatrina/go12-service/modules/category/internal/model"
+	"github.com/katatrina/go12-service/modules/category/model"
 	"github.com/katatrina/go12-service/shared/datatype"
 )
 
@@ -28,22 +28,22 @@ func (hdl *CreateCommandHandler) Execute(ctx context.Context, cmd *CreateCommand
 	if err := cmd.DTO.Validate(); err != nil {
 		return nil, err
 	}
-
+	
 	categoryID, err := uuid.NewV7()
 	if err != nil {
 		return nil, err
 	}
-
+	
 	category := model.Category{
 		ID:          categoryID,
 		Name:        cmd.DTO.Name,
 		Description: cmd.DTO.Description,
 		Status:      datatype.StatusActive,
 	}
-
+	
 	if err = hdl.catRepo.Insert(ctx, &category); err != nil {
 		return nil, err
 	}
-
+	
 	return &category, nil
 }
