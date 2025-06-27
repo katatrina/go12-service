@@ -1,4 +1,4 @@
-package controller
+package httpcontroller
 
 import (
 	"net/http"
@@ -9,12 +9,12 @@ import (
 )
 
 func (ctl *RestaurantController) CreateRestaurant(c *gin.Context) {
-	var requestBodyData model.CreateRestaurantDTO
+	var requestBodyData restaurantmodel.CreateRestaurantDTO
 	if err := c.ShouldBindJSON(&requestBodyData); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	cmd := service.CreateCommand{DTO: &requestBodyData}
+	cmd := restaurantservice.CreateCommand{DTO: &requestBodyData}
 	restaurant, err := ctl.createCmdHdl.Execute(c.Request.Context(), &cmd)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

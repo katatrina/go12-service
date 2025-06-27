@@ -1,4 +1,4 @@
-package model
+package restaurantmodel
 
 import (
 	"encoding/json"
@@ -23,7 +23,8 @@ type Restaurant struct {
 	Status           datatype.Status  `json:"status" gorm:"column:status"`
 	CreatedAt        time.Time        `json:"createdAt" gorm:"column:created_at"`
 	UpdatedAt        time.Time        `json:"updatedAt" gorm:"column:updated_at"`
-	Category         *Category        `json:"category" gorm:"foreignKey:CategoryID;references:ID"`
+	// Category 	 *categorymodel.Category `json:"category" gorm:"foreignKey:CategoryID;references:ID"`
+	// Category      *Category        		 `json:"category" gorm:"foreignKey:CategoryID;references:ID"`
 }
 
 func (r *Restaurant) TableName() string {

@@ -1,4 +1,4 @@
-package service
+package restaurantservice
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 )
 
 type IGetByIDRepo interface {
-	FindByID(ctx context.Context, id uuid.UUID) (*model.Restaurant, error)
+	FindByID(ctx context.Context, id uuid.UUID) (*restaurantmodel.Restaurant, error)
 }
 
 type GetByIDQueryHandler struct {
@@ -25,7 +25,7 @@ func NewGetDetailQueryHandler(restaurantRepo IGetByIDRepo) *GetByIDQueryHandler 
 	}
 }
 
-func (hdl *GetByIDQueryHandler) Execute(ctx context.Context, query *GetByIDQuery) (*model.Restaurant, error) {
+func (hdl *GetByIDQueryHandler) Execute(ctx context.Context, query *GetByIDQuery) (*restaurantmodel.Restaurant, error) {
 	restaurant, err := hdl.restaurantRepo.FindByID(ctx, query.ID)
 	if err != nil {
 		return nil, err

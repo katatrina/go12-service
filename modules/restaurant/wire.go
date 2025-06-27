@@ -6,13 +6,13 @@ package restaurantmodule
 
 import (
 	"github.com/google/wire"
-	controller "github.com/katatrina/go12-service/modules/restaurant/infras/controller/http"
+	httpcontroller "github.com/katatrina/go12-service/modules/restaurant/infras/controller/http"
 	"gorm.io/gorm"
 )
 
-func InitializeRestaurantController(db *gorm.DB) *controller.RestaurantController {
+func InitializeRestaurantController(db *gorm.DB) *httpcontroller.RestaurantController {
 	wire.Build(
 		RestaurantSet,
 	)
-	return &controller.RestaurantController{}
+	return &httpcontroller.RestaurantController{}
 }

@@ -1,4 +1,4 @@
-package controller
+package httpcontroller
 
 import (
 	"net/http"
@@ -15,8 +15,8 @@ func (ctl *RestaurantController) DeleteRestaurantByID(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	cmd := service.DeleteByIDCommand{ID: id}
-	if err := ctl.deleteCmdHdl.Execute(c.Request.Context(), &cmd); err != nil {
+	cmd := restaurantservice.DeleteByIDCommand{ID: id}
+	if err = ctl.deleteCmdHdl.Execute(c.Request.Context(), &cmd); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

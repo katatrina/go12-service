@@ -1,4 +1,4 @@
-package controller
+package httpcontroller
 
 import (
 	"context"
@@ -9,23 +9,23 @@ import (
 )
 
 type ICreateCommandHandler interface {
-	Execute(ctx context.Context, cmd *service.CreateCommand) (*model.Restaurant, error)
+	Execute(ctx context.Context, cmd *restaurantservice.CreateCommand) (*restaurantmodel.Restaurant, error)
 }
 
 type IGetByIDQueryHandler interface {
-	Execute(ctx context.Context, query *service.GetByIDQuery) (*model.Restaurant, error)
+	Execute(ctx context.Context, query *restaurantservice.GetByIDQuery) (*restaurantmodel.Restaurant, error)
 }
 
 type IListQueryHandler interface {
-	Execute(ctx context.Context, query *service.ListQuery) ([]model.Restaurant, error)
+	Execute(ctx context.Context, query *restaurantservice.ListQuery) ([]restaurantservice.ListRestaurantItemDTO, error)
 }
 
 type IUpdateByIDCommandHandler interface {
-	Execute(ctx context.Context, cmd *service.UpdateByIDCommand) error
+	Execute(ctx context.Context, cmd *restaurantservice.UpdateByIDCommand) error
 }
 
 type IDeleteByIDCommandHandler interface {
-	Execute(ctx context.Context, cmd *service.DeleteByIDCommand) error
+	Execute(ctx context.Context, cmd *restaurantservice.DeleteByIDCommand) error
 }
 
 type RestaurantController struct {

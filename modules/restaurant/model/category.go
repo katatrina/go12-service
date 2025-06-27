@@ -1,13 +1,14 @@
-package model
+package restaurantmodel
 
 import (
+	"github.com/google/uuid"
 	"github.com/katatrina/go12-service/shared/datatype"
 )
 
 type Category struct {
-	ID     string          `json:"id" gorm:"column:id"`
+	ID     uuid.UUID       `json:"id" gorm:"column:id"`
 	Name   string          `json:"name" gorm:"column:name"`
-	Icon   string          `json:"logo" gorm:"column:logo"`
+	Icon   string          `json:"icon" gorm:"column:icon"`
 	Status datatype.Status `json:"status" gorm:"column:status"`
 }
 

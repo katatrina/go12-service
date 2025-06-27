@@ -1,4 +1,4 @@
-package controller
+package httpcontroller
 
 import (
 	"errors"
@@ -17,10 +17,10 @@ func (ctl *RestaurantController) GetRestaurantByID(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	query := service.GetByIDQuery{ID: id}
+	query := restaurantservice.GetByIDQuery{ID: id}
 	restaurant, err := ctl.getQryHdl.Execute(c.Request.Context(), &query)
 	if err != nil {
-		if errors.Is(err, model.ErrRestaurantNotFound) || errors.Is(err, model.ErrRestaurantAlreadyDeleted) {
+		if errors.Is(err, restaurantmodel.ErrRestaurantNotFound) || errors.Is(err, restaurantmodel.ErrRestaurantAlreadyDeleted) {
 			c.JSON(http.StatusNotFound, gin.H{"error": "restaurant not found"})
 			return
 		}

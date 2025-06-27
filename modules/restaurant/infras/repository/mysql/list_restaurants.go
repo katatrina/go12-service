@@ -7,14 +7,14 @@ import (
 	sharedmodel "github.com/katatrina/go12-service/shared/model"
 )
 
-func (repo *RestaurantRepository) ListRestaurants(
+func (repo *RestaurantRepository) List(
 	ctx context.Context,
 	pagingDTO *sharedmodel.PagingDTO,
-	filterDTO *model.FilterRestaurantDTO,
-) ([]model.Restaurant, error) {
-	var restaurants []model.Restaurant
+	filterDTO *restaurantmodel.FilterRestaurantDTO,
+) ([]restaurantmodel.Restaurant, error) {
+	var restaurants []restaurantmodel.Restaurant
 	
-	db := repo.db.WithContext(ctx).Model(&model.Restaurant{})
+	db := repo.db.WithContext(ctx).Model(&restaurantmodel.Restaurant{})
 	
 	if filterDTO.Status != nil {
 		db = db.Where("status = ?", *filterDTO.Status)
@@ -30,7 +30,7 @@ func (repo *RestaurantRepository) ListRestaurants(
 		return nil, err
 	}
 	
-	db = db.Preload("Category")
+	// db = db.Preload("Category")
 	
 	offset := (pagingDTO.Page - 1) * pagingDTO.Limit
 	if err := db.Offset(offset).Limit(pagingDTO.Limit).Find(&restaurants).Error; err != nil {

@@ -1,4 +1,4 @@
-package service
+package restaurantservice
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 )
 
 type CreateCommand struct {
-	DTO *model.CreateRestaurantDTO
+	DTO *restaurantmodel.CreateRestaurantDTO
 }
 
 type CreateCommandHandler struct {
@@ -17,14 +17,14 @@ type CreateCommandHandler struct {
 }
 
 type ICreateRepo interface {
-	Insert(ctx context.Context, data *model.Restaurant) error
+	Insert(ctx context.Context, data *restaurantmodel.Restaurant) error
 }
 
 func NewCreateCommandHandler(restaurantRepo ICreateRepo) *CreateCommandHandler {
 	return &CreateCommandHandler{restaurantRepo: restaurantRepo}
 }
 
-func (hdl *CreateCommandHandler) Execute(ctx context.Context, cmd *CreateCommand) (*model.Restaurant, error) {
+func (hdl *CreateCommandHandler) Execute(ctx context.Context, cmd *CreateCommand) (*restaurantmodel.Restaurant, error) {
 	// TODO: validate DTO nếu cần
 	// if err := cmd.DTO.Validate(); err != nil {
 	// 	return nil, err
@@ -54,7 +54,7 @@ func (hdl *CreateCommandHandler) Execute(ctx context.Context, cmd *CreateCommand
 		cityID = &parsed
 	}
 	
-	restaurant := model.Restaurant{
+	restaurant := restaurantmodel.Restaurant{
 		ID:               restaurantID,
 		OwnerID:          ownerID,
 		CategoryID:       categoryID,

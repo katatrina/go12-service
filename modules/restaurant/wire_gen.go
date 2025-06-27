@@ -9,19 +9,21 @@ package restaurantmodule
 import (
 	"github.com/katatrina/go12-service/modules/restaurant/infras/controller/http"
 	"github.com/katatrina/go12-service/modules/restaurant/infras/repository/mysql"
+	"github.com/katatrina/go12-service/modules/restaurant/infras/repository/rpc-client"
 	"github.com/katatrina/go12-service/modules/restaurant/service"
 	"gorm.io/gorm"
 )
 
 // Injectors from wire.go:
 
-func InitializeRestaurantController(db *gorm.DB) *controller.RestaurantController {
+func InitializeRestaurantController(db *gorm.DB) *httpcontroller.RestaurantController {
 	restaurantRepository := repository.NewRestaurantRepository(db)
-	createCommandHandler := service.NewCreateCommandHandler(restaurantRepository)
-	getByIDQueryHandler := service.NewGetDetailQueryHandler(restaurantRepository)
-	listRestaurantsQueryHandler := service.NewListRestaurantsQueryHandler(restaurantRepository)
-	updateByIDCommandHandler := service.NewUpdateByIDCommandHandler(restaurantRepository)
-	deleteByIDCommandHandler := service.NewDeleteByIDCommandHandler(restaurantRepository)
-	restaurantController := controller.NewRestaurantController(createCommandHandler, getByIDQueryHandler, listRestaurantsQueryHandler, updateByIDCommandHandler, deleteByIDCommandHandler)
+	createCommandHandler := restaurantservice.NewCreateCommandHandler(restaurantRepository)
+	getByIDQueryHandler := restaurantservice.NewGetDetailQueryHandler(restaurantRepository)
+	categoryRPCClient := restaurantrpcclient.NewCategoryRPCClient(db)
+	listRestaurantsQueryHandler := restaurantservice.NewListRestaurantsQueryHandler(restaurantRepository, categoryRPCClient)
+	updateByIDCommandHandler := restaurantservice.NewUpdateByIDCommandHandler(restaurantRepository)
+	deleteByIDCommandHandler := restaurantservice.NewDeleteByIDCommandHandler(restaurantRepository)
+	restaurantController := httpcontroller.NewRestaurantController(createCommandHandler, getByIDQueryHandler, listRestaurantsQueryHandler, updateByIDCommandHandler, deleteByIDCommandHandler)
 	return restaurantController
 }

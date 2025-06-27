@@ -1,4 +1,4 @@
-package service
+package restaurantservice
 
 import (
 	"context"
@@ -9,8 +9,8 @@ import (
 )
 
 type IUpdateByIDRepo interface {
-	FindByID(ctx context.Context, id uuid.UUID) (*model.Restaurant, error)
-	Update(ctx context.Context, id uuid.UUID, dto *model.UpdateRestaurantDTO) error
+	FindByID(ctx context.Context, id uuid.UUID) (*restaurantmodel.Restaurant, error)
+	Update(ctx context.Context, id uuid.UUID, dto *restaurantmodel.UpdateRestaurantDTO) error
 }
 
 type UpdateByIDCommandHandler struct {
@@ -19,7 +19,7 @@ type UpdateByIDCommandHandler struct {
 
 type UpdateByIDCommand struct {
 	ID  uuid.UUID
-	DTO *model.UpdateRestaurantDTO
+	DTO *restaurantmodel.UpdateRestaurantDTO
 }
 
 func NewUpdateByIDCommandHandler(restaurantRepo IUpdateByIDRepo) *UpdateByIDCommandHandler {
@@ -39,7 +39,7 @@ func (hdl *UpdateByIDCommandHandler) Execute(ctx context.Context, cmd *UpdateByI
 	}
 	
 	if restaurant.Status == datatype.StatusDeleted {
-		return model.ErrRestaurantAlreadyDeleted
+		return restaurantmodel.ErrRestaurantAlreadyDeleted
 	}
 	
 	if err = hdl.restaurantRepo.Update(ctx, cmd.ID, cmd.DTO); err != nil {

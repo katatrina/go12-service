@@ -1,4 +1,4 @@
-package service
+package restaurantservice
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 )
 
 type IDeleteByIDRepo interface {
-	FindByID(ctx context.Context, id uuid.UUID) (*model.Restaurant, error)
+	FindByID(ctx context.Context, id uuid.UUID) (*restaurantmodel.Restaurant, error)
 	Delete(ctx context.Context, id uuid.UUID, isHard bool) error
 }
 
