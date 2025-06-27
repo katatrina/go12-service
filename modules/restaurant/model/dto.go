@@ -3,16 +3,16 @@ package model
 import (
 	"encoding/json"
 	"strings"
-
+	
 	"github.com/katatrina/go12-service/shared/datatype"
 )
 
 type CreateRestaurantDTO struct {
 	OwnerID    string   `json:"ownerID"`
+	CategoryID string   `json:"categoryID"`
 	Name       string   `json:"name"`
 	Addr       string   `json:"addr"`
 	CityID     *string  `json:"cityID"`
-	CategoryID *string  `json:"categoryID"`
 	Lat        *float64 `json:"lat"`
 	Lng        *float64 `json:"lng"`
 	// Cover            interface{} `json:"cover"`

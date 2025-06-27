@@ -26,11 +26,11 @@ func (repo *RestaurantRepository) ListRestaurants(
 		db = db.Where("category_id = ?", *filterDTO.CategoryID)
 	}
 	
-	var total int64
-	if err := db.Count(&total).Error; err != nil {
+	if err := db.Count(&pagingDTO.Total).Error; err != nil {
 		return nil, err
 	}
-	pagingDTO.Total = total
+	
+	db = db.Preload("Category")
 	
 	offset := (pagingDTO.Page - 1) * pagingDTO.Limit
 	if err := db.Offset(offset).Limit(pagingDTO.Limit).Find(&restaurants).Error; err != nil {

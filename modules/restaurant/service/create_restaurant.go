@@ -40,6 +40,11 @@ func (hdl *CreateCommandHandler) Execute(ctx context.Context, cmd *CreateCommand
 		return nil, err
 	}
 	
+	categoryID, err := uuid.Parse(cmd.DTO.CategoryID)
+	if err != nil {
+		return nil, err
+	}
+	
 	var cityID *uuid.UUID
 	if cmd.DTO.CityID != nil {
 		parsed, err := uuid.Parse(*cmd.DTO.CityID)
@@ -52,6 +57,7 @@ func (hdl *CreateCommandHandler) Execute(ctx context.Context, cmd *CreateCommand
 	restaurant := model.Restaurant{
 		ID:               restaurantID,
 		OwnerID:          ownerID,
+		CategoryID:       categoryID,
 		Name:             cmd.DTO.Name,
 		Addr:             cmd.DTO.Addr,
 		CityID:           cityID,
