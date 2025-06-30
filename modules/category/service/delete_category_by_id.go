@@ -1,15 +1,15 @@
-package service
+package categoryservice
 
 import (
 	"context"
 	
 	"github.com/google/uuid"
-	"github.com/katatrina/go12-service/modules/category/model"
+	categorymodel "github.com/katatrina/go12-service/modules/category/model"
 	"github.com/katatrina/go12-service/shared/datatype"
 )
 
 type IDeleteByIDRepo interface {
-	FindByID(ctx context.Context, id uuid.UUID) (*model.Category, error)
+	FindByID(ctx context.Context, id uuid.UUID) (*categorymodel.Category, error)
 	Delete(ctx context.Context, id uuid.UUID, isHard bool) error
 }
 

@@ -6,14 +6,14 @@ package categorymodule
 
 import (
 	"github.com/google/wire"
-	controller "github.com/katatrina/go12-service/modules/category/infras/controller/http"
+	httpcontroller "github.com/katatrina/go12-service/modules/category/infras/controller/http"
 	"gorm.io/gorm"
 )
 
-func InitializeCategoryController(db *gorm.DB) *controller.CategoryController {
+func InitializeCategoryController(db *gorm.DB) *httpcontroller.CategoryController {
 	wire.Build(
 		CategorySet,
 	)
 	
-	return &controller.CategoryController{}
+	return &httpcontroller.CategoryController{}
 }

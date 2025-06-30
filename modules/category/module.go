@@ -5,7 +5,7 @@ import (
 	"github.com/google/wire"
 	httpcontroller "github.com/katatrina/go12-service/modules/category/infras/controller/http"
 	mysqlrepository "github.com/katatrina/go12-service/modules/category/infras/repository/mysql"
-	"github.com/katatrina/go12-service/modules/category/service"
+	categoryservice "github.com/katatrina/go12-service/modules/category/service"
 	"gorm.io/gorm"
 )
 
@@ -13,23 +13,23 @@ var CategorySet = wire.NewSet(
 	mysqlrepository.NewCategoryRepository,
 	
 	httpcontroller.NewCategoryController,
-	service.NewCreateCommandHandler,
-	service.NewGetDetailQueryHandler,
-	service.NewListCategoriesQueryHandler,
-	service.NewUpdateByIDCommandHandler,
-	service.NewDeleteByIDCommandHandler,
+	categoryservice.NewCreateCommandHandler,
+	categoryservice.NewGetDetailQueryHandler,
+	categoryservice.NewListCategoriesQueryHandler,
+	categoryservice.NewUpdateByIDCommandHandler,
+	categoryservice.NewDeleteByIDCommandHandler,
 	
-	wire.Bind(new(httpcontroller.ICreateCommandHandler), new(*service.CreateCommandHandler)),
-	wire.Bind(new(httpcontroller.IGetByIDQueryHandler), new(*service.GetByIDQueryHandler)),
-	wire.Bind(new(httpcontroller.IListQueryHandler), new(*service.ListCategoriesQueryHandler)),
-	wire.Bind(new(httpcontroller.IUpdateByIDCommandHandler), new(*service.UpdateByIDCommandHandler)),
-	wire.Bind(new(httpcontroller.IDeleteByIDCommandHandler), new(*service.DeleteByIDCommandHandler)),
+	wire.Bind(new(httpcontroller.ICreateCommandHandler), new(*categoryservice.CreateCommandHandler)),
+	wire.Bind(new(httpcontroller.IGetByIDQueryHandler), new(*categoryservice.GetByIDQueryHandler)),
+	wire.Bind(new(httpcontroller.IListQueryHandler), new(*categoryservice.ListCategoriesQueryHandler)),
+	wire.Bind(new(httpcontroller.IUpdateByIDCommandHandler), new(*categoryservice.UpdateByIDCommandHandler)),
+	wire.Bind(new(httpcontroller.IDeleteByIDCommandHandler), new(*categoryservice.DeleteByIDCommandHandler)),
 	
-	wire.Bind(new(service.ICreateRepo), new(*mysqlrepository.CategoryRepository)),
-	wire.Bind(new(service.IGetByIDRepo), new(*mysqlrepository.CategoryRepository)),
-	wire.Bind(new(service.IListRepo), new(*mysqlrepository.CategoryRepository)),
-	wire.Bind(new(service.IUpdateByIDRepo), new(*mysqlrepository.CategoryRepository)),
-	wire.Bind(new(service.IDeleteByIDRepo), new(*mysqlrepository.CategoryRepository)),
+	wire.Bind(new(categoryservice.ICreateRepo), new(*mysqlrepository.CategoryRepository)),
+	wire.Bind(new(categoryservice.IGetByIDRepo), new(*mysqlrepository.CategoryRepository)),
+	wire.Bind(new(categoryservice.IListRepo), new(*mysqlrepository.CategoryRepository)),
+	wire.Bind(new(categoryservice.IUpdateByIDRepo), new(*mysqlrepository.CategoryRepository)),
+	wire.Bind(new(categoryservice.IDeleteByIDRepo), new(*mysqlrepository.CategoryRepository)),
 )
 
 func SetupCategoryModule(db *gorm.DB, g *gin.RouterGroup) {

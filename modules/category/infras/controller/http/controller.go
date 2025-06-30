@@ -1,31 +1,31 @@
-package controller
+package httpcontroller
 
 import (
 	"context"
 	
 	"github.com/gin-gonic/gin"
-	"github.com/katatrina/go12-service/modules/category/model"
-	"github.com/katatrina/go12-service/modules/category/service"
+	categorymodel "github.com/katatrina/go12-service/modules/category/model"
+	categoryservice "github.com/katatrina/go12-service/modules/category/service"
 )
 
 type ICreateCommandHandler interface {
-	Execute(ctx context.Context, cmd *service.CreateCommand) (*model.Category, error)
+	Execute(ctx context.Context, cmd *categoryservice.CreateCommand) (*categorymodel.Category, error)
 }
 
 type IGetByIDQueryHandler interface {
-	Execute(ctx context.Context, query *service.GetByIDQuery) (*model.Category, error)
+	Execute(ctx context.Context, query *categoryservice.GetByIDQuery) (*categorymodel.Category, error)
 }
 
 type IListQueryHandler interface {
-	Execute(ctx context.Context, query *service.ListQuery) ([]model.Category, error)
+	Execute(ctx context.Context, query *categoryservice.ListQuery) ([]categorymodel.Category, error)
 }
 
 type IUpdateByIDCommandHandler interface {
-	Execute(ctx context.Context, cmd *service.UpdateByIDCommand) error
+	Execute(ctx context.Context, cmd *categoryservice.UpdateByIDCommand) error
 }
 
 type IDeleteByIDCommandHandler interface {
-	Execute(ctx context.Context, cmd *service.DeleteByIDCommand) error
+	Execute(ctx context.Context, cmd *categoryservice.DeleteByIDCommand) error
 }
 
 type CategoryController struct {
@@ -53,9 +53,12 @@ func NewCategoryController(
 }
 
 func (ctl *CategoryController) SetupRoutes(g *gin.RouterGroup) {
-	g.POST("", ctl.CreateCategory)
-	g.GET("", ctl.ListCategories)
-	g.GET("/:id", ctl.GetCategoryByID)
-	g.PATCH("/:id", ctl.UpdateCategoryByID)
-	g.DELETE("/:id", ctl.DeleteCategoryByID)
+	categoryGroup := g.Group("/categories")
+	{
+		categoryGroup.POST("", ctl.CreateCategory)
+		categoryGroup.GET("", ctl.ListCategories)
+		categoryGroup.GET("/:id", ctl.GetCategoryByID)
+		categoryGroup.PATCH("/:id", ctl.UpdateCategoryByID)
+		categoryGroup.DELETE("/:id", ctl.DeleteCategoryByID)
+	}
 }

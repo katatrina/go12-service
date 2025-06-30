@@ -1,4 +1,4 @@
-package restaurantrpcclient
+package rpcclient
 
 import (
 	"context"

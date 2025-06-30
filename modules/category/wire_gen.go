@@ -15,13 +15,13 @@ import (
 
 // Injectors from wire.go:
 
-func InitializeCategoryController(db *gorm.DB) *controller.CategoryController {
-	categoryRepository := repository.NewCategoryRepository(db)
-	createCommandHandler := service.NewCreateCommandHandler(categoryRepository)
-	getByIDQueryHandler := service.NewGetDetailQueryHandler(categoryRepository)
-	listCategoriesQueryHandler := service.NewListCategoriesQueryHandler(categoryRepository)
-	updateByIDCommandHandler := service.NewUpdateByIDCommandHandler(categoryRepository)
-	deleteByIDCommandHandler := service.NewDeleteByIDCommandHandler(categoryRepository)
-	categoryController := controller.NewCategoryController(createCommandHandler, getByIDQueryHandler, listCategoriesQueryHandler, updateByIDCommandHandler, deleteByIDCommandHandler)
+func InitializeCategoryController(db *gorm.DB) *httpcontroller.CategoryController {
+	categoryRepository := mysqlrepository.NewCategoryRepository(db)
+	createCommandHandler := categoryservice.NewCreateCommandHandler(categoryRepository)
+	getByIDQueryHandler := categoryservice.NewGetDetailQueryHandler(categoryRepository)
+	listCategoriesQueryHandler := categoryservice.NewListCategoriesQueryHandler(categoryRepository)
+	updateByIDCommandHandler := categoryservice.NewUpdateByIDCommandHandler(categoryRepository)
+	deleteByIDCommandHandler := categoryservice.NewDeleteByIDCommandHandler(categoryRepository)
+	categoryController := httpcontroller.NewCategoryController(createCommandHandler, getByIDQueryHandler, listCategoriesQueryHandler, updateByIDCommandHandler, deleteByIDCommandHandler)
 	return categoryController
 }

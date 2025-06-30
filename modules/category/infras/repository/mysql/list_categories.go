@@ -1,9 +1,9 @@
-package repository
+package mysqlrepository
 
 import (
 	"context"
 	
-	"github.com/katatrina/go12-service/modules/category/model"
+	categorymodel "github.com/katatrina/go12-service/modules/category/model"
 	"github.com/katatrina/go12-service/shared/datatype"
 	sharedmodel "github.com/katatrina/go12-service/shared/model"
 )
@@ -11,12 +11,12 @@ import (
 func (repo *CategoryRepository) ListCategories(
 	ctx context.Context,
 	pagingDTO *sharedmodel.PagingDTO,
-	filterDTO *model.FilterCategoryDTO,
-) ([]model.Category, error) {
-	var categories []model.Category
+	filterDTO *categorymodel.FilterCategoryDTO,
+) ([]categorymodel.Category, error) {
+	var categories []categorymodel.Category
 	
 	// Build base query
-	baseQuery := repo.db.WithContext(ctx).Model(&model.Category{})
+	baseQuery := repo.db.WithContext(ctx).Model(&categorymodel.Category{})
 	
 	// Apply filters if any
 	if filterDTO.Status != nil {

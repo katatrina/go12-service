@@ -1,9 +1,9 @@
-package service
+package categoryservice
 
 import (
 	"context"
 	
-	"github.com/katatrina/go12-service/modules/category/model"
+	categorymodel "github.com/katatrina/go12-service/modules/category/model"
 	sharedmodel "github.com/katatrina/go12-service/shared/model"
 )
 
@@ -11,8 +11,8 @@ type IListRepo interface {
 	ListCategories(
 		ctx context.Context,
 		pagingDTO *sharedmodel.PagingDTO,
-		filterDTO *model.FilterCategoryDTO,
-	) ([]model.Category, error)
+		filterDTO *categorymodel.FilterCategoryDTO,
+	) ([]categorymodel.Category, error)
 }
 
 type ListCategoriesQueryHandler struct {
@@ -26,14 +26,14 @@ func NewListCategoriesQueryHandler(catRepo IListRepo) *ListCategoriesQueryHandle
 }
 
 type ListQuery struct {
-	model.FilterCategoryDTO
+	categorymodel.FilterCategoryDTO
 	sharedmodel.PagingDTO
 }
 
 func (hdl *ListCategoriesQueryHandler) Execute(
 	ctx context.Context,
 	query *ListQuery,
-) ([]model.Category, error) {
+) ([]categorymodel.Category, error) {
 	categories, err := hdl.catRepo.ListCategories(ctx, &query.PagingDTO, &query.FilterCategoryDTO)
 	if err != nil {
 		return nil, err

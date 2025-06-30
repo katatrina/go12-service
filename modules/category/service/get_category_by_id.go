@@ -1,15 +1,15 @@
-package service
+package categoryservice
 
 import (
 	"context"
 	
 	"github.com/google/uuid"
-	"github.com/katatrina/go12-service/modules/category/model"
+	categorymodel "github.com/katatrina/go12-service/modules/category/model"
 	"github.com/katatrina/go12-service/shared/datatype"
 )
 
 type IGetByIDRepo interface {
-	FindByID(ctx context.Context, id uuid.UUID) (*model.Category, error)
+	FindByID(ctx context.Context, id uuid.UUID) (*categorymodel.Category, error)
 }
 
 type GetByIDQueryHandler struct {
@@ -26,14 +26,14 @@ type GetByIDQuery struct {
 	ID uuid.UUID
 }
 
-func (hdl *GetByIDQueryHandler) Execute(ctx context.Context, query *GetByIDQuery) (*model.Category, error) {
+func (hdl *GetByIDQueryHandler) Execute(ctx context.Context, query *GetByIDQuery) (*categorymodel.Category, error) {
 	category, err := hdl.catRepo.FindByID(ctx, query.ID)
 	if err != nil {
 		return nil, err
 	}
 	
 	if category.Status == datatype.StatusDeleted {
-		return nil, model.ErrCategoryAlreadyDeleted
+		return nil, categorymodel.ErrCategoryAlreadyDeleted
 	}
 	
 	return category, nil

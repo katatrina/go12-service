@@ -1,4 +1,4 @@
-package model
+package categorymodel
 
 import (
 	"strings"

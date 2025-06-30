@@ -5,7 +5,7 @@ import (
 	"github.com/google/wire"
 	httpcontroller "github.com/katatrina/go12-service/modules/restaurant/infras/controller/http"
 	mysqlrepository "github.com/katatrina/go12-service/modules/restaurant/infras/repository/mysql"
-	restaurantrpcclient "github.com/katatrina/go12-service/modules/restaurant/infras/repository/rpc-client"
+	rpcclient "github.com/katatrina/go12-service/modules/restaurant/infras/repository/rpc"
 	restaurantservice "github.com/katatrina/go12-service/modules/restaurant/service"
 	"gorm.io/gorm"
 )
@@ -19,7 +19,7 @@ var RestaurantSet = wire.NewSet(
 	restaurantservice.NewListRestaurantsQueryHandler,
 	restaurantservice.NewUpdateByIDCommandHandler,
 	restaurantservice.NewDeleteByIDCommandHandler,
-	restaurantrpcclient.NewCategoryRPCClient,
+	rpcclient.NewCategoryRPCClient,
 	
 	wire.Bind(new(httpcontroller.ICreateCommandHandler), new(*restaurantservice.CreateCommandHandler)),
 	wire.Bind(new(httpcontroller.IGetByIDQueryHandler), new(*restaurantservice.GetByIDQueryHandler)),
@@ -32,7 +32,7 @@ var RestaurantSet = wire.NewSet(
 	wire.Bind(new(restaurantservice.IListRepo), new(*mysqlrepository.RestaurantRepository)),
 	wire.Bind(new(restaurantservice.IUpdateByIDRepo), new(*mysqlrepository.RestaurantRepository)),
 	wire.Bind(new(restaurantservice.IDeleteByIDRepo), new(*mysqlrepository.RestaurantRepository)),
-	wire.Bind(new(restaurantservice.ICategoryRepo), new(*restaurantrpcclient.CategoryRPCClient)),
+	wire.Bind(new(restaurantservice.ICategoryRepo), new(*rpcclient.CategoryRPCClient)),
 )
 
 func SetupRestaurantModule(db *gorm.DB, g *gin.RouterGroup) {

@@ -1,4 +1,4 @@
-package controller
+package httpcontroller
 
 import (
 	"errors"
@@ -6,8 +6,8 @@ import (
 	
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/katatrina/go12-service/modules/category/model"
-	"github.com/katatrina/go12-service/modules/category/service"
+	categorymodel "github.com/katatrina/go12-service/modules/category/model"
+	categoryservice "github.com/katatrina/go12-service/modules/category/service"
 )
 
 func (ctl *CategoryController) DeleteCategoryByID(c *gin.Context) {
@@ -20,10 +20,10 @@ func (ctl *CategoryController) DeleteCategoryByID(c *gin.Context) {
 		return
 	}
 	
-	cmd := service.DeleteByIDCommand{ID: id}
+	cmd := categoryservice.DeleteByIDCommand{ID: id}
 	err = ctl.deleteCmdHdl.Execute(c.Request.Context(), &cmd)
 	if err != nil {
-		if errors.Is(err, model.ErrCategoryNotFound) {
+		if errors.Is(err, categorymodel.ErrCategoryNotFound) {
 			c.JSON(http.StatusNotFound, gin.H{
 				"error": err.Error(),
 			})

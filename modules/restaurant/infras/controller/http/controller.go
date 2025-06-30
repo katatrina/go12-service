@@ -53,9 +53,12 @@ func NewRestaurantController(
 }
 
 func (ctl *RestaurantController) SetupRoutes(g *gin.RouterGroup) {
-	g.POST("", ctl.CreateRestaurant)
-	g.GET("", ctl.ListRestaurants)
-	g.GET("/:id", ctl.GetRestaurantByID)
-	g.PATCH("/:id", ctl.UpdateRestaurantByID)
-	g.DELETE("/:id", ctl.DeleteRestaurantByID)
+	restaurantGroup := g.Group("/restaurants")
+	{
+		restaurantGroup.POST("", ctl.CreateRestaurant)
+		restaurantGroup.GET("", ctl.ListRestaurants)
+		restaurantGroup.GET("/:id", ctl.GetRestaurantByID)
+		restaurantGroup.PATCH("/:id", ctl.UpdateRestaurantByID)
+		restaurantGroup.DELETE("/:id", ctl.DeleteRestaurantByID)
+	}
 }

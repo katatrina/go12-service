@@ -53,11 +53,9 @@ func main() {
 	v1 := r.Group("/v1")
 	
 	{
-		categories := v1.Group("/categories")
-		categorymodule.SetupCategoryModule(db, categories)
+		categorymodule.SetupCategoryModule(db, v1)
 		
-		restaurants := v1.Group("/restaurants")
-		restaurantmodule.SetupRestaurantModule(db, restaurants)
+		restaurantmodule.SetupRestaurantModule(db, v1)
 	}
 	
 	r.Run(fmt.Sprintf(":%s", port)) // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")

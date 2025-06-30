@@ -1,14 +1,14 @@
-package controller
+package httpcontroller
 
 import (
 	"net/http"
 	
 	"github.com/gin-gonic/gin"
-	"github.com/katatrina/go12-service/modules/category/service"
+	categoryservice "github.com/katatrina/go12-service/modules/category/service"
 )
 
 func (ctl *CategoryController) ListCategories(c *gin.Context) {
-	var query service.ListQuery
+	var query categoryservice.ListQuery
 	
 	if err := c.ShouldBindQuery(&query); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

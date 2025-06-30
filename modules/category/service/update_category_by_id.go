@@ -1,16 +1,16 @@
-package service
+package categoryservice
 
 import (
 	"context"
 	
 	"github.com/google/uuid"
-	"github.com/katatrina/go12-service/modules/category/model"
+	categorymodel "github.com/katatrina/go12-service/modules/category/model"
 	"github.com/katatrina/go12-service/shared/datatype"
 )
 
 type IUpdateByIDRepo interface {
-	FindByID(ctx context.Context, id uuid.UUID) (*model.Category, error)
-	Update(ctx context.Context, id uuid.UUID, dto *model.UpdateCategoryDTO) error
+	FindByID(ctx context.Context, id uuid.UUID) (*categorymodel.Category, error)
+	Update(ctx context.Context, id uuid.UUID, dto *categorymodel.UpdateCategoryDTO) error
 }
 
 type UpdateByIDCommandHandler struct {
@@ -19,7 +19,7 @@ type UpdateByIDCommandHandler struct {
 
 type UpdateByIDCommand struct {
 	ID  uuid.UUID
-	DTO *model.UpdateCategoryDTO
+	DTO *categorymodel.UpdateCategoryDTO
 }
 
 func NewUpdateByIDCommandHandler(catRepo IUpdateByIDRepo) *UpdateByIDCommandHandler {
@@ -39,7 +39,7 @@ func (hdl *UpdateByIDCommandHandler) Execute(ctx context.Context, cmd *UpdateByI
 	}
 	
 	if category.Status == datatype.StatusDeleted {
-		return model.ErrCategoryAlreadyDeleted
+		return categorymodel.ErrCategoryAlreadyDeleted
 	}
 	
 	if err = hdl.catRepo.Update(ctx, cmd.ID, cmd.DTO); err != nil {

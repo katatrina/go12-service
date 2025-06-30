@@ -1,4 +1,4 @@
-package controller
+package httpcontroller
 
 import (
 	"errors"
@@ -6,8 +6,8 @@ import (
 	
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/katatrina/go12-service/modules/category/model"
-	"github.com/katatrina/go12-service/modules/category/service"
+	categorymodel "github.com/katatrina/go12-service/modules/category/model"
+	categoryservice "github.com/katatrina/go12-service/modules/category/service"
 )
 
 func (ctl *CategoryController) UpdateCategoryByID(c *gin.Context) {
@@ -20,7 +20,7 @@ func (ctl *CategoryController) UpdateCategoryByID(c *gin.Context) {
 		return
 	}
 	
-	var dto model.UpdateCategoryDTO
+	var dto categorymodel.UpdateCategoryDTO
 	
 	if err = c.ShouldBindJSON(&dto); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -29,18 +29,18 @@ func (ctl *CategoryController) UpdateCategoryByID(c *gin.Context) {
 		return
 	}
 	
-	cmd := service.UpdateByIDCommand{
+	cmd := categoryservice.UpdateByIDCommand{
 		ID:  id,
 		DTO: &dto,
 	}
 	err = ctl.updateCmdHdl.Execute(c.Request.Context(), &cmd)
 	if err != nil {
 		switch {
-		case errors.Is(err, model.ErrCategoryNotFound):
+		case errors.Is(err, categorymodel.ErrCategoryNotFound):
 			c.JSON(http.StatusNotFound, gin.H{
 				"error": err.Error(),
 			})
-		case errors.Is(err, model.ErrCategoryAlreadyDeleted):
+		case errors.Is(err, categorymodel.ErrCategoryAlreadyDeleted):
 			c.JSON(http.StatusConflict, gin.H{
 				"error": err.Error(),
 			})

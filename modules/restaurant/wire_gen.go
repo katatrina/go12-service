@@ -9,7 +9,7 @@ package restaurantmodule
 import (
 	"github.com/katatrina/go12-service/modules/restaurant/infras/controller/http"
 	"github.com/katatrina/go12-service/modules/restaurant/infras/repository/mysql"
-	"github.com/katatrina/go12-service/modules/restaurant/infras/repository/rpc-client"
+	"github.com/katatrina/go12-service/modules/restaurant/infras/repository/rpc"
 	"github.com/katatrina/go12-service/modules/restaurant/service"
 	"gorm.io/gorm"
 )
@@ -17,10 +17,10 @@ import (
 // Injectors from wire.go:
 
 func InitializeRestaurantController(db *gorm.DB) *httpcontroller.RestaurantController {
-	restaurantRepository := repository.NewRestaurantRepository(db)
+	restaurantRepository := mysqlrepository.NewRestaurantRepository(db)
 	createCommandHandler := restaurantservice.NewCreateCommandHandler(restaurantRepository)
 	getByIDQueryHandler := restaurantservice.NewGetDetailQueryHandler(restaurantRepository)
-	categoryRPCClient := restaurantrpcclient.NewCategoryRPCClient(db)
+	categoryRPCClient := rpcclient.NewCategoryRPCClient(db)
 	listRestaurantsQueryHandler := restaurantservice.NewListRestaurantsQueryHandler(restaurantRepository, categoryRPCClient)
 	updateByIDCommandHandler := restaurantservice.NewUpdateByIDCommandHandler(restaurantRepository)
 	deleteByIDCommandHandler := restaurantservice.NewDeleteByIDCommandHandler(restaurantRepository)

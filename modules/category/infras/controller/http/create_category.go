@@ -1,22 +1,22 @@
-package controller
+package httpcontroller
 
 import (
 	"net/http"
 	
 	"github.com/gin-gonic/gin"
-	"github.com/katatrina/go12-service/modules/category/model"
-	"github.com/katatrina/go12-service/modules/category/service"
+	categorymodel "github.com/katatrina/go12-service/modules/category/model"
+	categoryservice "github.com/katatrina/go12-service/modules/category/service"
 )
 
 func (ctl *CategoryController) CreateCategory(c *gin.Context) {
-	var requestBodyData model.CreateCategoryDTO
+	var requestBodyData categorymodel.CreateCategoryDTO
 	
 	if err := c.ShouldBindJSON(&requestBodyData); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	
-	cmd := service.CreateCommand{DTO: &requestBodyData}
+	cmd := categoryservice.CreateCommand{DTO: &requestBodyData}
 	category, err := ctl.createCmdHdl.Execute(c.Request.Context(), &cmd)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

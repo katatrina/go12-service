@@ -8,7 +8,6 @@ import (
 type Category struct {
 	ID     uuid.UUID       `json:"id" gorm:"column:id"`
 	Name   string          `json:"name" gorm:"column:name"`
-	Icon   string          `json:"icon" gorm:"column:icon"`
 	Status datatype.Status `json:"status" gorm:"column:status"`
 }
 
