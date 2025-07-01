@@ -24,6 +24,7 @@ var CategorySet = wire.NewSet(
 	wire.Bind(new(httpcontroller.IListQueryHandler), new(*categoryservice.ListCategoriesQueryHandler)),
 	wire.Bind(new(httpcontroller.IUpdateByIDCommandHandler), new(*categoryservice.UpdateByIDCommandHandler)),
 	wire.Bind(new(httpcontroller.IDeleteByIDCommandHandler), new(*categoryservice.DeleteByIDCommandHandler)),
+	wire.Bind(new(httpcontroller.ICategoryRPCRepo), new(*mysqlrepository.CategoryRepository)),
 	
 	wire.Bind(new(categoryservice.ICreateRepo), new(*mysqlrepository.CategoryRepository)),
 	wire.Bind(new(categoryservice.IGetByIDRepo), new(*mysqlrepository.CategoryRepository)),
@@ -33,7 +34,9 @@ var CategorySet = wire.NewSet(
 )
 
 func SetupCategoryModule(db *gorm.DB, g *gin.RouterGroup) {
+	categoryGroup := g.Group("/categories")
 	catCtl := InitializeCategoryController(db)
 	
-	catCtl.SetupRoutes(g)
+	catCtl.SetupRoutes(categoryGroup)
+	catCtl.SetupRoutesForRPC(g)
 }

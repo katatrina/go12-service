@@ -22,6 +22,6 @@ func InitializeCategoryController(db *gorm.DB) *httpcontroller.CategoryControlle
 	listCategoriesQueryHandler := categoryservice.NewListCategoriesQueryHandler(categoryRepository)
 	updateByIDCommandHandler := categoryservice.NewUpdateByIDCommandHandler(categoryRepository)
 	deleteByIDCommandHandler := categoryservice.NewDeleteByIDCommandHandler(categoryRepository)
-	categoryController := httpcontroller.NewCategoryController(createCommandHandler, getByIDQueryHandler, listCategoriesQueryHandler, updateByIDCommandHandler, deleteByIDCommandHandler)
+	categoryController := httpcontroller.NewCategoryController(createCommandHandler, getByIDQueryHandler, listCategoriesQueryHandler, updateByIDCommandHandler, deleteByIDCommandHandler, categoryRepository)
 	return categoryController
 }

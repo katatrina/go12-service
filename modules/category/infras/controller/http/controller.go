@@ -4,6 +4,7 @@ import (
 	"context"
 	
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	categorymodel "github.com/katatrina/go12-service/modules/category/model"
 	categoryservice "github.com/katatrina/go12-service/modules/category/service"
 )
@@ -29,11 +30,16 @@ type IDeleteByIDCommandHandler interface {
 }
 
 type CategoryController struct {
-	createCmdHdl ICreateCommandHandler
-	getQryHdl    IGetByIDQueryHandler
-	listQryHdl   IListQueryHandler
-	updateCmdHdl IUpdateByIDCommandHandler
-	deleteCmdHdl IDeleteByIDCommandHandler
+	createCmdHdl    ICreateCommandHandler
+	getQryHdl       IGetByIDQueryHandler
+	listQryHdl      IListQueryHandler
+	updateCmdHdl    IUpdateByIDCommandHandler
+	deleteCmdHdl    IDeleteByIDCommandHandler
+	categoryRPCRepo ICategoryRPCRepo
+}
+
+type ICategoryRPCRepo interface {
+	FindByIDs(ctx context.Context, ids []uuid.UUID) ([]categorymodel.Category, error)
 }
 
 func NewCategoryController(
@@ -42,23 +48,30 @@ func NewCategoryController(
 	listQryHdl IListQueryHandler,
 	updateCmdHdl IUpdateByIDCommandHandler,
 	deleteCmdHdl IDeleteByIDCommandHandler,
+	categoryRPCRepo ICategoryRPCRepo,
 ) *CategoryController {
 	return &CategoryController{
-		createCmdHdl: createNewCmdHdl,
-		getQryHdl:    getDetailQryHdl,
-		listQryHdl:   listQryHdl,
-		updateCmdHdl: updateCmdHdl,
-		deleteCmdHdl: deleteCmdHdl,
+		createCmdHdl:    createNewCmdHdl,
+		getQryHdl:       getDetailQryHdl,
+		listQryHdl:      listQryHdl,
+		updateCmdHdl:    updateCmdHdl,
+		deleteCmdHdl:    deleteCmdHdl,
+		categoryRPCRepo: categoryRPCRepo,
 	}
 }
 
 func (ctl *CategoryController) SetupRoutes(g *gin.RouterGroup) {
-	categoryGroup := g.Group("/categories")
 	{
-		categoryGroup.POST("", ctl.CreateCategory)
-		categoryGroup.GET("", ctl.ListCategories)
-		categoryGroup.GET("/:id", ctl.GetCategoryByID)
-		categoryGroup.PATCH("/:id", ctl.UpdateCategoryByID)
-		categoryGroup.DELETE("/:id", ctl.DeleteCategoryByID)
+		g.POST("", ctl.CreateCategory)
+		g.GET("", ctl.ListCategories)
+		g.GET("/:id", ctl.GetCategoryByID)
+		g.PATCH("/:id", ctl.UpdateCategoryByID)
+		g.DELETE("/:id", ctl.DeleteCategoryByID)
+	}
+}
+
+func (ctl *CategoryController) SetupRoutesForRPC(g *gin.RouterGroup) {
+	{
+		g.POST("/rpc/categories/find-by-ids", ctl.RPCGetByIDS)
 	}
 }
