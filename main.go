@@ -19,6 +19,8 @@ func main() {
 		port = "8080"
 	}
 	
+	catServiceURL := os.Getenv("CATEGORY_SERVICE_URL")
+	
 	dsn := os.Getenv("DB_DSN")
 	dbMaster, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
@@ -51,11 +53,9 @@ func main() {
 	// Version Prefix: /v1
 	
 	v1 := r.Group("/v1")
-	
 	{
 		categorymodule.SetupCategoryModule(db, v1)
-		
-		restaurantmodule.SetupRestaurantModule(db, v1)
+		restaurantmodule.SetupRestaurantModule(db, v1, catServiceURL)
 	}
 	
 	r.Run(fmt.Sprintf(":%s", port)) // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")

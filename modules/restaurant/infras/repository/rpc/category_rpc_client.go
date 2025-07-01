@@ -2,28 +2,43 @@ package rpcclient
 
 import (
 	"context"
+	"fmt"
 	
 	"github.com/google/uuid"
 	restaurantmodel "github.com/katatrina/go12-service/modules/restaurant/model"
-	"gorm.io/gorm"
+	"resty.dev/v3"
 )
 
 type CategoryRPCClient struct {
-	db *gorm.DB
+	catServiceURL string
 }
 
-func NewCategoryRPCClient(db *gorm.DB) *CategoryRPCClient {
+func NewCategoryRPCClient(catServiceURL string) *CategoryRPCClient {
 	return &CategoryRPCClient{
-		db: db,
+		catServiceURL: catServiceURL,
 	}
 }
 
 func (c *CategoryRPCClient) FindByIDs(ctx context.Context, ids []uuid.UUID) ([]restaurantmodel.Category, error) {
-	var categories []restaurantmodel.Category
+	client := resty.New()
 	
-	if err := c.db.WithContext(ctx).Where("id IN ?", ids).Find(&categories).Error; err != nil {
+	type ResponseDTO struct {
+		Data []restaurantmodel.Category `json:"data"`
+	}
+	
+	var response ResponseDTO
+	
+	url := fmt.Sprintf("%s/find-by-ids", c.catServiceURL)
+	
+	_, err := client.R().
+		SetBody(map[string]interface{}{
+			"ids": ids,
+		}).
+		SetResult(&response).
+		Post(url)
+	if err != nil {
 		return nil, err
 	}
 	
-	return categories, nil
+	return response.Data, nil
 }

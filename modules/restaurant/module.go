@@ -35,8 +35,8 @@ var RestaurantSet = wire.NewSet(
 	wire.Bind(new(restaurantservice.ICategoryRepo), new(*rpcclient.CategoryRPCClient)),
 )
 
-func SetupRestaurantModule(db *gorm.DB, g *gin.RouterGroup) {
-	restCtl := InitializeRestaurantController(db)
+func SetupRestaurantModule(db *gorm.DB, g *gin.RouterGroup, catServiceURL string) {
+	restCtl := InitializeRestaurantController(db, catServiceURL)
 	
 	restCtl.SetupRoutes(g)
 }

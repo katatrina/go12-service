@@ -16,11 +16,11 @@ import (
 
 // Injectors from wire.go:
 
-func InitializeRestaurantController(db *gorm.DB) *httpcontroller.RestaurantController {
+func InitializeRestaurantController(db *gorm.DB, catServiceURL string) *httpcontroller.RestaurantController {
 	restaurantRepository := mysqlrepository.NewRestaurantRepository(db)
 	createCommandHandler := restaurantservice.NewCreateCommandHandler(restaurantRepository)
 	getByIDQueryHandler := restaurantservice.NewGetDetailQueryHandler(restaurantRepository)
-	categoryRPCClient := rpcclient.NewCategoryRPCClient(db)
+	categoryRPCClient := rpcclient.NewCategoryRPCClient(catServiceURL)
 	listRestaurantsQueryHandler := restaurantservice.NewListRestaurantsQueryHandler(restaurantRepository, categoryRPCClient)
 	updateByIDCommandHandler := restaurantservice.NewUpdateByIDCommandHandler(restaurantRepository)
 	deleteByIDCommandHandler := restaurantservice.NewDeleteByIDCommandHandler(restaurantRepository)

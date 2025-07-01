@@ -10,7 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func InitializeRestaurantController(db *gorm.DB) *httpcontroller.RestaurantController {
+func InitializeRestaurantController(db *gorm.DB, catServiceURL string) *httpcontroller.RestaurantController {
 	wire.Build(
 		RestaurantSet,
 	)
