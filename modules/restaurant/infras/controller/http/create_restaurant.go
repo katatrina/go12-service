@@ -10,15 +10,19 @@ import (
 
 func (ctl *RestaurantController) CreateRestaurant(c *gin.Context) {
 	var requestBodyData restaurantmodel.CreateRestaurantDTO
+	
 	if err := c.ShouldBindJSON(&requestBodyData); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	
 	cmd := restaurantservice.CreateCommand{DTO: &requestBodyData}
-	restaurant, err := ctl.createCmdHdl.Execute(c.Request.Context(), &cmd)
+	
+	id, err := ctl.createCmdHdl.Execute(c.Request.Context(), &cmd)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusCreated, gin.H{"data": restaurant})
+	
+	c.JSON(http.StatusCreated, gin.H{"data": id})
 }

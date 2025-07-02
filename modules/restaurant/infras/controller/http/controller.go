@@ -4,12 +4,13 @@ import (
 	"context"
 	
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/katatrina/go12-service/modules/restaurant/model"
 	"github.com/katatrina/go12-service/modules/restaurant/service"
 )
 
 type ICreateCommandHandler interface {
-	Execute(ctx context.Context, cmd *restaurantservice.CreateCommand) (*restaurantmodel.Restaurant, error)
+	Execute(ctx context.Context, cmd *restaurantservice.CreateCommand) (*uuid.UUID, error)
 }
 
 type IGetByIDQueryHandler interface {

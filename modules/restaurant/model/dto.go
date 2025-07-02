@@ -3,21 +3,22 @@ package restaurantmodel
 import (
 	"encoding/json"
 	"strings"
+	"time"
 	
+	"github.com/google/uuid"
 	"github.com/katatrina/go12-service/shared/datatype"
 )
 
 type CreateRestaurantDTO struct {
-	OwnerID    string   `json:"ownerID"`
-	CategoryID string   `json:"categoryID"`
-	Name       string   `json:"name"`
-	Addr       string   `json:"addr"`
-	CityID     *string  `json:"cityID"`
-	Lat        *float64 `json:"lat"`
-	Lng        *float64 `json:"lng"`
-	// Cover            interface{} `json:"cover"`
-	// Logo             interface{} `json:"logo"`
-	ShippingFeePerKm float64 `json:"shippingFeePerKm"`
+	ID         uuid.UUID       `json:"id" gorm:"column:id"`
+	OwnerID    uuid.UUID       `json:"ownerID" gorm:"column:owner_id"`
+	Name       string          `json:"name" gorm:"column:name"`
+	Addr       string          `json:"addr" gorm:"column:addr"`
+	CityID     *uuid.UUID      `json:"cityID" gorm:"column:city_id"`
+	CategoryID *uuid.UUID      `json:"categoryID" gorm:"column:category_id"`
+	Status     datatype.Status `json:"-" gorm:"column:status"`
+	CreatedAt  time.Time       `json:"-" gorm:"column:created_at"`
+	UpdatedAt  time.Time       `json:"-" gorm:"column:updated_at"`
 }
 
 type UpdateRestaurantDTO struct {
@@ -37,6 +38,29 @@ type FilterRestaurantDTO struct {
 	Status     *string `json:"status" form:"status"`
 	CityID     *string `json:"cityID" form:"cityID"`
 	CategoryID *string `json:"categoryID" form:"categoryID"`
+}
+
+func (*CreateRestaurantDTO) TableName() string {
+	return "restaurants"
+}
+
+func (dto *CreateRestaurantDTO) Validate() error {
+	// Validate name
+	dto.Name = strings.TrimSpace(dto.Name)
+	if dto.Name == "" {
+		return ErrNameRequired
+	}
+	if len(dto.Name) > 50 {
+		return ErrInvalidNameLength
+	}
+	
+	// Validate address
+	dto.Addr = strings.TrimSpace(dto.Addr)
+	if dto.Addr == "" {
+		return ErrAddrRequired
+	}
+	
+	return nil
 }
 
 func (dto *UpdateRestaurantDTO) Validate() error {
