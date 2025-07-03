@@ -17,7 +17,7 @@ type IListRepo interface {
 }
 
 type ICategoryRepo interface {
-	FindByIDs(ctx context.Context, ids []uuid.UUID) ([]restaurantmodel.Category, error)
+	FindByIDs(ctx context.Context, ids []*uuid.UUID) ([]restaurantmodel.Category, error)
 }
 
 type ListRestaurantsQueryHandler struct {
@@ -51,7 +51,7 @@ func (hdl *ListRestaurantsQueryHandler) Execute(
 		return nil, err
 	}
 	
-	categoryIDs := make([]uuid.UUID, len(restaurants))
+	categoryIDs := make([]*uuid.UUID, len(restaurants))
 	
 	for i := range restaurants {
 		categoryIDs[i] = restaurants[i].CategoryID
@@ -63,10 +63,10 @@ func (hdl *ListRestaurantsQueryHandler) Execute(
 		return nil, err
 	}
 	
-	mapCatIDToCategory := make(map[uuid.UUID]restaurantmodel.Category, len(restaurants))
+	mapCatIDToCategory := make(map[*uuid.UUID]restaurantmodel.Category, len(restaurants))
 	
 	for i := range categories {
-		mapCatIDToCategory[categories[i].ID] = categories[i] // Better to get by index
+		mapCatIDToCategory[&categories[i].ID] = categories[i] // Better to get by index
 	}
 	
 	result := make([]ListRestaurantItemDTO, len(restaurants))

@@ -11,7 +11,7 @@ import (
 type Restaurant struct {
 	ID               uuid.UUID        `json:"id" gorm:"column:id"`
 	OwnerID          uuid.UUID        `json:"ownerID" gorm:"column:owner_id"`
-	CategoryID       uuid.UUID        `json:"categoryID" gorm:"column:category_id"`
+	CategoryID       *uuid.UUID       `json:"categoryID" gorm:"column:category_id"`
 	Name             string           `json:"name" gorm:"column:name"`
 	Addr             string           `json:"addr" gorm:"column:addr"`
 	CityID           *uuid.UUID       `json:"cityID" gorm:"column:city_id"`
@@ -23,8 +23,6 @@ type Restaurant struct {
 	Status           datatype.Status  `json:"status" gorm:"column:status"`
 	CreatedAt        time.Time        `json:"createdAt" gorm:"column:created_at"`
 	UpdatedAt        time.Time        `json:"updatedAt" gorm:"column:updated_at"`
-	// Category 	 *categorymodel.Category `json:"category" gorm:"foreignKey:CategoryID;references:ID"`
-	// Category      *Category        		 `json:"category" gorm:"foreignKey:CategoryID;references:ID"`
 }
 
 func (r *Restaurant) TableName() string {

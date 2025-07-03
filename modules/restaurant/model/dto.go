@@ -3,22 +3,17 @@ package restaurantmodel
 import (
 	"encoding/json"
 	"strings"
-	"time"
 	
 	"github.com/google/uuid"
 	"github.com/katatrina/go12-service/shared/datatype"
 )
 
 type CreateRestaurantDTO struct {
-	ID         uuid.UUID       `json:"id" gorm:"column:id"`
-	OwnerID    uuid.UUID       `json:"ownerID" gorm:"column:owner_id"`
-	Name       string          `json:"name" gorm:"column:name"`
-	Addr       string          `json:"addr" gorm:"column:addr"`
-	CityID     *uuid.UUID      `json:"cityID" gorm:"column:city_id"`
-	CategoryID *uuid.UUID      `json:"categoryID" gorm:"column:category_id"`
-	Status     datatype.Status `json:"-" gorm:"column:status"`
-	CreatedAt  time.Time       `json:"-" gorm:"column:created_at"`
-	UpdatedAt  time.Time       `json:"-" gorm:"column:updated_at"`
+	OwnerID    uuid.UUID  `json:"ownerID"`
+	Name       string     `json:"name"`
+	Addr       string     `json:"addr"`
+	CityID     *uuid.UUID `json:"cityID"`
+	CategoryID *uuid.UUID `json:"categoryID"`
 }
 
 type UpdateRestaurantDTO struct {

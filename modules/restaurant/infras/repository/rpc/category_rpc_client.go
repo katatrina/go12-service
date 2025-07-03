@@ -19,7 +19,7 @@ func NewCategoryRPCClient(catServiceURL string) *CategoryRPCClient {
 	}
 }
 
-func (c *CategoryRPCClient) FindByIDs(ctx context.Context, ids []uuid.UUID) ([]restaurantmodel.Category, error) {
+func (c *CategoryRPCClient) FindByIDs(ctx context.Context, ids []*uuid.UUID) ([]restaurantmodel.Category, error) {
 	client := resty.New()
 	
 	type ResponseDTO struct {

@@ -18,11 +18,11 @@ func (ctl *RestaurantController) CreateRestaurant(c *gin.Context) {
 	
 	cmd := restaurantservice.CreateCommand{DTO: &requestBodyData}
 	
-	id, err := ctl.createCmdHdl.Execute(c.Request.Context(), &cmd)
+	restaurant, err := ctl.createCmdHdl.Execute(c.Request.Context(), &cmd)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	
-	c.JSON(http.StatusCreated, gin.H{"data": id})
+	c.JSON(http.StatusCreated, gin.H{"data": restaurant})
 }
