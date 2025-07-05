@@ -35,7 +35,7 @@ type FilterRestaurantDTO struct {
 	CategoryID *string `json:"categoryID" form:"categoryID"`
 }
 
-func (*CreateRestaurantDTO) TableName() string {
+func (CreateRestaurantDTO) TableName() string {
 	return "restaurants"
 }
 

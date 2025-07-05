@@ -10,5 +10,6 @@ func (repo *RestaurantRepository) Insert(ctx context.Context, data *restaurantmo
 	if err := repo.db.WithContext(ctx).Create(data).Error; err != nil {
 		return err
 	}
+	
 	return nil
 }

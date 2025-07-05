@@ -11,6 +11,6 @@ type Category struct {
 	Status datatype.Status `json:"status" gorm:"column:status"`
 }
 
-func (*Category) TableName() string {
+func (Category) TableName() string {
 	return "categories"
 }

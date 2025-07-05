@@ -25,6 +25,6 @@ type Restaurant struct {
 	UpdatedAt        time.Time        `json:"updatedAt" gorm:"column:updated_at"`
 }
 
-func (r *Restaurant) TableName() string {
+func (Restaurant) TableName() string {
 	return "restaurants"
 }

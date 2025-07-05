@@ -17,7 +17,7 @@ type Category struct {
 	UpdatedAt   time.Time       `json:"updatedAt" gorm:"column:updated_at"`
 }
 
-func (c *Category) TableName() string {
+func (Category) TableName() string {
 	return "categories"
 }
 
