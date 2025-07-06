@@ -39,6 +39,10 @@ func (CreateRestaurantDTO) TableName() string {
 	return "restaurants"
 }
 
+func (UpdateRestaurantDTO) TableName() string {
+	return "restaurants"
+}
+
 func (dto *CreateRestaurantDTO) Validate() error {
 	// Validate name
 	dto.Name = strings.TrimSpace(dto.Name)

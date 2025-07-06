@@ -8,5 +8,5 @@ import (
 )
 
 func (repo *RestaurantRepository) Update(ctx context.Context, id uuid.UUID, dto *restaurantmodel.UpdateRestaurantDTO) error {
-	return repo.db.WithContext(ctx).Model(&restaurantmodel.Restaurant{}).Where("id = ?", id).Updates(dto).Error
+	return repo.db.WithContext(ctx).Where("id = ?", id).Updates(dto).Error
 }
