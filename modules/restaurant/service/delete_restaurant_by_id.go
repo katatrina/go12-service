@@ -34,8 +34,10 @@ func (hdl *DeleteByIDCommandHandler) Execute(ctx context.Context, cmd *DeleteByI
 	}
 	
 	if restaurant.Status == datatype.StatusDeleted {
-		return nil
+		return restaurantmodel.ErrRestaurantAlreadyDeleted
 	}
+	
+	// The restaurant is still existed and not in deleted status
 	
 	if err = hdl.restaurantRepo.Delete(ctx, cmd.ID, false); err != nil {
 		return err

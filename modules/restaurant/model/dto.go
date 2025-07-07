@@ -1,7 +1,6 @@
 package restaurantmodel
 
 import (
-	"encoding/json"
 	"strings"
 	
 	"github.com/google/uuid"
@@ -17,16 +16,11 @@ type CreateRestaurantDTO struct {
 }
 
 type UpdateRestaurantDTO struct {
-	Name             *string          `json:"name"`
-	Addr             *string          `json:"addr"`
-	CityID           *string          `json:"cityID"`
-	CategoryID       *string          `json:"categoryID"`
-	Lat              *float64         `json:"lat"`
-	Lng              *float64         `json:"lng"`
-	Cover            *json.RawMessage `json:"cover"`
-	Logo             *json.RawMessage `json:"logo"`
-	ShippingFeePerKm *float64         `json:"shippingFeePerKm"`
-	Status           *string          `json:"status"`
+	Name             *string  `json:"name"`
+	Addr             *string  `json:"addr"`
+	CityID           *string  `json:"cityID"`
+	CategoryID       *string  `json:"categoryID"`
+	ShippingFeePerKm *float64 `json:"shippingFeePerKm"`
 }
 
 type FilterRestaurantDTO struct {
@@ -78,13 +72,7 @@ func (dto *UpdateRestaurantDTO) Validate() error {
 			return ErrAddrRequired
 		}
 	}
-	if dto.Status != nil {
-		*dto.Status = strings.TrimSpace(*dto.Status)
-		status := datatype.Status(strings.ToLower(*dto.Status))
-		if !status.Valid() {
-			return ErrStatusInvalid
-		}
-	}
+	
 	return nil
 }
 

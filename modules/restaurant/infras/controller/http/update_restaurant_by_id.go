@@ -1,6 +1,7 @@
 package httpcontroller
 
 import (
+	"errors"
 	"net/http"
 	
 	"github.com/gin-gonic/gin"
@@ -26,7 +27,15 @@ func (ctl *RestaurantController) UpdateRestaurantByID(c *gin.Context) {
 	
 	cmd := restaurantservice.UpdateByIDCommand{ID: id, DTO: &dto}
 	if err = ctl.updateCmdHdl.Execute(c.Request.Context(), &cmd); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		switch {
+		case errors.Is(err, restaurantmodel.ErrRestaurantNotFound):
+			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		case errors.Is(err, restaurantmodel.ErrRestaurantAlreadyDeleted):
+			c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
+		default:
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
+		
 		return
 	}
 	
