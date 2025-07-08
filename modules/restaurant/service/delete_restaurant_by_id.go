@@ -2,6 +2,7 @@ package restaurantservice
 
 import (
 	"context"
+	"errors"
 	
 	"github.com/google/uuid"
 	"github.com/katatrina/go12-service/modules/restaurant/model"
@@ -30,17 +31,19 @@ type DeleteByIDCommand struct {
 func (hdl *DeleteByIDCommandHandler) Execute(ctx context.Context, cmd *DeleteByIDCommand) error {
 	restaurant, err := hdl.restaurantRepo.FindByID(ctx, cmd.ID)
 	if err != nil {
-		return err
+		if errors.Is(err, datatype.ErrNotFound) {
+			return datatype.ErrNotFound
+		}
+		
+		return datatype.ErrInternalServerError.WithWrap(err).WithDebug(err.Error())
 	}
 	
 	if restaurant.Status == datatype.StatusDeleted {
-		return restaurantmodel.ErrRestaurantAlreadyDeleted
+		return datatype.ErrNotFound.WithError(restaurantmodel.ErrRestaurantAlreadyDeleted.Error())
 	}
 	
-	// The restaurant is still existed and not in deleted status
-	
 	if err = hdl.restaurantRepo.Delete(ctx, cmd.ID, false); err != nil {
-		return err
+		return datatype.ErrInternalServerError.WithWrap(err).WithDebug(err.Error())
 	}
 	
 	return nil

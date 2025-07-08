@@ -97,6 +97,7 @@ func (e *DefaultError) WithTrace(err error) *DefaultError {
 	} else {
 		e.Wrap(err)
 	}
+	
 	return e
 }
 

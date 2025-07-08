@@ -5,6 +5,7 @@ import (
 	
 	"github.com/google/uuid"
 	restaurantmodel "github.com/katatrina/go12-service/modules/restaurant/model"
+	"github.com/katatrina/go12-service/shared/datatype"
 	sharedmodel "github.com/katatrina/go12-service/shared/model"
 )
 
@@ -48,7 +49,7 @@ func (hdl *ListRestaurantsQueryHandler) Execute(
 ) ([]ListRestaurantItemDTO, error) {
 	restaurants, err := hdl.restRepo.List(ctx, &query.PagingDTO, &query.FilterRestaurantDTO)
 	if err != nil {
-		return nil, err
+		return nil, datatype.ErrInternalServerError.WithWrap(err).WithDebug(err.Error())
 	}
 	
 	categoryIDs := make([]*uuid.UUID, len(restaurants))
@@ -60,7 +61,7 @@ func (hdl *ListRestaurantsQueryHandler) Execute(
 	categories, err := hdl.catRepo.FindByIDs(ctx, categoryIDs)
 	if err != nil {
 		// return restaurants, nil (If category is not important, we can return restaurants without categories)
-		return nil, err
+		return nil, datatype.ErrInternalServerError.WithWrap(err).WithDebug(err.Error())
 	}
 	
 	mapCatIDToCategory := make(map[*uuid.UUID]restaurantmodel.Category, len(restaurants))

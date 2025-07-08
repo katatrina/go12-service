@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 	
 	"github.com/gin-gonic/gin"
+	"github.com/katatrina/go12-service/middleware"
 	categorymodule "github.com/katatrina/go12-service/modules/category"
 	restaurantmodule "github.com/katatrina/go12-service/modules/restaurant"
 	"gorm.io/driver/mysql"
@@ -43,15 +43,10 @@ func main() {
 	r := gin.Default()
 	gin.ForceConsoleColor()
 	
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
-	
 	// CRUDL - Create Read Update Delete List
 	// Version Prefix: /v1
 	
+	r.Use(middleware.RecoverMiddleware())
 	v1 := r.Group("/v1")
 	{
 		categorymodule.SetupCategoryModule(db, v1)

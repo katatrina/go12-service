@@ -1,31 +1,27 @@
 package httpcontroller
 
 import (
-	"errors"
 	"net/http"
 	
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/katatrina/go12-service/modules/restaurant/model"
 	"github.com/katatrina/go12-service/modules/restaurant/service"
+	"github.com/katatrina/go12-service/shared/datatype"
 )
 
 func (ctl *RestaurantController) GetRestaurantByID(c *gin.Context) {
 	idStr := c.Param("id")
+	
 	id, err := uuid.Parse(idStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+		panic(datatype.ErrBadRequest.WithError(err.Error())) // This should be handled by a middleware
 	}
+	
 	query := restaurantservice.GetByIDQuery{ID: id}
 	restaurant, err := ctl.getQryHdl.Execute(c.Request.Context(), &query)
 	if err != nil {
-		if errors.Is(err, restaurantmodel.ErrRestaurantNotFound) || errors.Is(err, restaurantmodel.ErrRestaurantAlreadyDeleted) {
-			c.JSON(http.StatusNotFound, gin.H{"error": "restaurant not found"})
-			return
-		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
+		panic(err)
 	}
+	
 	c.JSON(http.StatusOK, gin.H{"data": restaurant})
 }

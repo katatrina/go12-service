@@ -2,22 +2,24 @@ package mysqlrepository
 
 import (
 	"context"
-	"errors"
+	stderrors "errors"
 	
 	"github.com/google/uuid"
 	"github.com/katatrina/go12-service/modules/restaurant/model"
+	"github.com/katatrina/go12-service/shared/datatype"
+	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
 
 func (repo *RestaurantRepository) FindByID(ctx context.Context, id uuid.UUID) (*restaurantmodel.Restaurant, error) {
 	var restaurant restaurantmodel.Restaurant
 	
-	if err := repo.db.WithContext(ctx).First(&restaurant, "id = ?", id).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, restaurantmodel.ErrRestaurantNotFound
+	if err := repo.db.WithContext(ctx).First(&restaurant, "id1 = ?", id).Error; err != nil {
+		if stderrors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, datatype.ErrRecordNotFound
 		}
 		
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	
 	return &restaurant, nil

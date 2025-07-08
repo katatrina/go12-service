@@ -1,13 +1,13 @@
 package httpcontroller
 
 import (
-	"errors"
 	"net/http"
 	
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/katatrina/go12-service/modules/restaurant/model"
 	"github.com/katatrina/go12-service/modules/restaurant/service"
+	"github.com/katatrina/go12-service/shared/datatype"
 )
 
 func (ctl *RestaurantController) UpdateRestaurantByID(c *gin.Context) {
@@ -15,28 +15,17 @@ func (ctl *RestaurantController) UpdateRestaurantByID(c *gin.Context) {
 	
 	id, err := uuid.Parse(idStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+		panic(datatype.ErrBadRequest.WithError(err.Error()))
 	}
 	
 	var dto restaurantmodel.UpdateRestaurantDTO
 	if err = c.ShouldBindJSON(&dto); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+		panic(datatype.ErrBadRequest.WithError(err.Error()))
 	}
 	
 	cmd := restaurantservice.UpdateByIDCommand{ID: id, DTO: &dto}
 	if err = ctl.updateCmdHdl.Execute(c.Request.Context(), &cmd); err != nil {
-		switch {
-		case errors.Is(err, restaurantmodel.ErrRestaurantNotFound):
-			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
-		case errors.Is(err, restaurantmodel.ErrRestaurantAlreadyDeleted):
-			c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
-		default:
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		}
-		
-		return
+		panic(err)
 	}
 	
 	c.JSON(http.StatusOK, gin.H{"data": true})

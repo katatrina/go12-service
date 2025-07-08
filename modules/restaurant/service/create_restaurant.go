@@ -53,7 +53,7 @@ func (hdl *CreateCommandHandler) Execute(ctx context.Context, cmd *CreateCommand
 	}
 	
 	if err = hdl.restRepo.Insert(ctx, &restaurant); err != nil {
-		return nil, err
+		return nil, datatype.ErrInternalServerError.WithWrap(err).WithDebug(err.Error())
 	}
 	
 	return &restaurant, nil

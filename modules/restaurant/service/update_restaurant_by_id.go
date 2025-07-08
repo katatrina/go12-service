@@ -2,6 +2,7 @@ package restaurantservice
 
 import (
 	"context"
+	"errors"
 	
 	"github.com/google/uuid"
 	"github.com/katatrina/go12-service/modules/restaurant/model"
@@ -35,7 +36,11 @@ func (hdl *UpdateByIDCommandHandler) Execute(ctx context.Context, cmd *UpdateByI
 	
 	restaurant, err := hdl.restaurantRepo.FindByID(ctx, cmd.ID)
 	if err != nil {
-		return err
+		if errors.Is(err, datatype.ErrNotFound) {
+			return datatype.ErrNotFound
+		}
+		
+		return datatype.ErrInternalServerError.WithWrap(err).WithDebug(err.Error())
 	}
 	
 	if restaurant.Status == datatype.StatusDeleted {
@@ -43,7 +48,7 @@ func (hdl *UpdateByIDCommandHandler) Execute(ctx context.Context, cmd *UpdateByI
 	}
 	
 	if err = hdl.restaurantRepo.Update(ctx, cmd.ID, cmd.DTO); err != nil {
-		return err
+		return datatype.ErrInternalServerError.WithWrap(err).WithDebug(err.Error())
 	}
 	
 	return nil

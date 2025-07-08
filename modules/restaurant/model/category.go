@@ -6,9 +6,9 @@ import (
 )
 
 type Category struct {
-	ID     uuid.UUID       `json:"id" gorm:"column:id"`
-	Name   string          `json:"name" gorm:"column:name"`
-	Status datatype.Status `json:"status" gorm:"column:status"`
+	ID     uuid.UUID       `json:"id"`
+	Name   string          `json:"name"`
+	Status datatype.Status `json:"status"`
 }
 
 func (Category) TableName() string {

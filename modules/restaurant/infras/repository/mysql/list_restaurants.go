@@ -5,6 +5,7 @@ import (
 	
 	"github.com/katatrina/go12-service/modules/restaurant/model"
 	sharedmodel "github.com/katatrina/go12-service/shared/model"
+	"github.com/pkg/errors"
 )
 
 func (repo *RestaurantRepository) List(
@@ -27,14 +28,15 @@ func (repo *RestaurantRepository) List(
 	}
 	
 	if err := db.Count(&pagingDTO.Total).Error; err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	
 	// db = db.Preload("Category")
 	
 	offset := (pagingDTO.Page - 1) * pagingDTO.Limit
 	if err := db.Offset(offset).Limit(pagingDTO.Limit).Find(&restaurants).Error; err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
+	
 	return restaurants, nil
 }
