@@ -9,6 +9,10 @@ const (
 	StatusPending  Status = "pending"
 )
 
+const (
+	KeyRequester = "requester"
+)
+
 func (s Status) Valid() bool {
 	switch s {
 	case StatusActive, StatusInactive, StatusDeleted, StatusPending:

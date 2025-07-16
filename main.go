@@ -9,6 +9,7 @@ import (
 	"github.com/katatrina/go12-service/middleware"
 	categorymodule "github.com/katatrina/go12-service/modules/category"
 	restaurantmodule "github.com/katatrina/go12-service/modules/restaurant"
+	usermodule "github.com/katatrina/go12-service/modules/user"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -51,6 +52,7 @@ func main() {
 	{
 		categorymodule.SetupCategoryModule(db, v1)
 		restaurantmodule.SetupRestaurantModule(db, v1, catServiceURL)
+		usermodule.SetupUserModule(db, v1)
 	}
 	
 	r.Run(fmt.Sprintf(":%s", port)) // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")

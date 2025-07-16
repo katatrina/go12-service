@@ -30,7 +30,7 @@ func NewGetDetailQueryHandler(restaurantRepo IGetByIDRepo) *GetByIDQueryHandler 
 func (hdl *GetByIDQueryHandler) Execute(ctx context.Context, query *GetByIDQuery) (*restaurantmodel.Restaurant, error) {
 	restaurant, err := hdl.restaurantRepo.FindByID(ctx, query.ID)
 	if err != nil {
-		if errors.Is(err, datatype.ErrNotFound) {
+		if errors.Is(err, datatype.ErrRecordNotFound) {
 			return nil, datatype.ErrNotFound
 		}
 		
