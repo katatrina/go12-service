@@ -9,7 +9,9 @@ import (
 )
 
 func (repo *RestaurantRepository) Update(ctx context.Context, id uuid.UUID, dto *restaurantmodel.UpdateRestaurantDTO) error {
-	err := repo.db.WithContext(ctx).Where("id = ?", id).Updates(dto).Error
+	db := repo.dbCtx.GetMainConnection()
+	
+	err := db.WithContext(ctx).Where("id = ?", id).Updates(dto).Error
 	if err != nil {
 		return errors.WithStack(err)
 	}

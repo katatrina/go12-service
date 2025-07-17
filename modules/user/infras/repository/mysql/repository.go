@@ -1,15 +1,15 @@
 package userrepository
 
 import (
-	"gorm.io/gorm"
+	sharedinfras "github.com/katatrina/go12-service/shared/infras"
 )
 
 type UserRepository struct {
-	db *gorm.DB
+	dbCtx sharedinfras.IDbContext
 }
 
-func NewUserRepository(db *gorm.DB) *UserRepository {
+func NewUserRepository(dbCtx sharedinfras.IDbContext) *UserRepository {
 	return &UserRepository{
-		db: db,
+		dbCtx: dbCtx,
 	}
 }

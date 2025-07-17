@@ -13,9 +13,11 @@ func (repo *RestaurantRepository) List(
 	pagingDTO *sharedmodel.PagingDTO,
 	filterDTO *restaurantmodel.FilterRestaurantDTO,
 ) ([]restaurantmodel.Restaurant, error) {
+	db := repo.dbCtx.GetMainConnection()
+	
 	var restaurants []restaurantmodel.Restaurant
 	
-	db := repo.db.WithContext(ctx).Model(&restaurantmodel.Restaurant{})
+	db = db.WithContext(ctx).Model(&restaurantmodel.Restaurant{})
 	
 	if filterDTO.Status != nil {
 		db = db.Where("status = ?", *filterDTO.Status)

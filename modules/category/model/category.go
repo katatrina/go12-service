@@ -22,7 +22,7 @@ func (Category) TableName() string {
 }
 
 func (dto *CreateCategoryDTO) Validate() error {
-	// Validate name
+	// Introspect name
 	dto.Name = strings.TrimSpace(dto.Name)
 	
 	if dto.Name == "" {
@@ -33,7 +33,7 @@ func (dto *CreateCategoryDTO) Validate() error {
 		return ErrInvalidNameLength
 	}
 	
-	// TODO: Validate description (if provided)
+	// TODO: Introspect description (if provided)
 	
 	return nil
 }

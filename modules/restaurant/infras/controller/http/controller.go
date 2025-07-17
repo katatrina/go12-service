@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/katatrina/go12-service/modules/restaurant/model"
 	"github.com/katatrina/go12-service/modules/restaurant/service"
+	sharedinfras "github.com/katatrina/go12-service/shared/infras"
 )
 
 type ICreateCommandHandler interface {
@@ -52,10 +53,10 @@ func NewRestaurantController(
 	}
 }
 
-func (ctl *RestaurantController) SetupRoutes(g *gin.RouterGroup) {
+func (ctl *RestaurantController) SetupRoutes(g *gin.RouterGroup, mldProvider sharedinfras.IMiddlewareProvider) {
 	restaurantGroup := g.Group("/restaurants")
 	{
-		restaurantGroup.POST("", ctl.CreateRestaurant)
+		restaurantGroup.POST("", mldProvider.Auth(), ctl.CreateRestaurant)
 		restaurantGroup.GET("", ctl.ListRestaurants)
 		restaurantGroup.GET("/:id", ctl.GetRestaurantByID)
 		restaurantGroup.PATCH("/:id", ctl.UpdateRestaurantByID)

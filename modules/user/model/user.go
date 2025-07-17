@@ -42,13 +42,21 @@ type User struct {
 	FbID      *string          `json:"fb_id" gorm:"column:fb_id"`
 	GgID      *string          `json:"gg_id" gorm:"column:gg_id"`
 	Password  string           `json:"-" gorm:"column:password"`
-	Salt      string           `json:"salt" gorm:"column:salt"`
+	Salt      string           `json:"-" gorm:"column:salt"`
 	Phone     *string          `json:"phone" gorm:"column:phone"`
 	Type      UserType         `json:"type" gorm:"column:type"`
 	Role      UserRole         `json:"role" gorm:"column:role"`
 	Status    UserStatus       `json:"status" gorm:"column:status"`
 	CreatedAt time.Time        `json:"created_at" gorm:"column:created_at"`
 	UpdatedAt time.Time        `json:"updated_at" gorm:"column:updated_at"`
+}
+
+func (u User) Subject() uuid.UUID {
+	return u.ID
+}
+
+func (u User) GetRole() string {
+	return string(u.Role)
 }
 
 func (User) TableName() string {

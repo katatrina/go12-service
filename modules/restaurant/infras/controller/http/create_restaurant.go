@@ -10,11 +10,14 @@ import (
 )
 
 func (ctl *RestaurantController) CreateRestaurant(c *gin.Context) {
+	requester := c.MustGet(datatype.KeyRequester).(datatype.Requester)
 	var requestBodyData restaurantmodel.CreateRestaurantDTO
 	
 	if err := c.ShouldBindJSON(&requestBodyData); err != nil {
 		panic(datatype.ErrBadRequest.WithError(err.Error()))
 	}
+	
+	requestBodyData.OwnerID = requester.Subject()
 	
 	cmd := restaurantservice.CreateCommand{DTO: &requestBodyData}
 	

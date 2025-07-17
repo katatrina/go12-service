@@ -61,7 +61,7 @@ func NewRegisterCommandHandler(registerRepo RegisterRepo) *RegisterCommandHandle
 }
 
 func (h *RegisterCommandHandler) Execute(ctx context.Context, cmd *RegisterCommand) (*usermodel.User, error) {
-	// Validate the command
+	// Introspect the command
 	if err := cmd.Validate(); err != nil {
 		return nil, datatype.ErrBadRequest.WithError(err.Error())
 	}

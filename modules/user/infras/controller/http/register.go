@@ -8,13 +8,13 @@ import (
 	"github.com/katatrina/go12-service/shared/datatype"
 )
 
-func (h *UserHTTPController) Register(c *gin.Context) {
+func (ctrl *UserHTTPController) Register(c *gin.Context) {
 	var cmd userservice.RegisterCommand
 	if err := c.ShouldBind(&cmd); err != nil {
 		panic(datatype.ErrBadRequest.WithWrap(err).WithDebug(err.Error()))
 	}
 	
-	user, err := h.registerCmdHandler.Execute(c.Request.Context(), &cmd)
+	user, err := ctrl.registerCmdHandler.Execute(c.Request.Context(), &cmd)
 	if err != nil {
 		panic(err)
 	}

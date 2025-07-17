@@ -8,7 +8,9 @@ import (
 )
 
 func (repo *RestaurantRepository) Insert(ctx context.Context, data *restaurantmodel.Restaurant) error {
-	if err := repo.db.WithContext(ctx).Create(data).Error; err != nil {
+	db := repo.dbCtx.GetMainConnection()
+	
+	if err := db.WithContext(ctx).Create(data).Error; err != nil {
 		return errors.WithStack(err)
 	}
 	

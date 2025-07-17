@@ -8,7 +8,7 @@ import (
 )
 
 type CreateRestaurantDTO struct {
-	OwnerID    uuid.UUID  `json:"ownerID"`
+	OwnerID    uuid.UUID  `json:"-"`
 	Name       string     `json:"name"`
 	Addr       string     `json:"addr"`
 	CityID     *uuid.UUID `json:"cityID"`
@@ -38,7 +38,7 @@ func (UpdateRestaurantDTO) TableName() string {
 }
 
 func (dto *CreateRestaurantDTO) Validate() error {
-	// Validate name
+	// Introspect name
 	dto.Name = strings.TrimSpace(dto.Name)
 	if dto.Name == "" {
 		return ErrNameRequired
@@ -47,7 +47,7 @@ func (dto *CreateRestaurantDTO) Validate() error {
 		return ErrInvalidNameLength
 	}
 	
-	// Validate address
+	// Introspect address
 	dto.Addr = strings.TrimSpace(dto.Addr)
 	if dto.Addr == "" {
 		return ErrAddrRequired

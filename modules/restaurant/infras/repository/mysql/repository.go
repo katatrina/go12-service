@@ -1,15 +1,15 @@
 package mysqlrepository
 
 import (
-	"gorm.io/gorm"
+	sharedinfras "github.com/katatrina/go12-service/shared/infras"
 )
 
 type RestaurantRepository struct {
-	db *gorm.DB
+	dbCtx sharedinfras.IDbContext
 }
 
-func NewRestaurantRepository(db *gorm.DB) *RestaurantRepository {
+func NewRestaurantRepository(dbCtx sharedinfras.IDbContext) *RestaurantRepository {
 	return &RestaurantRepository{
-		db: db,
+		dbCtx: dbCtx,
 	}
 }

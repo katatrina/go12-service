@@ -11,14 +11,16 @@ import (
 )
 
 func (repo *RestaurantRepository) Delete(ctx context.Context, id uuid.UUID, isHard bool) error {
+	db := repo.dbCtx.GetMainConnection()
+	
 	if isHard {
-		err := repo.db.WithContext(ctx).Where("id = ?", id).Delete(restaurantmodel.Restaurant{}).Error
+		err := db.WithContext(ctx).Where("id = ?", id).Delete(restaurantmodel.Restaurant{}).Error
 		if err != nil {
 			return errors.WithStack(err)
 		}
 	} else {
 		// Soft delete
-		err := repo.db.WithContext(ctx).Model(restaurantmodel.Restaurant{}).
+		err := db.WithContext(ctx).Model(restaurantmodel.Restaurant{}).
 			Where("id = ?", id).
 			Updates(map[string]interface{}{
 				"status":     datatype.StatusDeleted,

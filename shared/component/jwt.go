@@ -45,7 +45,7 @@ func (j *JWTComp) ExpiresIn() time.Duration {
 	return j.duration
 }
 
-func (j *JWTComp) Validate(tokenString string) (*jwt.RegisteredClaims, error) {
+func (j *JWTComp) Introspect(tokenString string) (string, error) {
 	// Parse the token
 	token, err := jwt.ParseWithClaims(tokenString, &jwt.RegisteredClaims{}, func(token *jwt.Token) (interface{}, error) {
 		// Make sure that the token's signing method is what you expect
@@ -55,12 +55,12 @@ func (j *JWTComp) Validate(tokenString string) (*jwt.RegisteredClaims, error) {
 		return []byte(j.secretKey), nil
 	})
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return "", errors.WithStack(err)
 	}
 	
 	if claims, ok := token.Claims.(*jwt.RegisteredClaims); ok && token.Valid {
-		return claims, nil
+		return claims.Subject, nil
 	}
 	
-	return nil, errors.New("invalid token")
+	return "", errors.New("invalid token")
 }

@@ -12,9 +12,11 @@ import (
 )
 
 func (repo *RestaurantRepository) FindByID(ctx context.Context, id uuid.UUID) (*restaurantmodel.Restaurant, error) {
+	db := repo.dbCtx.GetMainConnection()
+	
 	var restaurant restaurantmodel.Restaurant
 	
-	if err := repo.db.WithContext(ctx).First(&restaurant, "id = ?", id).Error; err != nil {
+	if err := db.WithContext(ctx).First(&restaurant, "id = ?", id).Error; err != nil {
 		if stderrors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, datatype.ErrRecordNotFound
 		}

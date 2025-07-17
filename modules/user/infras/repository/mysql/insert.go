@@ -8,7 +8,8 @@ import (
 )
 
 func (repo *UserRepository) Insert(ctx context.Context, user *usermodel.User) error {
-	if err := repo.db.WithContext(ctx).Create(user).Error; err != nil {
+	db := repo.dbCtx.GetMainConnection()
+	if err := db.WithContext(ctx).Create(user).Error; err != nil {
 		return errors.WithStack(err)
 	}
 	
