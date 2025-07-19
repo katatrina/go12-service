@@ -6,5 +6,5 @@ import (
 
 type Requester interface {
 	Subject() uuid.UUID
-	GetRole() string
+	GetRole() UserRole
 }

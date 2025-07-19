@@ -10,6 +10,7 @@ import (
 	userrepository "github.com/katatrina/go12-service/modules/user/infras/repository/mysql"
 	userservice "github.com/katatrina/go12-service/modules/user/service"
 	sharedcomponent "github.com/katatrina/go12-service/shared/component"
+	"github.com/katatrina/go12-service/shared/datatype"
 	sharedinfras "github.com/katatrina/go12-service/shared/infras"
 )
 
@@ -38,4 +39,5 @@ func SetupUserModule(appCtx sharedinfras.IAppContext, g *gin.RouterGroup) {
 	introspectCmdHdlWrapper := userservice.NewIntrospectCmdHdlWrapper(introspectCmdHandler)
 	
 	userCtrl.SetupRoutes(g, middleware.Auth(introspectCmdHdlWrapper))
+	userCtrl.SetupAdminRoutes(g, middleware.Auth(introspectCmdHdlWrapper), middleware.CheckRoles(datatype.RoleAdmin))
 }

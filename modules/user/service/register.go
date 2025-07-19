@@ -103,7 +103,7 @@ func (h *RegisterCommandHandler) Execute(ctx context.Context, cmd *RegisterComma
 		Password:  string(hashPassword),
 		Salt:      salt,
 		Type:      usermodel.TypeEmailPassword,
-		Role:      usermodel.RoleUser,
+		Role:      datatype.RoleUser,
 		Status:    usermodel.StatusActive,
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),

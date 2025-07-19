@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/katatrina/go12-service/middleware"
 	categorymodule "github.com/katatrina/go12-service/modules/category"
+	mediamodule "github.com/katatrina/go12-service/modules/media"
 	restaurantmodule "github.com/katatrina/go12-service/modules/restaurant"
 	usermodule "github.com/katatrina/go12-service/modules/user"
 	sharedinfras "github.com/katatrina/go12-service/shared/infras"
@@ -51,11 +52,11 @@ func main() {
 	v1 := r.Group("/v1")
 	
 	appCtx := sharedinfras.NewAppContext(db)
-	
 	{
 		categorymodule.SetupCategoryModule(db, v1)
 		restaurantmodule.SetupRestaurantModule(appCtx, v1)
 		usermodule.SetupUserModule(appCtx, v1)
+		mediamodule.SetupMediaModule(appCtx, v1)
 	}
 	
 	r.Run(fmt.Sprintf(":%s", port)) // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")

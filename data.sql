@@ -80,13 +80,14 @@ CREATE TABLE `foods`
     KEY             `category_id` (`category_id`) USING BTREE
 ) ENGINE=InnoDB;
 
-DROP TABLE IF EXISTS `images`;
-CREATE TABLE `images`
+DROP TABLE IF EXISTS `medias`;
+CREATE TABLE `medias`
 (
     `id`         varchar(36)                                                   NOT NULL,
-    `file_name`  varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-    `width`      int                                                           NOT NULL,
-    `height`     int                                                           NOT NULL,
+    `filename`   varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+    `cloud_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+    `size`       int                                                           NOT NULL,
+    `ext`        varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NOT NULL,
     `status`     enum('active','inactive','deleted','pending') NOT NULL DEFAULT 'active',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

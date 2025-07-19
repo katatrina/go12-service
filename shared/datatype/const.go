@@ -9,6 +9,14 @@ const (
 	StatusPending  Status = "pending"
 )
 
+type UserRole string
+
+const (
+	RoleUser    UserRole = "user"
+	RoleAdmin   UserRole = "admin"
+	RoleShipper UserRole = "shipper"
+)
+
 const (
 	KeyRequester = "requester"
 )

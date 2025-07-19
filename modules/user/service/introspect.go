@@ -68,19 +68,6 @@ func NewIntrospectCmdHdlWrapper(hdl *IntrospectCommandHandler) *IntrospectCmdHdl
 	return &IntrospectCmdHdlWrapper{hdl: hdl}
 }
 
-type dataRequester struct {
-	UserID    uuid.UUID `json:"id"`
-	RoleValue string    `json:"role"`
-}
-
-func (r dataRequester) Subject() uuid.UUID {
-	return r.UserID
-}
-
-func (r dataRequester) GetRole() string {
-	return r.RoleValue
-}
-
 func (w *IntrospectCmdHdlWrapper) Introspect(token string) (datatype.Requester, error) {
 	user, err := w.hdl.Execute(context.Background(), &IntrospectCommand{
 		Token: token,

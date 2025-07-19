@@ -50,3 +50,13 @@ func (ctrl *UserHTTPController) SetupRoutes(router *gin.RouterGroup, authMiddlew
 	router.GET("/profile", authMiddleware, ctrl.GetProfile)
 	router.POST("/rpc/users/introspect-token", ctrl.IntrospectTokenRpc)
 }
+
+func (ctrl *UserHTTPController) SetupAdminRoutes(
+	router *gin.RouterGroup,
+	authMiddleware gin.HandlerFunc,
+	adminRoleMiddleware gin.HandlerFunc) {
+	router.GET("/admin/users", authMiddleware, adminRoleMiddleware, func(c *gin.Context) {
+		// Admin-specific user management logic can be added here
+		c.JSON(200, gin.H{"message": "Admin user management endpoint"})
+	})
+}

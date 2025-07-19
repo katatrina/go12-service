@@ -18,16 +18,16 @@ func NewIntrospectRPCClient(userServiceURL string) *IntrospectRPCClient {
 }
 
 type dataRequester struct {
-	UserID    uuid.UUID `json:"id"`
-	RoleValue string    `json:"role"`
+	UserID    uuid.UUID         `json:"id"`
+	RoleValue datatype.UserRole `json:"role"`
 }
 
-func (r dataRequester) Subject() uuid.UUID {
-	return r.UserID
+func (d dataRequester) Subject() uuid.UUID {
+	return d.UserID
 }
 
-func (r dataRequester) GetRole() string {
-	return r.RoleValue
+func (d dataRequester) GetRole() datatype.UserRole {
+	return d.RoleValue
 }
 
 func (c *IntrospectRPCClient) Introspect(token string) (datatype.Requester, error) {
@@ -35,8 +35,8 @@ func (c *IntrospectRPCClient) Introspect(token string) (datatype.Requester, erro
 	
 	type ResponseDTO struct {
 		Data struct {
-			UserID uuid.UUID `json:"id"`
-			Role   string    `json:"role"`
+			UserID uuid.UUID         `json:"id"`
+			Role   datatype.UserRole `json:"role"`
 		} `json:"data"`
 	}
 	
