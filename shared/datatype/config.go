@@ -14,6 +14,7 @@ type Config struct {
 	UserServiceURL     string
 	CategoryServiceURL string
 	AWS                AWSConfig
+	NatsURL            string
 }
 
 var config *Config
@@ -30,8 +31,13 @@ func NewConfig() *Config {
 				Region:     os.Getenv("AWS_REGION"),
 				SecretKey:  os.Getenv("AWS_SECRET_KEY"),
 			},
+			NatsURL: os.Getenv("NATS_URL"),
 		}
 	}
 	
+	return config
+}
+
+func (config *Config) GetConfig() *Config {
 	return config
 }

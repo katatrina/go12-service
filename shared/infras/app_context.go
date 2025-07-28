@@ -32,12 +32,14 @@ type IAppContext interface {
 	DbContext() IDbContext
 	Uploader() IUploader
 	GetConfig() *datatype.Config
+	MsgBroker() IMsgBroker
 }
 
 type appContext struct {
 	mldProvider IMiddlewareProvider
 	dbContext   IDbContext
 	uploader    IUploader
+	msgBroker   IMsgBroker
 	config      *datatype.Config
 }
 
@@ -51,6 +53,8 @@ func NewAppContext(db *gorm.DB) IAppContext {
 	
 	uploader, err := sharecomponent.NewS3Uploader(config.AWS.AccessKey, config.AWS.BucketName, config.AWS.Domain, config.AWS.Region, config.AWS.SecretKey)
 	
+	natsComp := sharecomponent.NewNatsComp(config.NatsURL)
+	
 	if err != nil {
 		panic(err)
 	}
@@ -60,6 +64,7 @@ func NewAppContext(db *gorm.DB) IAppContext {
 		dbContext:   dbCtx,
 		uploader:    uploader,
 		config:      config,
+		msgBroker:   natsComp,
 	}
 }
 
@@ -77,4 +82,8 @@ func (c *appContext) GetConfig() *datatype.Config {
 
 func (c *appContext) Uploader() IUploader {
 	return c.uploader
+}
+
+func (c *appContext) MsgBroker() IMsgBroker {
+	return c.msgBroker
 }

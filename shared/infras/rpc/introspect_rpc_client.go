@@ -44,7 +44,7 @@ func (c *IntrospectRPCClient) Introspect(token string) (datatype.Requester, erro
 	
 	url := c.userServiceURL + "/introspect-token"
 	
-	_, err := client.R().
+	resp, err := client.R().
 		SetBody(map[string]interface{}{
 			"token": token,
 		}).
@@ -52,6 +52,11 @@ func (c *IntrospectRPCClient) Introspect(token string) (datatype.Requester, erro
 		Post(url)
 	if err != nil {
 		return nil, errors.WithStack(err)
+	}
+	
+	// Check HTTP status code - this is the key fix!
+	if resp.StatusCode() != 200 {
+		return nil, errors.New("token introspection failed: invalid or expired token")
 	}
 	
 	return &dataRequester{

@@ -28,3 +28,8 @@ func (s Status) Valid() bool {
 	}
 	return false
 }
+
+const (
+	EvtUserLikedRestaurant   = "UserLikedRestaurant"
+	EvtUserUnlikedRestaurant = "UserUnlikedRestaurant"
+)

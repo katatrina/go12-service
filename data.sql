@@ -155,8 +155,7 @@ CREATE TABLE `restaurant_likes`
 (
     `restaurant_id` varchar(36) NOT NULL,
     `user_id`       varchar(36) NOT NULL,
-    `status`        enum('active','inactive','deleted','pending') NOT NULL DEFAULT 'active',
-    `created_at`    timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    `created_at`    datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     PRIMARY KEY (`restaurant_id`, `user_id`),
     KEY             `user_id` (`user_id`)
 ) ENGINE=InnoDB;
@@ -191,6 +190,7 @@ CREATE TABLE `restaurants`
     `cover`       json        DEFAULT NULL,
     `logo`        json        DEFAULT NULL,
     `shipping_fee_per_km` double DEFAULT '0',
+    `liked_count` int         DEFAULT '0',
     `status`      enum('active','inactive','deleted','pending') NOT NULL DEFAULT 'active',
     `created_at`  timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`  timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
