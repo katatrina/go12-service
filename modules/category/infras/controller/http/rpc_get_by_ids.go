@@ -8,7 +8,7 @@ import (
 )
 
 type RPCGetByIDsRequestDTO struct {
-	IDs []*uuid.UUID `json:"ids"`
+	IDs []uuid.UUID `json:"ids"`
 }
 
 func (ctl *CategoryController) RPCGetByIDS(c *gin.Context) {

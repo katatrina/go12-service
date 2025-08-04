@@ -6,17 +6,17 @@ import (
 )
 
 type MiddlewareProvider struct {
-	tokenValidator ITokenIntrospector
+	tokenIntrospector ITokenIntrospector
 }
 
 func NewMiddlewareProvider(tokenValidator ITokenIntrospector) *MiddlewareProvider {
 	return &MiddlewareProvider{
-		tokenValidator: tokenValidator,
+		tokenIntrospector: tokenValidator,
 	}
 }
 
 func (p *MiddlewareProvider) Auth() gin.HandlerFunc {
-	return Auth(p.tokenValidator)
+	return Auth(p.tokenIntrospector)
 }
 
 func (p *MiddlewareProvider) CheckRoles(roles ...datatype.UserRole) gin.HandlerFunc {

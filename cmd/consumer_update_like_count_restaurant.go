@@ -42,8 +42,8 @@ var consumerIncreaseLikeCountRestaurantCmd = &cobra.Command{
 		
 		nc.Subscribe(datatype.EvtUserLikedRestaurant, func(msg *nats.Msg) {
 			type msgData struct {
-				RestaurantID uuid.UUID `json:"restaurantID"`
-				UserID       uuid.UUID `json:"userID"`
+				RestaurantId uuid.UUID `json:"restaurantId"`
+				UserId       uuid.UUID `json:"userId"`
 			}
 			
 			var data msgData
@@ -54,13 +54,13 @@ var consumerIncreaseLikeCountRestaurantCmd = &cobra.Command{
 			}
 			
 			if err := db.Table("restaurants").
-				Where("id = ?", data.RestaurantID).
+				Where("id = ?", data.RestaurantId).
 				Update("liked_count", gorm.Expr("liked_count + 1")).Error; err != nil {
 				log.Println("failed to update like count", err)
 				return
 			}
 			
-			log.Println("Update like count success for restaurantID:", data.RestaurantID)
+			log.Println("Update like count success for restaurantId:", data.RestaurantId)
 		})
 		
 		// Setup graceful shutdown

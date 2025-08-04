@@ -15,9 +15,9 @@ mysql-create:
 		-e MYSQL_DATABASE=$(MYSQL_DATABASE) \
 		-e MYSQL_USER=$(MYSQL_USER) \
 		-e MYSQL_PASSWORD=$(MYSQL_PASSWORD) \
-		-p 3307:3306 \
+		-p 3306:3306 \
 		mysql:8.4.5-oraclelinux9
-	@echo "MySQL container created and started on port 3307"
+	@echo "MySQL container created and started on port 3306"
 
 mysql-start:
 	@echo "Starting existing MySQL container..."

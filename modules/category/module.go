@@ -40,3 +40,14 @@ func SetupCategoryModule(db *gorm.DB, g *gin.RouterGroup) {
 	catCtl.SetupRoutes(categoryGroup)
 	catCtl.SetupRoutesForRPC(g)
 }
+
+func InitializeCategoryController(db *gorm.DB) *httpcontroller.CategoryController {
+	categoryRepository := mysqlrepository.NewCategoryRepository(db)
+	createCommandHandler := categoryservice.NewCreateCommandHandler(categoryRepository)
+	getByIDQueryHandler := categoryservice.NewGetDetailQueryHandler(categoryRepository)
+	listCategoriesQueryHandler := categoryservice.NewListCategoriesQueryHandler(categoryRepository)
+	updateByIDCommandHandler := categoryservice.NewUpdateByIDCommandHandler(categoryRepository)
+	deleteByIDCommandHandler := categoryservice.NewDeleteByIDCommandHandler(categoryRepository)
+	categoryController := httpcontroller.NewCategoryController(createCommandHandler, getByIDQueryHandler, listCategoriesQueryHandler, updateByIDCommandHandler, deleteByIDCommandHandler, categoryRepository)
+	return categoryController
+}

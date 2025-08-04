@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package protorpc;
+
+option go_package = "category/";
+
+service Category {
+  rpc GetCategoriesByIDs (GetCatIDsRequest) returns (CatIDsResp) {}
+}
+
+message GetCatIDsRequest {
+  repeated string ids = 1;
+}
+
+// The response message containing the greetings
+message CatIDsResp {
+  repeated CategoryDTO data = 1;
+}
+
+message CategoryDTO {
+  string id = 1;
+  string name = 2;
+  string status = 3;
+}

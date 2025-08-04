@@ -7,7 +7,7 @@ import (
 	categorymodel "github.com/katatrina/go12-service/modules/category/model"
 )
 
-func (repo *CategoryRepository) FindByIDs(ctx context.Context, ids []*uuid.UUID) ([]categorymodel.Category, error) {
+func (repo *CategoryRepository) FindByIDs(ctx context.Context, ids []uuid.UUID) ([]categorymodel.Category, error) {
 	var categories []categorymodel.Category
 	
 	err := repo.db.WithContext(ctx).

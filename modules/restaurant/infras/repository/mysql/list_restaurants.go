@@ -6,6 +6,7 @@ import (
 	"github.com/katatrina/go12-service/modules/restaurant/model"
 	sharedmodel "github.com/katatrina/go12-service/shared/model"
 	"github.com/pkg/errors"
+	"go.opentelemetry.io/otel"
 )
 
 func (repo *RestaurantRepository) List(
@@ -13,6 +14,9 @@ func (repo *RestaurantRepository) List(
 	pagingDTO *sharedmodel.PagingDTO,
 	filterDTO *restaurantmodel.FilterRestaurantDTO,
 ) ([]restaurantmodel.Restaurant, error) {
+	_, span := otel.Tracer("go12-service").Start(ctx, "list-restaurants-gorm")
+	defer span.End()
+	
 	db := repo.dbCtx.GetMainConnection()
 	
 	var restaurants []restaurantmodel.Restaurant

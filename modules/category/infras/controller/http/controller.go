@@ -39,7 +39,7 @@ type CategoryController struct {
 }
 
 type ICategoryRPCRepo interface {
-	FindByIDs(ctx context.Context, ids []*uuid.UUID) ([]categorymodel.Category, error)
+	FindByIDs(ctx context.Context, ids []uuid.UUID) ([]categorymodel.Category, error)
 }
 
 func NewCategoryController(
