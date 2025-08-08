@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package protorpc;
+
+option go_package = "food/";
+
+service Food {
+  rpc GetFoodsByIDs (GetFoodIDsRequest) returns (FoodIDsResp) {}
+  rpc GetFoodsByRestaurantID (GetFoodsByRestaurantRequest) returns (FoodIDsResp) {}
+  rpc GetFoodsByCategoryID (GetFoodsByCategoryRequest) returns (FoodIDsResp) {}
+}
+
+message GetFoodIDsRequest {
+  repeated string ids = 1;
+}
+
+message GetFoodsByRestaurantRequest {
+  string restaurant_id = 1;
+  optional int32 limit = 2;
+  optional int32 offset = 3;
+}
+
+message GetFoodsByCategoryRequest {
+  string category_id = 1;
+  optional int32 limit = 2;
+  optional int32 offset = 3;
+}
+
+message FoodIDsResp {
+  repeated FoodDTO data = 1;
+}
+
+message FoodDTO {
+  string id = 1;
+  string restaurant_id = 2;
+  string category_id = 3;
+  string name = 4;
+  string description = 5;
+  double price = 6;
+  string status = 7;
+  string created_at = 8;
+  string updated_at = 9;
+}

@@ -6,17 +6,21 @@ import (
 	"log"
 	"net"
 	"net/http"
-	"os"
 	
 	"github.com/katatrina/go12-service/gen/proto/category"
+	"github.com/katatrina/go12-service/gen/proto/food"
 	"github.com/katatrina/go12-service/middleware"
 	categorymodule "github.com/katatrina/go12-service/modules/category"
 	categorygrpcctl "github.com/katatrina/go12-service/modules/category/infras/controller/grpcctl"
 	categorygormmysql "github.com/katatrina/go12-service/modules/category/infras/repository/mysql"
+	foodmodule "github.com/katatrina/go12-service/modules/food"
+	foodgrpcctl "github.com/katatrina/go12-service/modules/food/infras/controller/grpcctl"
+	foodgormmysql "github.com/katatrina/go12-service/modules/food/infras/repository/mysql"
 	mediamodule "github.com/katatrina/go12-service/modules/media"
 	restaurantmodule "github.com/katatrina/go12-service/modules/restaurant"
 	restaurantlikemodule "github.com/katatrina/go12-service/modules/restaurantlike"
 	usermodule "github.com/katatrina/go12-service/modules/user"
+	"github.com/katatrina/go12-service/shared/datatype"
 	sharedinfras "github.com/katatrina/go12-service/shared/infras"
 	
 	"github.com/gin-gonic/gin"
@@ -37,13 +41,11 @@ var rootCmd = &cobra.Command{
 	Use:   "app",
 	Short: "Start rest api service",
 	Run: func(cmd *cobra.Command, args []string) {
-		port := os.Getenv("PORT")
+		// Load configuration
+		config := datatype.NewConfig()
 		
-		if port == "" {
-			port = "8080"
-		}
-		
-		dsn := os.Getenv("DB_DSN")
+		port := config.Port
+		dsn := config.DBDSN
 		dbMaster, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 		
 		if err != nil {
@@ -81,23 +83,42 @@ var rootCmd = &cobra.Command{
 		restaurantlikemodule.SetupRestaurantLikeModule(appCtx, v1)
 		usermodule.SetupUserModule(appCtx, v1)
 		mediamodule.SetupMediaModule(appCtx, v1)
+		foodmodule.SetupFoodModule(appCtx, v1)
 		
-		// Run gRPC server
+		// Run Category gRPC server
 		go func() {
 			// Create a listener on TCP port
-			lis, err := net.Listen("tcp", ":6000")
+			lis, err := net.Listen("tcp", fmt.Sprintf(":%s", config.Grpc.Port))
 			if err != nil {
-				log.Fatalln("Failed to listen:", err)
+				log.Fatalln("Failed to listen for Category gRPC:", err)
 			}
 			
 			// Create a gRPC server object
 			s := grpc.NewServer()
-			// Attach the Greeter service to the server
+			// Attach the Category service to the server
 			category.RegisterCategoryServer(s, categorygrpcctl.NewCategoryGrpcServer(categorygormmysql.NewCategoryRepository(db)))
 			// Serve gRPC Server
 			
-			log.Println("Serving gRPC on 0.0.0.0:6000")
+			log.Printf("Serving Category gRPC on 0.0.0.0:%s", config.Grpc.Port)
 			log.Fatal(s.Serve(lis))
+		}()
+		
+		// Run Food gRPC server
+		go func() {
+			// Create a listener on TCP port for Food service
+			lis2, err := net.Listen("tcp", fmt.Sprintf(":%s", config.Grpc.FoodServicePort))
+			if err != nil {
+				log.Fatalln("Failed to listen for Food gRPC:", err)
+			}
+			
+			// Create a gRPC server object for Food service
+			s2 := grpc.NewServer()
+			// Attach the Food service to the server
+			food.RegisterFoodServer(s2, foodgrpcctl.NewFoodGrpcServer(foodgormmysql.NewFoodRepository(sharedinfras.NewDbContext(db))))
+			// Serve Food gRPC Server
+			
+			log.Printf("Serving Food gRPC on 0.0.0.0:%s", config.Grpc.FoodServicePort)
+			log.Fatal(s2.Serve(lis2))
 		}()
 		
 		// Init OTel Tracer
@@ -122,7 +143,6 @@ func Execute() {
 	setupConsumerCmd()
 	
 	rootCmd.AddCommand(consumerCmd)
-	rootCmd.AddCommand(testNatsCmd)
 	
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatal("failed to execute command", err)

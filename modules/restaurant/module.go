@@ -4,14 +4,14 @@ import (
 	"github.com/gin-gonic/gin"
 	httpcontroller "github.com/katatrina/go12-service/modules/restaurant/infras/controller/http"
 	rpcclient "github.com/katatrina/go12-service/modules/restaurant/infras/repository/grpc-client"
-	mysqlrepository "github.com/katatrina/go12-service/modules/restaurant/infras/repository/mysql"
+	restaurantrepository "github.com/katatrina/go12-service/modules/restaurant/infras/repository/mysql"
 	restaurantservice "github.com/katatrina/go12-service/modules/restaurant/service"
 	sharedinfras "github.com/katatrina/go12-service/shared/infras"
 )
 
 func InitializeRestaurantController(appCtx sharedinfras.IAppContext) *httpcontroller.RestaurantController {
 	dbCtx := appCtx.DbContext()
-	restaurantRepository := mysqlrepository.NewRestaurantRepository(dbCtx)
+	restaurantRepository := restaurantrepository.NewRestaurantRepository(dbCtx)
 	createCommandHandler := restaurantservice.NewCreateCommandHandler(restaurantRepository)
 	getByIDQueryHandler := restaurantservice.NewGetDetailQueryHandler(restaurantRepository)
 	// categoryRPCClient := rpcclient.NewCategoryRPCClient(appCtx.GetConfig().CategoryServiceURL)

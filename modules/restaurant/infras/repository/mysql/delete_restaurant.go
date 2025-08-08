@@ -1,4 +1,4 @@
-package mysqlrepository
+package restaurantrepository
 
 import (
 	"context"

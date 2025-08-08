@@ -18,6 +18,6 @@ func (MediaCreateDTO) TableName() string {
 	return Media{}.TableName()
 }
 
-func (m *MediaCreateDTO) Validate() error {
+func (m MediaCreateDTO) Validate() error {
 	return nil
 }

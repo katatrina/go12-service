@@ -13,10 +13,14 @@ type JWTComp struct {
 	duration  time.Duration
 }
 
-func NewJWTComp(secretKey string, duration time.Duration) *JWTComp {
+func NewJWTComp(secretKey string, duration ...time.Duration) *JWTComp {
+	defaultDuration := 3600 * 24 * 7 * time.Second // 7 days
+	if len(duration) > 0 {
+		defaultDuration = duration[0]
+	}
 	return &JWTComp{
 		secretKey: secretKey,
-		duration:  duration,
+		duration:  defaultDuration,
 	}
 }
 

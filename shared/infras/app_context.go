@@ -47,9 +47,9 @@ func NewAppContext(db *gorm.DB) IAppContext {
 	dbCtx := NewDbContext(db)
 	
 	config := datatype.NewConfig()
-	introspectRpcClient := sharedrpc.NewIntrospectRPCClient(config.UserServiceURL)
+	userGrpcClient := sharedrpc.NewUserGRPCClient(config.Grpc.UserServiceURL)
 	
-	provider := middleware.NewMiddlewareProvider(introspectRpcClient)
+	provider := middleware.NewMiddlewareProvider(userGrpcClient)
 	
 	uploader, err := sharecomponent.NewS3Uploader(config.AWS.AccessKey, config.AWS.BucketName, config.AWS.Domain, config.AWS.Region, config.AWS.SecretKey)
 	

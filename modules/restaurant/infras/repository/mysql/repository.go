@@ -1,4 +1,4 @@
-package mysqlrepository
+package restaurantrepository
 
 import (
 	sharedinfras "github.com/katatrina/go12-service/shared/infras"

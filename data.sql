@@ -71,7 +71,7 @@ CREATE TABLE `foods`
     `name`          varchar(255) NOT NULL,
     `description`   text,
     `price`         float        NOT NULL,
-    `images`        json         NOT NULL,
+    -- `images`        json         NOT NULL, -- TODO: Will be added later after discussing with mentor
     `status`        enum('active','inactive','deleted','pending') NOT NULL DEFAULT 'active',
     `created_at`    timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`    timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
