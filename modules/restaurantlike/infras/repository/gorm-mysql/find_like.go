@@ -13,12 +13,12 @@ import (
 
 func (repo *RestaurantLikeRepository) FindLike(
 	ctx context.Context,
-	restaurantId, userId uuid.UUID,
+	restaurantID, userID uuid.UUID,
 ) (*restaurantlikemodel.RestaurantLike, error) {
 	db := repo.dbCtx.GetMainConnection()
 	var like restaurantlikemodel.RestaurantLike
 	
-	if err := db.Where("restaurant_id = ? AND user_id = ?", restaurantId.String(), userId.String()).
+	if err := db.Where("restaurant_id = ? AND user_id = ?", restaurantID.String(), userID.String()).
 		First(&like).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, datatype.ErrRecordNotFound

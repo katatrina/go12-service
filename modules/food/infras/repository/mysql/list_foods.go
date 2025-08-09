@@ -6,9 +6,13 @@ import (
 	"github.com/google/uuid"
 	foodmodel "github.com/katatrina/go12-service/modules/food/model"
 	"github.com/pkg/errors"
+	"go.opentelemetry.io/otel"
 )
 
 func (repo *FoodRepository) List(ctx context.Context, filter *foodmodel.FoodFilterDTO, offset, limit int) ([]*foodmodel.Food, error) {
+	_, span := otel.Tracer("go12-service").Start(ctx, "food-repo-mysql.list")
+	defer span.End()
+	
 	db := repo.dbCtx.GetMainConnection()
 	
 	var foods []*foodmodel.Food
@@ -49,6 +53,9 @@ func (repo *FoodRepository) List(ctx context.Context, filter *foodmodel.FoodFilt
 }
 
 func (repo *FoodRepository) Count(ctx context.Context, filter *foodmodel.FoodFilterDTO) (int64, error) {
+	_, span := otel.Tracer("go12-service").Start(ctx, "food-repo-mysql.count")
+	defer span.End()
+	
 	db := repo.dbCtx.GetMainConnection()
 	
 	var count int64

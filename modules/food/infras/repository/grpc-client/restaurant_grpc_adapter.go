@@ -36,3 +36,24 @@ func (a *RestaurantGRPCAdapter) GetRestaurantByID(ctx context.Context, restauran
 		Status:     dto.Status,
 	}, nil
 }
+
+func (a *RestaurantGRPCAdapter) GetRestaurantByIDForCreate(ctx context.Context, restaurantID string) (*foodservice.CreateRestaurantDTO, error) {
+	restaurants, err := a.client.GetRestaurantsByIDs(ctx, []string{restaurantID})
+	if err != nil {
+		return nil, err
+	}
+
+	if len(restaurants) == 0 {
+		return nil, errors.New("restaurant not found")
+	}
+
+	dto := restaurants[0]
+	// Convert restaurant.RestaurantDTO to foodservice.CreateRestaurantDTO
+	return &foodservice.CreateRestaurantDTO{
+		ID:         dto.Id,
+		Name:       dto.Name,
+		Address:    dto.Address,
+		CategoryID: &dto.CategoryId,
+		Status:     dto.Status,
+	}, nil
+}

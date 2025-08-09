@@ -14,12 +14,12 @@ import (
 )
 
 type LikeRestaurantCommand struct {
-	RestaurantId uuid.UUID
-	UserId       uuid.UUID
+	RestaurantID uuid.UUID
+	UserID       uuid.UUID
 }
 
 type ILikeRestaurantRepo interface {
-	FindLike(ctx context.Context, restaurantId, userId uuid.UUID) (*restaurantlikemodel.RestaurantLike, error)
+	FindLike(ctx context.Context, restaurantID, userID uuid.UUID) (*restaurantlikemodel.RestaurantLike, error)
 	CreateLike(ctx context.Context, data *restaurantlikemodel.RestaurantLike) error
 }
 
@@ -38,7 +38,7 @@ func NewLikeRestaurantCommandHandler(repo ILikeRestaurantRepo, evtPublisher IEvt
 
 func (hdl *LikeRestaurantCommandHandler) Execute(ctx context.Context, cmd *LikeRestaurantCommand) error {
 	// Check if already liked
-	_, err := hdl.repo.FindLike(ctx, cmd.RestaurantId, cmd.UserId)
+	_, err := hdl.repo.FindLike(ctx, cmd.RestaurantID, cmd.UserID)
 	
 	if err == nil {
 		return datatype.ErrConflict.WithError(restaurantlikemodel.ErrRestaurantLikeExists.Error())
@@ -51,8 +51,8 @@ func (hdl *LikeRestaurantCommandHandler) Execute(ctx context.Context, cmd *LikeR
 	// Create like
 	now := time.Now().UTC()
 	like := restaurantlikemodel.RestaurantLike{
-		RestaurantID: cmd.RestaurantId,
-		UserID:       cmd.UserId,
+		RestaurantID: cmd.RestaurantID,
+		UserID:       cmd.UserID,
 		CreatedAt:    &now,
 	}
 	

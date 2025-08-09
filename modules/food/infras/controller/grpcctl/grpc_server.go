@@ -8,6 +8,7 @@ import (
 	foodmodel "github.com/katatrina/go12-service/modules/food/model"
 
 	"github.com/google/uuid"
+	"go.opentelemetry.io/otel"
 )
 
 type FoodRepository interface {
@@ -31,6 +32,9 @@ func (s *FoodGrpcServer) GetFoodsByIDs(
 	ctx context.Context,
 	req *food.GetFoodIDsRequest,
 ) (*food.FoodIDsResp, error) {
+	ctx, span := otel.Tracer("go12-service").Start(ctx, "food-grpc.get-by-ids")
+	defer span.End()
+	
 	log.Println("GetFoodsByIDs by gRPC")
 
 	uuidIds := make([]uuid.UUID, len(req.Ids))
@@ -84,6 +88,9 @@ func (s *FoodGrpcServer) GetFoodsByRestaurantID(
 	ctx context.Context,
 	req *food.GetFoodsByRestaurantRequest,
 ) (*food.FoodIDsResp, error) {
+	ctx, span := otel.Tracer("go12-service").Start(ctx, "food-grpc.get-by-restaurant")
+	defer span.End()
+	
 	log.Println("GetFoodsByRestaurantID by gRPC")
 
 	restaurantID, err := uuid.Parse(req.RestaurantId)
@@ -142,6 +149,9 @@ func (s *FoodGrpcServer) GetFoodsByCategoryID(
 	ctx context.Context,
 	req *food.GetFoodsByCategoryRequest,
 ) (*food.FoodIDsResp, error) {
+	ctx, span := otel.Tracer("go12-service").Start(ctx, "food-grpc.get-by-category")
+	defer span.End()
+	
 	log.Println("GetFoodsByCategoryID by gRPC")
 
 	categoryID, err := uuid.Parse(req.CategoryId)

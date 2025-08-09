@@ -1,7 +1,6 @@
 package usermodule
 
 import (
-	"os"
 	"time"
 	
 	"github.com/gin-gonic/gin"
@@ -15,9 +14,10 @@ import (
 )
 
 func InitializeUserHTTPController(appCtx sharedinfras.IAppContext) *userhttpcontroller.UserHTTPController {
+	config := datatype.NewConfig()
 	dbCtx := appCtx.DbContext()
 	userRepo := userrepository.NewUserRepository(dbCtx)
-	jwtComp := sharedcomponent.NewJWTComp(os.Getenv("JWT_SECRET_KEY"), 3600*24*7*time.Second) // 7 days expiration
+	jwtComp := sharedcomponent.NewJWTComp(config.JWTSecretKey, 3600*24*7*time.Second) // 7 days expiration
 	
 	// Command & Query Handlers
 	registerCmdHandler := userservice.NewRegisterCommandHandler(userRepo)
@@ -32,7 +32,8 @@ func InitializeUserHTTPController(appCtx sharedinfras.IAppContext) *userhttpcont
 func SetupUserModule(appCtx sharedinfras.IAppContext, g *gin.RouterGroup) {
 	userCtrl := InitializeUserHTTPController(appCtx)
 	
-	jwtComp := sharedcomponent.NewJWTComp(os.Getenv("JWT_SECRET_KEY"), 3600*24*7*time.Second)
+	config := datatype.NewConfig()
+	jwtComp := sharedcomponent.NewJWTComp(config.JWTSecretKey, 3600*24*7*time.Second)
 	
 	userRepo := userrepository.NewUserRepository(appCtx.DbContext())
 	introspectCmdHandler := userservice.NewIntrospectCommandHandler(jwtComp, userRepo)

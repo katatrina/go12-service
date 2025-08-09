@@ -40,6 +40,23 @@ logs/
 # Application binary
 app
 go12-service
+main
+
+# Uploads directory
+uploads/
+tmp/
+temp/
+
+# Coverage files
+coverage.txt
+coverage.html
+coverage.out
+*.cover
+
+# Debug files
+debug
+*.debug
+__debug_bin*
 
 # Docker ignore
 
@@ -51,3 +68,12 @@ go12-service
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Generated gRPC files
+gen/
+*.pb.go
+*_grpc.pb.go
+
+# Claude Code
+.claude
+CLAUDE.md

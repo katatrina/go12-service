@@ -18,11 +18,11 @@ func (ctrl *RestaurantLikeHTTPController) LikeRestaurantAPI(c *gin.Context) {
 	}
 	
 	requester := c.MustGet(datatype.KeyRequester).(datatype.Requester)
-	userId := requester.Subject()
+	userID := requester.Subject()
 	
 	cmd := restaurantlikeservice.LikeRestaurantCommand{
-		RestaurantId: id,
-		UserId:       userId,
+		RestaurantID: id,
+		UserID:       userID,
 	}
 	
 	if err := ctrl.likeHandler.Execute(c.Request.Context(), &cmd); err != nil {

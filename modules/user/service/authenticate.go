@@ -54,7 +54,7 @@ func NewAuthenticateCommandHandler(userRepo IAuthenticateRepo, tokenIssuer IToke
 
 type AuthenticateResponse struct {
 	Token     string        `json:"token"`
-	ExpiresIn time.Duration `json:"expiresIn"`
+	ExpiresIn time.Duration `json:"expires_in"`
 }
 
 func (h *AuthenticateCommandHandler) Execute(ctx context.Context, cmd *AuthenticateCommand) (*AuthenticateResponse, error) {

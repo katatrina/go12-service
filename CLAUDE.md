@@ -8,7 +8,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Build**: `go build -o app .` (creates executable binary)
 - **Run locally**: `go run main.go` (starts REST API on port 8080, gRPC services on ports 6000-6003)
 - **Docker build**: `docker build -t go12-service:1.0.0 .`
-- **Docker run**: See `run_container.md` for complete container setup with environment variables
 
 ### Database Management
 - **Create MySQL container**: `make mysql-create`
@@ -19,12 +18,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Protocol Buffers
 - **Generate gRPC code**: `buf generate` (uses buf.gen.yaml configuration)
+- **⚠️ IMPORTANT**: Must run `buf generate` after cloning or modifying .proto files
+- **Generated files**: Located in `gen/` directory (ignored by Git)
 
 ## Architecture Overview
 
 This is a microservice built with Go that provides a food delivery platform with the following core modules:
 
-### Module Structure (Hexagonal Architecture)
+### Module Structure (Hexagonal Architecture + Modular Monolith)
 Each module follows a consistent structure:
 ```
 modules/{domain}/
@@ -91,9 +92,12 @@ Configuration can be set via `.env` file or environment variables:
 #### Setup Instructions
 1. Copy `.env.example` to `.env`: `cp .env.example .env`
 2. Update `.env` with your actual configuration values
-3. The application will automatically load config from `.env` file with environment variable fallback
+3. **Generate gRPC code**: `buf generate` (required after cloning)
+4. The application will automatically load config from `.env` file with environment variable fallback
 
 ### Development Notes
+- **Generated Code**: gRPC files in `gen/` are auto-generated from `.proto` files and ignored by Git
+- **Code Generation Workflow**: Always run `buf generate` after modifying Protocol Buffer definitions
 - The application uses dependency injection via the `appContext` pattern
 - Each module is self-contained with its own repository, service, and controller layers
 - **Pure gRPC Architecture**: 

@@ -11,13 +11,13 @@ import (
 )
 
 type UnlikeRestaurantCommand struct {
-	RestaurantId uuid.UUID
-	UserId       uuid.UUID
+	RestaurantID uuid.UUID
+	UserID       uuid.UUID
 }
 
 type IUnlikeRestaurantRepo interface {
-	FindLike(ctx context.Context, restaurantId, userId uuid.UUID) (*restaurantlikemodel.RestaurantLike, error)
-	DeleteLike(ctx context.Context, restaurantId, userId uuid.UUID) error
+	FindLike(ctx context.Context, restaurantID, userID uuid.UUID) (*restaurantlikemodel.RestaurantLike, error)
+	DeleteLike(ctx context.Context, restaurantID, userID uuid.UUID) error
 }
 
 type UnlikeRestaurantCommandHandler struct {
@@ -30,7 +30,7 @@ func NewUnlikeRestaurantCommandHandler(repo IUnlikeRestaurantRepo) *UnlikeRestau
 
 func (hdl *UnlikeRestaurantCommandHandler) Execute(ctx context.Context, cmd *UnlikeRestaurantCommand) error {
 	// Check if like exists
-	_, err := hdl.repo.FindLike(ctx, cmd.RestaurantId, cmd.UserId)
+	_, err := hdl.repo.FindLike(ctx, cmd.RestaurantID, cmd.UserID)
 	
 	if err != nil {
 		if errors.Is(err, datatype.ErrRecordNotFound) {
@@ -40,7 +40,7 @@ func (hdl *UnlikeRestaurantCommandHandler) Execute(ctx context.Context, cmd *Unl
 	}
 	
 	// Delete like
-	if err = hdl.repo.DeleteLike(ctx, cmd.RestaurantId, cmd.UserId); err != nil {
+	if err = hdl.repo.DeleteLike(ctx, cmd.RestaurantID, cmd.UserID); err != nil {
 		return datatype.ErrInternalServerError.WithWrap(err).WithDebug(err.Error())
 	}
 	

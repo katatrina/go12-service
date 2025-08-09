@@ -22,7 +22,7 @@ import (
 func startUserGRPCServer(config *datatype.Config, db *gorm.DB) {
 	go func() {
 		// Create a listener on TCP port for User service
-		lis3, err := net.Listen("tcp", fmt.Sprintf(":%s", config.Grpc.UserServicePort))
+		lis3, err := net.Listen("tcp", fmt.Sprintf(":%s", config.Grpc.GetUserPort()))
 		if err != nil {
 			log.Fatalln("Failed to listen for User gRPC:", err)
 		}
@@ -34,7 +34,7 @@ func startUserGRPCServer(config *datatype.Config, db *gorm.DB) {
 		user.RegisterUserServer(s3, usergrpcctl.NewUserGrpcServer(usergormmysql.NewUserRepository(sharedinfras.NewDbContext(db)), jwtComp))
 		// Serve User gRPC Server
 		
-		log.Printf("Serving User gRPC on 0.0.0.0:%s", config.Grpc.UserServicePort)
+		log.Printf("Serving User gRPC on 0.0.0.0:%s", config.Grpc.GetUserPort())
 		log.Fatal(s3.Serve(lis3))
 	}()
 }
@@ -42,7 +42,7 @@ func startUserGRPCServer(config *datatype.Config, db *gorm.DB) {
 func startRestaurantGRPCServer(config *datatype.Config, db *gorm.DB) {
 	go func() {
 		// Create a listener on TCP port for Restaurant service
-		lis4, err := net.Listen("tcp", fmt.Sprintf(":%s", config.Grpc.RestaurantServicePort))
+		lis4, err := net.Listen("tcp", fmt.Sprintf(":%s", config.Grpc.GetRestaurantPort()))
 		if err != nil {
 			log.Fatalln("Failed to listen for Restaurant gRPC:", err)
 		}
@@ -53,7 +53,7 @@ func startRestaurantGRPCServer(config *datatype.Config, db *gorm.DB) {
 		restaurant.RegisterRestaurantServer(s4, restaurantgrpcctl.NewRestaurantGrpcServer(restaurantgormmysql.NewRestaurantRepository(sharedinfras.NewDbContext(db))))
 		// Serve Restaurant gRPC Server
 		
-		log.Printf("Serving Restaurant gRPC on 0.0.0.0:%s", config.Grpc.RestaurantServicePort)
+		log.Printf("Serving Restaurant gRPC on 0.0.0.0:%s", config.Grpc.GetRestaurantPort())
 		log.Fatal(s4.Serve(lis4))
 	}()
 }

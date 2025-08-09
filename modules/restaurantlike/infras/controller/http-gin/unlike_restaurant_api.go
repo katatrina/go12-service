@@ -18,11 +18,11 @@ func (ctrl *RestaurantLikeHTTPController) UnlikeRestaurantAPI(c *gin.Context) {
 	}
 	
 	requester := c.MustGet(datatype.KeyRequester).(datatype.Requester)
-	userId := requester.Subject()
+	userID := requester.Subject()
 	
 	cmd := restaurantlikeservice.UnlikeRestaurantCommand{
-		RestaurantId: id,
-		UserId:       userId,
+		RestaurantID: id,
+		UserID:       userID,
 	}
 	
 	if err := ctrl.unlikeHandler.Execute(c.Request.Context(), &cmd); err != nil {

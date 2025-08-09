@@ -13,8 +13,8 @@ type Category struct {
 	Name        string          `json:"name" gorm:"column:name"`
 	Description *string         `json:"description" gorm:"column:description"`
 	Status      datatype.Status `json:"status" gorm:"column:status"`
-	CreatedAt   time.Time       `json:"createdAt" gorm:"column:created_at"`
-	UpdatedAt   time.Time       `json:"updatedAt" gorm:"column:updated_at"`
+	CreatedAt   time.Time       `json:"created_at" gorm:"column:created_at"`
+	UpdatedAt   time.Time       `json:"updated_at" gorm:"column:updated_at"`
 }
 
 func (Category) TableName() string {

@@ -16,8 +16,8 @@ import (
 type RegisterCommand struct {
 	Email     string `json:"email" form:"email"`
 	Password  string `json:"password" form:"password"`
-	FirstName string `json:"firstName" form:"firstName"`
-	LastName  string `json:"lastName" form:"lastName"`
+	FirstName string `json:"first_name" form:"firstName"`
+	LastName  string `json:"last_name" form:"lastName"`
 }
 
 func (cmd RegisterCommand) Validate() error {

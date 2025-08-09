@@ -5,6 +5,7 @@ import (
 	
 	foodmodel "github.com/katatrina/go12-service/modules/food/model"
 	"github.com/katatrina/go12-service/shared/datatype"
+	"go.opentelemetry.io/otel"
 )
 
 type ListCommand struct {
@@ -25,6 +26,9 @@ func NewListCommandHandler(foodRepo IListRepo) *ListCommandHandler {
 }
 
 func (hdl *ListCommandHandler) Execute(ctx context.Context, cmd *ListCommand) (*foodmodel.FoodListResponseDTO, error) {
+	ctx, span := otel.Tracer("go12-service").Start(ctx, "food-service.list")
+	defer span.End()
+	
 	if err := cmd.DTO.Validate(); err != nil {
 		return nil, datatype.ErrBadRequest.WithError(err.Error())
 	}
@@ -39,12 +43,17 @@ func (hdl *ListCommandHandler) Execute(ctx context.Context, cmd *ListCommand) (*
 		Search:       cmd.DTO.Search,
 	}
 	
-	foods, err := hdl.foodRepo.List(ctx, filter, offset, cmd.DTO.Limit)
+	// Database queries with tracing
+	listCtx, listSpan := otel.Tracer("go12-service").Start(ctx, "food-repo.list")
+	foods, err := hdl.foodRepo.List(listCtx, filter, offset, cmd.DTO.Limit)
+	listSpan.End()
 	if err != nil {
 		return nil, datatype.ErrInternalServerError.WithWrap(err).WithDebug(err.Error())
 	}
 	
-	total, err := hdl.foodRepo.Count(ctx, filter)
+	countCtx, countSpan := otel.Tracer("go12-service").Start(ctx, "food-repo.count")
+	total, err := hdl.foodRepo.Count(countCtx, filter)
+	countSpan.End()
 	if err != nil {
 		return nil, datatype.ErrInternalServerError.WithWrap(err).WithDebug(err.Error())
 	}

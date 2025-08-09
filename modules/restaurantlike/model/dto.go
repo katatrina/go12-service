@@ -5,8 +5,8 @@ import (
 )
 
 type RestaurantLikeCreateDTO struct {
-	RestaurantId uuid.UUID `json:"restaurantId" gorm:"column:restaurant_id;primaryKey"`
-	UserId       uuid.UUID `json:"userId" gorm:"column:user_id;primaryKey"`
+	RestaurantID uuid.UUID `json:"restaurant_id" gorm:"column:restaurant_id;primaryKey"`
+	UserID       uuid.UUID `json:"user_id" gorm:"column:user_id;primaryKey"`
 }
 
 func (RestaurantLikeCreateDTO) TableName() string {

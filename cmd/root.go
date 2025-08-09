@@ -88,7 +88,7 @@ var rootCmd = &cobra.Command{
 		// Run Category gRPC server
 		go func() {
 			// Create a listener on TCP port
-			lis, err := net.Listen("tcp", fmt.Sprintf(":%s", config.Grpc.Port))
+			lis, err := net.Listen("tcp", fmt.Sprintf(":%s", config.Grpc.GetCategoryPort()))
 			if err != nil {
 				log.Fatalln("Failed to listen for Category gRPC:", err)
 			}
@@ -99,14 +99,14 @@ var rootCmd = &cobra.Command{
 			category.RegisterCategoryServer(s, categorygrpcctl.NewCategoryGrpcServer(categorygormmysql.NewCategoryRepository(db)))
 			// Serve gRPC Server
 			
-			log.Printf("Serving Category gRPC on 0.0.0.0:%s", config.Grpc.Port)
+			log.Printf("Serving Category gRPC on 0.0.0.0:%s", config.Grpc.GetCategoryPort())
 			log.Fatal(s.Serve(lis))
 		}()
 		
 		// Run Food gRPC server
 		go func() {
 			// Create a listener on TCP port for Food service
-			lis2, err := net.Listen("tcp", fmt.Sprintf(":%s", config.Grpc.FoodServicePort))
+			lis2, err := net.Listen("tcp", fmt.Sprintf(":%s", config.Grpc.GetFoodPort()))
 			if err != nil {
 				log.Fatalln("Failed to listen for Food gRPC:", err)
 			}
@@ -117,9 +117,13 @@ var rootCmd = &cobra.Command{
 			food.RegisterFoodServer(s2, foodgrpcctl.NewFoodGrpcServer(foodgormmysql.NewFoodRepository(sharedinfras.NewDbContext(db))))
 			// Serve Food gRPC Server
 			
-			log.Printf("Serving Food gRPC on 0.0.0.0:%s", config.Grpc.FoodServicePort)
+			log.Printf("Serving Food gRPC on 0.0.0.0:%s", config.Grpc.GetFoodPort())
 			log.Fatal(s2.Serve(lis2))
 		}()
+		
+		// Start User and Restaurant gRPC servers
+		startUserGRPCServer(config, db)
+		startRestaurantGRPCServer(config, db)
 		
 		// Init OTel Tracer
 		

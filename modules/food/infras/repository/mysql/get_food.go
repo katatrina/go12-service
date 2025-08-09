@@ -8,10 +8,14 @@ import (
 	foodmodel "github.com/katatrina/go12-service/modules/food/model"
 	"github.com/katatrina/go12-service/shared/datatype"
 	"github.com/pkg/errors"
+	"go.opentelemetry.io/otel"
 	"gorm.io/gorm"
 )
 
 func (repo *FoodRepository) FindByID(ctx context.Context, id uuid.UUID) (*foodmodel.Food, error) {
+	_, span := otel.Tracer("go12-service").Start(ctx, "food-repo-mysql.find-by-id")
+	defer span.End()
+	
 	db := repo.dbCtx.GetMainConnection()
 	
 	var food foodmodel.Food

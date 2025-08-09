@@ -27,12 +27,12 @@ func NewCreateCommandHandler(restRepo ICreateRepo) *CreateCommandHandler {
 
 func (hdl *CreateCommandHandler) Execute(ctx context.Context, cmd *CreateCommand) (*restaurantmodel.Restaurant, error) {
 	if err := cmd.DTO.Validate(); err != nil {
-		return nil, err
+		return nil, datatype.ErrBadRequest.WithError(err.Error())
 	}
 	
 	restaurantID, err := uuid.NewV7()
 	if err != nil {
-		return nil, err
+		return nil, datatype.ErrInternalServerError.WithWrap(err).WithDebug(err.Error())
 	}
 	
 	restaurant := restaurantmodel.Restaurant{

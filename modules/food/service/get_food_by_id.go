@@ -9,6 +9,7 @@ import (
 	"github.com/katatrina/go12-service/gen/proto/category"
 	foodmodel "github.com/katatrina/go12-service/modules/food/model"
 	"github.com/katatrina/go12-service/shared/datatype"
+	"go.opentelemetry.io/otel"
 )
 
 type GetByIDCommand struct {
@@ -63,13 +64,19 @@ func (cmd *GetByIDCommand) Validate() error {
 }
 
 func (hdl *GetByIDCommandHandler) Execute(ctx context.Context, cmd *GetByIDCommand) (*foodmodel.FoodResponseDTO, error) {
+	ctx, span := otel.Tracer("go12-service").Start(ctx, "food-service.get-by-id")
+	defer span.End()
+	
 	if err := cmd.Validate(); err != nil {
 		return nil, datatype.ErrBadRequest.WithError(err.Error())
 	}
 	
 	foodUUID, _ := uuid.Parse(cmd.ID)
 	
-	food, err := hdl.foodRepo.FindByID(ctx, foodUUID)
+	// Database query with tracing
+	dbCtx, dbSpan := otel.Tracer("go12-service").Start(ctx, "food-repo.find-by-id")
+	food, err := hdl.foodRepo.FindByID(dbCtx, foodUUID)
+	dbSpan.End()
 	if err != nil {
 		if errors.Is(err, datatype.ErrRecordNotFound) {
 			return nil, datatype.ErrNotFound.WithError(foodmodel.ErrFoodNotFound.Error())
@@ -87,7 +94,10 @@ func (hdl *GetByIDCommandHandler) Execute(ctx context.Context, cmd *GetByIDComma
 	
 	// Fetch category information if category_id exists
 	if food.CategoryID != nil {
-		categories, err := hdl.categoryRPC.GetCategoriesByIDs(ctx, []string{food.CategoryID.String()})
+		catCtx, catSpan := otel.Tracer("go12-service").Start(ctx, "category-grpc.get-by-ids")
+		categories, err := hdl.categoryRPC.GetCategoriesByIDs(catCtx, []string{food.CategoryID.String()})
+		catSpan.End()
+		
 		if err != nil {
 			log.Printf("Warning: Failed to fetch category info: %v", err)
 		} else if len(categories) > 0 {
@@ -101,7 +111,9 @@ func (hdl *GetByIDCommandHandler) Execute(ctx context.Context, cmd *GetByIDComma
 	}
 	
 	// Fetch restaurant information
-	restaurant, err := hdl.restaurantRPC.GetRestaurantByID(ctx, food.RestaurantID.String())
+	restCtx, restSpan := otel.Tracer("go12-service").Start(ctx, "restaurant-grpc.get-by-id")
+	restaurant, err := hdl.restaurantRPC.GetRestaurantByID(restCtx, food.RestaurantID.String())
+	restSpan.End()
 	if err != nil {
 		log.Printf("Warning: Failed to fetch restaurant info: %v", err)
 	} else {

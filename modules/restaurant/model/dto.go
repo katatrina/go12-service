@@ -11,22 +11,22 @@ type CreateRestaurantDTO struct {
 	OwnerID    uuid.UUID  `json:"-"`
 	Name       string     `json:"name"`
 	Addr       string     `json:"addr"`
-	CityID     *uuid.UUID `json:"cityID"`
-	CategoryID *uuid.UUID `json:"categoryID"`
+	CityID     *uuid.UUID `json:"city_id"`
+	CategoryID *uuid.UUID `json:"category_id"`
 }
 
 type UpdateRestaurantDTO struct {
 	Name             *string  `json:"name"`
 	Addr             *string  `json:"addr"`
-	CityID           *string  `json:"cityID"`
-	CategoryID       *string  `json:"categoryID"`
-	ShippingFeePerKm *float64 `json:"shippingFeePerKm"`
+	CityID           *string  `json:"city_id"`
+	CategoryID       *string  `json:"category_id"`
+	ShippingFeePerKm *float64 `json:"shipping_fee_per_km"`
 }
 
 type FilterRestaurantDTO struct {
 	Status     *string `json:"status" form:"status"`
-	CityID     *string `json:"cityID" form:"cityID"`
-	CategoryID *string `json:"categoryID" form:"categoryID"`
+	CityID     *string `json:"city_id" form:"cityID"`
+	CategoryID *string `json:"category_id" form:"categoryID"`
 }
 
 func (CreateRestaurantDTO) TableName() string {

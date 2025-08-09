@@ -4,7 +4,7 @@ import "fmt"
 
 type MediaCreateDTO struct {
 	Filename  string `json:"filename" gorm:"column:filename;"`
-	CloudName string `json:"cloudName" gorm:"column:cloud_name;"`
+	CloudName string `json:"cloud_name" gorm:"column:cloud_name;"`
 	Size      int64  `json:"size" gorm:"column:size;"`
 	Ext       string `json:"ext" gorm:"column:ext;"`
 	Url       string `json:"url" gorm:"column:url;"`

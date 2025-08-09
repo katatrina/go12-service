@@ -19,7 +19,7 @@ func InitializeFoodController(appCtx sharedinfras.IAppContext) *httpcontroller.F
 	categoryRPC := grpcclient.NewCategoryRPCClient(config.Grpc.CategoryServiceURL)
 	restaurantRPC := grpcclient.NewRestaurantGRPCAdapter(config.Grpc.RestaurantServiceURL)
 	
-	createCommandHandler := foodservice.NewCreateCommandHandler(foodRepository)
+	createCommandHandler := foodservice.NewCreateCommandHandler(foodRepository, categoryRPC, restaurantRPC)
 	getByIDCommandHandler := foodservice.NewGetByIDCommandHandler(foodRepository, categoryRPC, restaurantRPC)
 	listCommandHandler := foodservice.NewListCommandHandler(foodRepository)
 	updateCommandHandler := foodservice.NewUpdateCommandHandler(foodRepository)

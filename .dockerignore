@@ -37,3 +37,49 @@ go.work
 # Mac system files
 .DS_Store
 __debug_*
+
+# Documentation and README files
+*.md
+docs/
+LICENSE
+CHANGELOG*
+
+# Git files
+.git/
+.gitignore
+.gitattributes
+
+# Test files and coverage
+*_test.go
+testdata/
+coverage.*
+*.cover
+
+# Uploads and temporary files
+uploads/
+tmp/
+temp/
+
+# Development files
+.env.example
+docker-compose*.yml
+Makefile
+run_container.md
+
+# CI/CD files
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Editor files
+*.swp
+*.swo
+*~
+
+# Windows files
+Thumbs.db
+ehthumbs.db
+
+# Other temporary files
+*.tmp
+*.cache
